@@ -1,0 +1,132 @@
+.AbilityStyle-cb9ce1de {
+  margin: 5px;
+  flow-children: down;
+  overflow: noclip;
+}
+.AbilityStyle-cb9ce1de .AbilityImageWrapper {
+  box-shadow: #000 0px 0px 5px;
+  overflow: noclip;
+}
+.AbilityStyle-cb9ce1de .AbilityImageWrapper,
+.AbilityStyle-cb9ce1de DOTAAbilityImage {
+  width: 64px;
+  height: 64px;
+}
+.AbilityStyle-cb9ce1de .LearnButton {
+  width: 100%;
+  height: 15px;
+  background-color: #ffc800;
+  opacity: 0;
+  background-image: url("s2r://panorama/images/control_icons/plus_png.vtex");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15px 15px;
+}
+.AbilityStyle-cb9ce1de .AbilityBorder {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #999999;
+}
+.AbilityStyle-cb9ce1de .AbilityCooldown {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(45, 45, 45, 0.8784313725);
+}
+.AbilityStyle-cb9ce1de .HotKey {
+  min-width: 20px;
+  color: #ffffff;
+  font-family: RadianceM;
+  padding: 2px;
+  background-color: #222222;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  font-size: 14px;
+  transform: translate3d(-5px, -5px, 0px);
+  text-align: center;
+}
+.AbilityStyle-cb9ce1de .Mana {
+  horizontal-align: right;
+  vertical-align: bottom;
+  color: #00b3ff;
+  font-family: RadianceM;
+  padding: 2px;
+  text-shadow: #000000 0px 0px 2px 4;
+}
+.AbilityStyle-cb9ce1de .AbilityLevel {
+  flow-children: right;
+  horizontal-align: center;
+  margin-top: 2px;
+}
+.AbilityStyle-cb9ce1de .AbilityLevel .Level {
+  width: 13px;
+  height: 5px;
+  margin: 2px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.AbilityStyle-cb9ce1de .AbilityLevel .Level.IsActivate {
+  background-color: #ffc800;
+}
+.AbilityStyle-cb9ce1de.IsPassive .AbilityBorder {
+  border: 0px;
+  box-shadow: inset #000 0px 0px 5px;
+}
+.AbilityStyle-cb9ce1de.IsNotActive DOTAAbilityImage {
+  wash-color: #555555;
+  saturation: 0.5;
+}
+.AbilityStyle-cb9ce1de.CanLearn .LearnButton {
+  opacity: 1;
+}
+
+.DotaAbilitiesStyle-e1afa20e {
+  flow-children: right;
+}
+
+.btnStyle-5c109066 {
+  background-color: gradient(linear, 0% 100%, 0% 0%, from(#111111), to(#333333));
+  box-shadow: #000000 0px 0px 4px;
+  padding: 10px 30px;
+}
+.btnStyle-5c109066 Image {
+  width: 20px;
+  height: 20px;
+}
+.btnStyle-5c109066 Label {
+  color: #ffffff;
+  font-size: 16px;
+  vertical-align: middle;
+}
+.btnStyle-5c109066.small {
+  padding: 5px 15px;
+  font-size: 12px;
+}
+.btnStyle-5c109066.large {
+  padding: 20px 60px;
+  font-size: 24px;
+}
+.btnStyle-5c109066.R {
+  background-color: gradient(linear, 0% 100%, 0% 0%, from(#712222), to(#e70000));
+}
+.btnStyle-5c109066.G {
+  background-color: gradient(linear, 0% 100%, 0% 0%, from(#2f7122), to(#00e708));
+}
+.btnStyle-5c109066.B {
+  background-color: gradient(linear, 0% 100%, 0% 0%, from(#224471), to(#0083e7));
+}
+
+.rootStyle-b3405de9 {
+  flow-children: right;
+  horizontal-align: center;
+  vertical-align: bottom;
+}
+
+.root {
+  width: 100%;
+  height: 100%;
+}
+
+.rootStyle-bd31ed39 {
+  flow-children: down;
+  horizontal-align: center;
+  vertical-align: bottom;
+}

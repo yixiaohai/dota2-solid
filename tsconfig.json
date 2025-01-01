@@ -9,6 +9,7 @@
         "esModuleInterop": true,
         "strict": true,
         "target": "ESNext",
-        "lib": ["ESNext"]
+        "lib": ["ESNext"],
+        "typeRoots": ["./node_modules/@types"]
     }
 }

@@ -13,15 +13,18 @@ import compatiblePanorama from './rollup-plugin-panorama';
 import { isDir, Panorama } from './utils';
 import { rollupPluginXML } from './rollup-plugin-xml';
 import { rollupPluginScss } from './rollup-plugin-scss';
+import { writeFileSync } from 'fs'; // 导入写文件的模块
+import CreateMain from './rollup-plugin-main';
 
 export default function GetRollupWatchOptions(rootPath: string) {
     // 入口文件夹
-    const pages = readdirSync(rootPath).filter(
-        v =>
-            v !== 'common' &&
-            isDir(path.join(rootPath, v)) &&
-            existsSync(path.join(rootPath, `${v}/${v}.tsx`))
-    );
+    const pages = readdirSync(rootPath).filter(v => {
+        const dirPath = path.join(rootPath, v);
+        const filePath = path.join(rootPath, `${v}/${v}.tsx`);
+
+        return v !== 'common' && isDir(dirPath) && existsSync(filePath);
+    });
+
     const inputFiles = pages.map(v => {
         return path.join(rootPath, `./${v}/${v}.tsx`);
     });
@@ -31,7 +34,7 @@ export default function GetRollupWatchOptions(rootPath: string) {
         input: inputFiles,
         output: {
             sourcemap: false,
-            dir: 'addon/content/solid-example/panorama/scripts/custom_game',
+            dir: 'addon/content/panorama/scripts/custom_game',
             format: 'cjs',
             entryFileNames: `[name].js`,
             chunkFileNames: `[name].js`,
@@ -91,18 +94,19 @@ export default function GetRollupWatchOptions(rootPath: string) {
             commonjs(),
             nodeResolve({ extensions: ['.tsx', '.ts', '.js', '.jsx'] }),
             compatiblePanorama(),
+            CreateMain(), // 创建custom_ui_manifest.xml
             rollupPluginXML({
                 inputFiles,
                 dir: join(
                     __dirname,
-                    '../addon/content/solid-example/panorama/layout/custom_game'
+                    '../addon/content/panorama/layout/custom_game'
                 )
             }),
             rollupPluginScss({
                 inputFiles,
                 dir: join(
                     __dirname,
-                    '../addon/content/solid-example/panorama/styles/custom_game'
+                    '../addon/content/panorama/styles/custom_game'
                 )
             })
         ]

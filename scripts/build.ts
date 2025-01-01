@@ -5,10 +5,15 @@ import {
     statSync,
     existsSync,
     Stats,
-    writeFileSync
+    writeFileSync,
+    mkdirSync,
+    lstatSync,
+    realpathSync,
+    chmodSync,
+    symlinkSync
 } from 'fs';
 import * as rollup from 'rollup';
-import path, { join } from 'path';
+import path, { basename, join, resolve } from 'path';
 import {
     PreloadTemplates,
     RenderPanoramaXML,
@@ -17,11 +22,12 @@ import {
 import glob from 'glob';
 import { readFile } from 'fs/promises';
 import GetRollupWatchOptions from './build-rollup-config';
-import { fileColor, normalizedPath, Panorama } from './utils';
+import { fileColor, getDotaPath, normalizedPath, Panorama } from './utils';
 import color from 'cli-color';
 import { bundlePanoramaPolyfill } from 'solid-panorama-polyfill';
+import { moveSync, remove } from 'fs-extra';
 
-const rootPath = normalizedPath(path.join(__dirname, '../src'));
+const rootPath = normalizedPath(path.join(__dirname, '../src/panorama'));
 
 /**
  * 启动Rollup编译
@@ -56,15 +62,81 @@ function StartRollup(): void {
     });
 }
 
+async function FsLink() {
+    const dotaPath = await getDotaPath();
+    if (dotaPath === undefined) {
+        console.log('No Dota 2 installation found. Addon linking is skipped.');
+        return;
+    }
+
+    const FolderName = basename(resolve(__dirname, '../'));
+
+    for (const directoryName of ['game', 'content']) {
+        const sourcePath = path.resolve(__dirname, '../addon/', directoryName);
+        const targetPath = path.join(
+            dotaPath,
+            directoryName,
+            'dota_addons',
+            FolderName
+        );
+        if (existsSync(targetPath)) {
+            const isCorrect =
+                lstatSync(sourcePath).isSymbolicLink() &&
+                realpathSync(sourcePath) === targetPath;
+            if (isCorrect) {
+                console.log(
+                    `Skipping '${sourcePath}' since it is already linked`
+                );
+                continue;
+            } else {
+                // 移除目标文件夹的所有内容，
+                console.log(
+                    `'${targetPath}' is already linked to another directory, removing`
+                );
+                chmodSync(targetPath, '0755');
+                remove(targetPath)
+                    .then(() => {
+                        console.log('removed target path');
+                        moveSync(sourcePath, targetPath);
+                        symlinkSync(targetPath, sourcePath, 'junction');
+                        console.log(`Linked ${sourcePath} <==> ${targetPath}`);
+                    })
+                    .catch(err => {
+                        console.error('Error removing target path:', err);
+                    });
+            }
+        } else {
+            moveSync(sourcePath, targetPath);
+            symlinkSync(targetPath, sourcePath, 'junction');
+            console.log(`Linked ${sourcePath} <==> ${targetPath}`);
+        }
+    }
+}
+
 /**
  * 任务入口
  */
 export default async function TaskPUI() {
+    const outputDir = './addon/content/panorama/scripts/custom_game/';
+    const layoutDir = './addon/content/panorama/layout/custom_game/';
+    const stylesDir = './addon/content/panorama/styles/custom_game/';
+
+    // 如果输出目录和布局目录不存在，则创建它们
+    try {
+        mkdirSync(outputDir, { recursive: true });
+        mkdirSync(layoutDir, { recursive: true });
+        mkdirSync(stylesDir, { recursive: true });
+    } catch (error) {
+        console.error('Error creating directory:', error);
+    }
+
     await bundlePanoramaPolyfill({
-        output: './addon/content/solid-example/panorama/scripts/custom_game/panorama-polyfill.js',
+        output: './addon/content/panorama/scripts/custom_game/panorama-polyfill.js',
         using: { console: true, timers: true },
         merges: [join(__dirname, 'custom-polyfill.js')]
     });
+
+    FsLink();
 
     StartRollup();
 }

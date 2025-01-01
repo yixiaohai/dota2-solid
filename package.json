@@ -6,8 +6,9 @@
     "author": "RobinCode",
     "license": "MIT",
     "scripts": {
-        "start": "ts-node -r ./scripts/build-write-file.ts ./scripts/build.ts",
-        "build": "ts-node -r ./scripts/build-write-file.ts ./scripts/build.ts"
+        "start": "run-p start:*",
+        "start:panorama": "ts-node -r ./scripts/build-write-file.ts ./scripts/build.ts",
+        "start:vscripts": "tstl --project ./src/vscripts/tsconfig.json --watch"
     },
     "dependencies": {
         "@babel/core": "^7.20.5",
@@ -44,9 +45,14 @@
         "solid-js": "^1.6.2",
         "solid-panorama-all-in-jsx": "^0.2.5",
         "solid-panorama-polyfill": "^0.1.8",
-        "solid-panorama-runtime": "^0.2.9",
+        "solid-panorama-runtime": "^0.5.2",
+        "steam-game-path": "^2.0.1",
         "ts-node": "^10.9.1",
-        "typescript": "~4.9.3",
         "typescript-styled-plugin": "^0.18.2"
+    },
+    "devDependencies": {
+        "@moddota/dota-lua-types": "^4.30.0",
+        "typescript": "^5.7.2",
+        "typescript-to-lua": "^1.23.0"
     }
 }

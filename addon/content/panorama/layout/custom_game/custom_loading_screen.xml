@@ -1,0 +1,10 @@
+<root>
+  <scripts>
+    <include src="file://{resources}/scripts/custom_game/panorama-polyfill.js"/>
+    <include src="file://{resources}/scripts/custom_game/custom_loading_screen.js"/>
+  </scripts>
+  <snippets/>
+  <Panel class="root" hittest="false">
+    <Panel id="app"/>
+  </Panel>
+</root>

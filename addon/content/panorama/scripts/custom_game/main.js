@@ -23,6 +23,59 @@ function default_ui_config () {
   GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_CUSTOMUI_BEHIND_HUD_ELEMENTS, true);
 }
 
+function CButton({
+  text,
+  icon,
+  color,
+  ...props
+}) {
+  return (() => {
+    const _el$ = libs.createElement("Button", {
+        "class": "btnStyle"
+      }, null),
+      _el$2 = libs.createElement("Image", {
+        src: icon ? `file://{images}/custom_game/${icon}` : ''
+      }, _el$),
+      _el$3 = libs.createElement("Label", {
+        text: text
+      }, _el$);
+    libs.setProp(_el$2, "src", icon ? `file://{images}/custom_game/${icon}` : '');
+    libs.setProp(_el$2, "visible", !!icon);
+    libs.setProp(_el$3, "text", text);
+    libs.setProp(_el$3, "visible", !!text);
+    libs.effect(_$p => libs.setProp(_el$, "classList", {
+      R: color === 'R',
+      G: color === 'G',
+      B: color === 'B',
+      small: props.small === true,
+      large: props.large === true
+    }, _$p));
+    return _el$;
+  })();
+}
+
+const rootStyle$3 = "rootStyle-b3405de9";
+function Shop() {
+  return (() => {
+    const _el$ = libs.createElement("Panel", {
+      "class": rootStyle$3
+    }, null);
+    libs.setProp(_el$, "class", rootStyle$3);
+    libs.insert(_el$, libs.createComponent(CButton, {
+      text: "Button A",
+      small: true
+    }), null);
+    libs.insert(_el$, libs.createComponent(CButton, {
+      text: "Button B"
+    }), null);
+    libs.insert(_el$, libs.createComponent(CButton, {
+      text: "Button C",
+      large: true
+    }), null);
+    return _el$;
+  })();
+}
+
 class UpdateList {
   _indexes = [];
   next(index) {
@@ -61,6 +114,7 @@ function Ability(props) {
   const [isNotActive, setIsNotActive] = libs.createSignal(false);
   const [canLearn, setCanLearn] = libs.createSignal(false);
   const [maxLevel, setMaxLevel] = libs.createSignal([]);
+  const [timer, setTimer] = libs.createSignal(-1);
   let AbilityCooldown;
   console.log('Ability function');
   libs.onMount(() => {
@@ -114,10 +168,14 @@ function Ability(props) {
         }, 0);
       }
     }
-    setInterval(() => {
+    setTimer(setInterval(() => {
       libs.batch(updateState);
       updateCooldown();
-    }, 200);
+    }, 200));
+    libs.onCleanup(() => {
+      clearInterval(timer());
+      console.log('组件已卸载，定时器已清理');
+    });
   });
   return (() => {
     const _el$ = libs.createElement("Panel", {
@@ -317,55 +375,185 @@ function DotaAbilities() {
   })();
 }
 
-function CButton({
-  text,
-  icon,
-  color,
-  ...props
-}) {
+const rootStyle$2 = "rootStyle-b6caf7bb";
+function InventoryItem(props) {
+  const [selected, setToggleSelected] = libs.createSignal(false);
+  const GetItemName = () => Abilities.GetAbilityName(props.ItemEntityIndex);
+  const ShowItemTooltip = panel => {};
+  const HideItemTooltip = () => {};
+  const OnDragStart = (panel, dragCallbacks) => {
+    if (props.ItemEntityIndex < 0) return true;
+    if (selected()) {
+      setToggleSelected(false);
+    }
+    let displayPanel = $.CreatePanel('DOTAItemImage', $.GetContextPanel(), 'dragImage');
+    displayPanel.itemname = GetItemName();
+    displayPanel.SetAttributeInt('ItemEntityIndex', props.ItemEntityIndex);
+    displayPanel.SetAttributeInt('OwnerEntityIndex', props.UnitEntityIndex);
+    displayPanel.SetAttributeInt('b_dragComplete', 0);
+    dragCallbacks.displayPanel = displayPanel;
+    dragCallbacks.offsetX = 30;
+    dragCallbacks.offsetY = 22;
+    panel.AddClass('draggingFrom');
+    return true;
+  };
+  const OnDragEnd = (panel, draggedPanel) => {
+    draggedPanel.DeleteAsync(0);
+    panel.RemoveClass('draggingFrom');
+    panel.RemoveClass('tryingToDrop');
+    let b_dragComplete = Boolean(draggedPanel.GetAttributeInt('b_dragComplete', 0));
+    let OwnerEntityIndex = draggedPanel.GetAttributeInt('OwnerEntityIndex', 0);
+    let ItemEntityIndex = draggedPanel.GetAttributeInt('ItemEntityIndex', 0);
+    if (!b_dragComplete) {
+      {
+        if (Entities.IsRealHero(OwnerEntityIndex)) {
+          Game.DropItemAtCursor(OwnerEntityIndex, ItemEntityIndex);
+        }
+      }
+    }
+  };
+  const OnDragEnter = (panel, draggedPanel) => {
+    let draggedItem = draggedPanel.itemname;
+    if (draggedItem == null || draggedPanel == panel) {
+      return true;
+    }
+    panel.AddClass('tryingToDrop');
+    return true;
+  };
+  const OnDragLeave = (panel, draggedPanel) => {
+    let draggedItem = draggedPanel.itemname;
+    if (draggedItem == null || draggedPanel == panel) {
+      return true;
+    }
+    panel.RemoveClass('tryingToDrop');
+    return true;
+  };
+  const OnDragDrop = (panel, draggedPanel) => {
+    Boolean(draggedPanel.GetAttributeInt('b_dragComplete', 0));
+    let OwnerEntityIndex = draggedPanel.GetAttributeInt('OwnerEntityIndex', 0);
+    let ItemEntityIndex = draggedPanel.GetAttributeInt('ItemEntityIndex', 0);
+    let draggedItem = ItemEntityIndex;
+    if (draggedItem == null) return true;
+    draggedPanel.SetAttributeInt('b_dragComplete', 1);
+    if (OwnerEntityIndex == props.UnitEntityIndex) {
+      const swapOrder = {
+        OrderType: dotaunitorder_t.DOTA_UNIT_ORDER_MOVE_ITEM,
+        TargetIndex: props.SlotIndex,
+        AbilityIndex: draggedItem
+      };
+      Game.PrepareUnitOrders(swapOrder);
+    } else {
+      if (Entities.IsRealHero(OwnerEntityIndex)) {
+        let order = {
+          OrderType: dotaunitorder_t.DOTA_UNIT_ORDER_GIVE_ITEM,
+          TargetIndex: props.UnitEntityIndex,
+          AbilityIndex: ItemEntityIndex
+        };
+        Game.PrepareUnitOrders(order);
+      }
+    }
+    return true;
+  };
+  if (props.ItemEntityIndex < 0 && selected() == true) {
+    setToggleSelected(false);
+  }
   return (() => {
-    const _el$ = libs.createElement("Button", {
-        "class": "btnStyle"
+    const _el$ = libs.createElement("Panel", {
+        draggable: true
       }, null),
-      _el$2 = libs.createElement("Image", {
-        src: icon ? `file://{images}/custom_game/${icon}` : ''
-      }, _el$),
-      _el$3 = libs.createElement("Label", {
-        text: text
+      _el$2 = libs.createElement("DOTAItemImage", {
+        get itemname() {
+          return Abilities.GetAbilityName(props.ItemEntityIndex);
+        }
       }, _el$);
-    libs.setProp(_el$2, "src", icon ? `file://{images}/custom_game/${icon}` : '');
-    libs.setProp(_el$2, "visible", !!icon);
-    libs.setProp(_el$3, "text", text);
-    libs.setProp(_el$3, "visible", !!text);
-    libs.effect(_$p => libs.setProp(_el$, "classList", {
-      R: color === 'R',
-      G: color === 'G',
-      B: color === 'B',
-      small: props.small === true,
-      large: props.large === true
-    }, _$p));
+    libs.setProp(_el$, "className", `inventoryItem `);
+    libs.setProp(_el$, "onDragStart", OnDragStart);
+    libs.setProp(_el$, "onDragEnd", OnDragEnd);
+    libs.setProp(_el$, "onDragEnter", OnDragEnter);
+    libs.setProp(_el$, "onDragLeave", OnDragLeave);
+    libs.setProp(_el$, "onDragDrop", OnDragDrop);
+    libs.setProp(_el$, "onmouseover", ShowItemTooltip);
+    libs.setProp(_el$, "onmouseout", HideItemTooltip);
+    libs.setProp(_el$, "onactivate", () => {
+      if (GameUI.IsAltDown()) {
+        Abilities.PingAbility(props.ItemEntityIndex);
+      } else {
+        Abilities.ExecuteAbility(props.ItemEntityIndex, Players.GetLocalPlayerPortraitUnit(), false);
+      }
+    });
+    libs.setProp(_el$, "ondblclick", () => {
+      Abilities.CreateDoubleTapCastOrder(props.ItemEntityIndex, Players.GetLocalPlayerPortraitUnit());
+    });
+    libs.effect(_$p => libs.setProp(_el$2, "itemname", Abilities.GetAbilityName(props.ItemEntityIndex), _$p));
     return _el$;
   })();
 }
+function getItemList() {
+  let items = [];
+  for (let slot = 0; slot < 9; ++slot) {
+    items.push(Entities.GetItemInSlot(Players.GetLocalPlayerPortraitUnit(), slot));
+  }
+  return items;
+}
+function Inventory() {
+  const [itemList, setItemList] = libs.createSignal(getItemList());
+  libs.createEffect(() => {
+    const id = GameEvents.Subscribe('dota_inventory_changed', () => {
+      setItemList(getItemList());
+    });
+    return () => {
+      GameEvents.Unsubscribe(id);
+    };
+  });
+  const Update = () => {
+    setItemList(getItemList());
+  };
+  const timer = setInterval(Update, Game.GetGameFrameTime());
+  libs.onCleanup(() => clearInterval(timer));
+  return (() => {
+    const _el$3 = libs.createElement("Panel", {
+      "class": rootStyle$2,
+      hittest: false
+    }, null);
+    libs.setProp(_el$3, "class", rootStyle$2);
+    libs.insert(_el$3, libs.createComponent(libs.Index, {
+      get each() {
+        return [...Array(9).keys()];
+      },
+      children: slot => libs.createComponent(InventoryItem, {
+        selectItem: true,
+        IsInventory: true,
+        get SlotIndex() {
+          return slot();
+        },
+        get ItemEntityIndex() {
+          return itemList()[slot()];
+        },
+        get UnitEntityIndex() {
+          return Players.GetPlayerHeroEntityIndex(Players.GetLocalPlayer());
+        }
+      })
+    }));
+    return _el$3;
+  })();
+}
 
-const rootStyle$1 = "rootStyle-b3405de9";
-function Shop() {
+const rootStyle$1 = "rootStyle-e9db74b7";
+console.log('Lowhud load');
+function Lowhud() {
+  let root;
+  libs.onMount(() => {
+    console.log('Created lowhud', rootStyle$1);
+  });
   return (() => {
     const _el$ = libs.createElement("Panel", {
       "class": rootStyle$1
     }, null);
+    const _ref$ = root;
+    typeof _ref$ === "function" ? libs.use(_ref$, _el$) : root = _el$;
     libs.setProp(_el$, "class", rootStyle$1);
-    libs.insert(_el$, libs.createComponent(CButton, {
-      text: "Button A",
-      small: true
-    }), null);
-    libs.insert(_el$, libs.createComponent(CButton, {
-      text: "Button B"
-    }), null);
-    libs.insert(_el$, libs.createComponent(CButton, {
-      text: "Button C",
-      large: true
-    }), null);
+    libs.insert(_el$, libs.createComponent(Inventory, {}), null);
+    libs.insert(_el$, libs.createComponent(DotaAbilities, {}), null);
     return _el$;
   })();
 }
@@ -374,22 +562,45 @@ default_ui_config();
 const rootStyle = "rootStyle-bd31ed39";
 console.log('Main load');
 function Main() {
-  let root;
+  const [count, setCount] = libs.createSignal(0);
+  libs.createEffect(() => {
+    console.log(`当前计数: ${count()}`);
+  });
   libs.onMount(() => {
-    console.log('Created Main', rootStyle);
+    console.log('Created Main3', rootStyle);
   });
   return (() => {
     const _el$ = libs.createElement("Panel", {
         "class": rootStyle
-      }, null);
-      libs.createElement("Label", {
-        text: "test123"
-      }, _el$);
-    const _ref$ = root;
-    typeof _ref$ === "function" ? libs.use(_ref$, _el$) : root = _el$;
+      }, null),
+      _el$2 = libs.createElement("Button", {}, _el$),
+      _el$3 = libs.createElement("Label", {
+        get text() {
+          return `增加:${count()}`;
+        }
+      }, _el$2);
     libs.setProp(_el$, "class", rootStyle);
-    libs.insert(_el$, libs.createComponent(DotaAbilities, {}), null);
-    libs.insert(_el$, libs.createComponent(Shop, {}), null);
+    libs.setProp(_el$2, "onactivate", () => setCount(count() + 1));
+    libs.insert(_el$, libs.createComponent(libs.Switch, {
+      get children() {
+        return [libs.createComponent(libs.Match, {
+          get when() {
+            return count() === 1;
+          },
+          get children() {
+            return libs.createComponent(Shop, {});
+          }
+        }), libs.createComponent(libs.Match, {
+          get when() {
+            return count() === 2;
+          },
+          get children() {
+            return libs.createComponent(Lowhud, {});
+          }
+        })];
+      }
+    }), null);
+    libs.effect(_$p => libs.setProp(_el$3, "text", `增加:${count()}`, _$p));
     return _el$;
   })();
 }

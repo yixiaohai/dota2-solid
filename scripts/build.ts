@@ -85,7 +85,7 @@ async function FsLink() {
                 realpathSync(sourcePath) === targetPath;
             if (isCorrect) {
                 console.log(
-                    `Skipping '${sourcePath}' since it is already linked`
+                    `[build.ts] Skipping '${sourcePath}' since it is already linked`
                 );
                 continue;
             } else {
@@ -120,12 +120,14 @@ export default async function TaskPUI() {
     const outputDir = './addon/content/panorama/scripts/custom_game/';
     const layoutDir = './addon/content/panorama/layout/custom_game/';
     const stylesDir = './addon/content/panorama/styles/custom_game/';
+    const imagesDir = './addon/content/panorama/images/custom_game/';
 
     // 如果输出目录和布局目录不存在，则创建它们
     try {
         mkdirSync(outputDir, { recursive: true });
         mkdirSync(layoutDir, { recursive: true });
         mkdirSync(stylesDir, { recursive: true });
+        mkdirSync(imagesDir, { recursive: true });
     } catch (error) {
         console.error('Error creating directory:', error);
     }

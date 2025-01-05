@@ -4,12 +4,13 @@ import { Plugin } from 'rollup';
 
 const xmlFile = `<root>
     <Panel hittest="false" >
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main_debug.xml" />
         <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main.xml" />
     </Panel>
 </root>
 `;
 export default function CreateMain(options?: {}): Plugin {
-    console.log('create main')
+    console.log('[rollup-plugin-main.ts] create custom_ui_manifest.xml')
     return {
         name: 'create-main',
         generateBundle() {

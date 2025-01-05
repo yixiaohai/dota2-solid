@@ -1,8 +1,8 @@
-import { onMount } from 'solid-js';
+import { createEffect, createSignal, Match, onMount, Switch } from 'solid-js';
 import { render } from 'solid-panorama-runtime';
 import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import default_ui_config from '../functions/default_ui_config';
+import default_ui_config from '../config/default_ui_config';
 
 default_ui_config();
 
@@ -36,21 +36,33 @@ const rootStyle = css`
 
 console.log('Main load');
 
-import { DotaAbilities } from '../components/Ability';
 import { Shop } from '../view/shop';
+import { Lowhud } from '../view/lowhud';
 
 export function Main() {
-    let root: Panel | undefined;
+    const [count, setCount] = createSignal(0);
+
+    createEffect(() => {
+        console.log(`当前计数: ${count()}`);
+    });
 
     onMount(() => {
-        console.log('Created Main', rootStyle);
+        console.log('Created Main3', rootStyle);
     });
 
     return (
-        <Panel ref={root} class={rootStyle}>
-            <Label text="test123" />
-            <DotaAbilities />
-            <Shop />
+        <Panel class={rootStyle}>
+            <Button onactivate={() => setCount(count() + 1)}>
+                <Label text={`增加:${count()}`} />
+            </Button>
+            <Switch>
+                <Match when={count() === 1}>
+                    <Shop />
+                </Match>
+                <Match when={count() === 2}>
+                    <Lowhud />
+                </Match>
+            </Switch>
         </Panel>
     );
 }

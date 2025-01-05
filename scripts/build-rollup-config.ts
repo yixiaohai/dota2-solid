@@ -13,8 +13,9 @@ import compatiblePanorama from './rollup-plugin-panorama';
 import { isDir, Panorama } from './utils';
 import { rollupPluginXML } from './rollup-plugin-xml';
 import { rollupPluginScss } from './rollup-plugin-scss';
-import { writeFileSync } from 'fs'; // 导入写文件的模块
+import { mkdirSync, writeFileSync } from 'fs'; // 导入写文件的模块
 import CreateMain from './rollup-plugin-main';
+import LoadImage from './rollup-plugin-img';
 
 export default function GetRollupWatchOptions(rootPath: string) {
     // 入口文件夹
@@ -28,7 +29,10 @@ export default function GetRollupWatchOptions(rootPath: string) {
     const inputFiles = pages.map(v => {
         return path.join(rootPath, `./${v}/${v}.tsx`);
     });
+
     console.log(pages.map(v => Panorama + ' 👁️  ' + v).join('\n'));
+
+    const imagesPath = path.join(rootPath, 'images');
 
     const options: RollupWatchOptions = {
         input: inputFiles,
@@ -108,7 +112,8 @@ export default function GetRollupWatchOptions(rootPath: string) {
                     __dirname,
                     '../addon/content/panorama/styles/custom_game'
                 )
-            })
+            }),
+            LoadImage({imagesPath}),
         ]
     };
 

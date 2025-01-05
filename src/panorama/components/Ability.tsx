@@ -5,6 +5,7 @@ import {
     createSignal,
     For,
     Index,
+    onCleanup,
     onMount
 } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
@@ -108,20 +109,20 @@ const AbilityStyle = css`
     }
 `;
 
-console.log('Ability load')
+console.log('Ability load');
 function Ability(props: { slot: number; list: AbilityList }) {
     const [ability, setAbility] = createSignal(-1 as AbilityEntityIndex);
     const [isPassive, setIsPassive] = createSignal(false);
     const [isNotActive, setIsNotActive] = createSignal(false);
     const [canLearn, setCanLearn] = createSignal(false);
     const [maxLevel, setMaxLevel] = createSignal<boolean[]>([]);
+    const [timer, setTimer] = createSignal(-1);
     let AbilityCooldown: Panel | undefined;
 
-    console.log('Ability function')
+    console.log('Ability function');
 
     onMount(() => {
-
-        console.log('Ability onMount')
+        console.log('Ability onMount');
         function updateState() {
             const currentAbility =
                 props.list.value(props.slot) || (-1 as AbilityEntityIndex);
@@ -189,10 +190,18 @@ function Ability(props: { slot: number; list: AbilityList }) {
             }
         }
 
-        setInterval(() => {
-            batch(updateState);
-            updateCooldown();
-        }, 200);
+        setTimer(
+            setInterval(() => {
+                batch(updateState);
+                updateCooldown();
+            }, 200)
+        );
+
+        // 清理定时器
+        onCleanup(() => {
+            clearInterval(timer());
+            console.log('组件已卸载，定时器已清理');
+        });
     });
 
     return (

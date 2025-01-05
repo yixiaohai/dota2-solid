@@ -23,7 +23,5 @@ interface CDOTA_PanoramaScript_GameUI {
     __layer: { [key: string]: any}
 }
 
-interface ModuleExports {
-    [key: string]: any; // 根据需要定义更具体的类型
-}
+
 

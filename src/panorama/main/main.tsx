@@ -16,7 +16,7 @@ xml(
             <include src="file://{resources}/scripts/custom_game/main.js" />
         </scripts>
         <Panel class="root" hittest={false}>
-            <Panel id="app" class="root" />
+            <Panel id="app" class="root" hittest={false}/>
         </Panel>
     </root>
 );
@@ -52,8 +52,8 @@ export function Main() {
 
     return (
         <Panel class={rootStyle}>
-            <Button onactivate={() => setCount(count() + 1)}>
-                <Label text={`增加:${count()}`} />
+            <Button onactivate={() => setCount(count() + 1)} >
+                <Label text={`增加:${count()}`} tooltip_text="123123"/>
             </Button>
             <Switch>
                 <Match when={count() === 1}>

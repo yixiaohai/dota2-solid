@@ -9,6 +9,6 @@
   </scripts>
   <snippets/>
   <Panel class="root" hittest="false">
-    <Panel id="app" class="root"/>
+    <Panel id="app_debug" class="root" hittest="false"/>
   </Panel>
 </root>

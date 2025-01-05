@@ -1,3 +1,7 @@
+interface ModuleExports {
+    [key: string]: any; // 根据需要定义更具体的类型
+}
+
 export default function () {
     const root = $.GetContextPanel();
     const modules: ModuleExports = (GameUI.__modules = {});

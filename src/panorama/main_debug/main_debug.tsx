@@ -23,16 +23,24 @@ xml(
             <include src="file://{resources}/scripts/custom_game/main_debug.js" />
         </scripts>
         <Panel class="root" hittest={false}>
-            <Panel id="app" class="root" />
+            <Panel id="app_debug" class="root" hittest={false}/>
         </Panel>
     </root>
 );
+
+const rootStyle = css`
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: bottom;
+    margin-bottom: 500px;
+`;
 
 export function Debug() {
     if (!Game.IsInToolsMode()) {
         return;
     }
 
+    const [menuShow, setMenuShow] = createSignal(false)
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
         {
             icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
@@ -40,6 +48,7 @@ export function Debug() {
                 console.log('toolcommon');
             },
             key: 'toolcommon',
+            label: '通用工具',
             style: {
                 width: '24px',
                 height: '24px'
@@ -51,23 +60,26 @@ export function Debug() {
                 console.log('tooldeveloper');
             },
             key: 'tooldeveloper',
+            label: '开发工具',
             style: {
-                width: '28px',
-                height: '28px'
+                width: '24px',
+                height: '24px'
             }
         },
     ]);
 
     onMount(() => {
         console.log('Created Debug View');
+        setInterval(() => {
+            setMenuShow(true);
+        }, 1500);
     });
 
     return (
-        <Panel>
-            <Menu items={menuItem} mode="horizontal" />
-            <Image src="s2r://panorama/images/custom_game/debug/icon/toolCommon.png.vtex" />
+        <Panel class='root'>
+            <Menu items={menuItem} mode="horizontal" show={menuShow()} />
         </Panel>
     );
 }
 
-render(() => <Debug />, $('#app'));
+render(() => <Debug />, $('#app_debug'));

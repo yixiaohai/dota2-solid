@@ -2,12 +2,11 @@ import { Component, For } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
 const MenuStyle = css`
-    width: 450px;
     height: 30px;
-    margin-top: 13px;
+    margin-top: 17px;
+    margin-left: 140px;
     horizontal-align: left;
     vertical-align: top;
-    margin-left: 140px;
     flow-children: right;
     opacity: 1;
     transition-property: opacity;
@@ -15,7 +14,7 @@ const MenuStyle = css`
     transition-timing-function: ease-in-out;
     z-index: -1;
 
-    .minimized {
+    &.minimized {
         opacity: 0;
     }
 
@@ -23,7 +22,7 @@ const MenuStyle = css`
         width: 30px;
         height: 30px;
         margin-left: 18px;
-        flow-children: right;
+        flow-children: down;
     }
 
     .box.minimized {
@@ -31,7 +30,7 @@ const MenuStyle = css`
     }
 
     .box Image {
-        vertical-align: middle;
+        vertical-align: top;
         horizontal-align: center;
         tooltip-position: bottom;
         tooltip-body-position: 50% 50%;
@@ -60,21 +59,22 @@ export interface MenuItem {
 interface MenuProps {
     items: MenuItem[];
     mode?: string;
+    show?: boolean;
 }
 
 export const Menu: Component<MenuProps> = props => {
     return (
-        <Panel class={MenuStyle}>
+        <Panel class={`${MenuStyle} ${props.show ? '' : `minimized`}`}>
             <For each={props.items}>
                 {i => (
                     <Panel
-                        class={`${MenuStyle} box`}
+                        class="box"
+                        tooltip_text={i.label}
                         onactivate={() => {
                             i.func();
                         }}
                     >
                         <Image src={`${i.icon}`} style={i.style} />
-                        {i.label && <Label text={i.label} />}
                     </Panel>
                 )}
             </For>

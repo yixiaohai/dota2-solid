@@ -1639,7 +1639,6 @@ exports.createSignal = createSignal;
 exports.createStore = createStore;
 exports.effect = effect;
 exports.insert = insert;
-exports.memo = memo;
 exports.onCleanup = onCleanup;
 exports.onMount = onMount;
 exports.render = render;

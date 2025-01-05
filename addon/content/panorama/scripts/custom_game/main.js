@@ -581,6 +581,7 @@ function Main() {
       }, _el$2);
     libs.setProp(_el$, "class", rootStyle);
     libs.setProp(_el$2, "onactivate", () => setCount(count() + 1));
+    libs.setProp(_el$3, "tooltip_text", "123123");
     libs.insert(_el$, libs.createComponent(libs.Switch, {
       get children() {
         return [libs.createComponent(libs.Match, {

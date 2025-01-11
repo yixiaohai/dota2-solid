@@ -1,10 +1,8 @@
 .MenuStyle-1fe11131 {
-  height: 30px;
-  margin-top: 17px;
-  margin-left: 140px;
+  margin-top: 12px;
+  margin-left: 10px;
   horizontal-align: left;
   vertical-align: top;
-  flow-children: right;
   opacity: 1;
   transition-property: opacity;
   transition-duration: 0.35s;
@@ -14,17 +12,30 @@
 .MenuStyle-1fe11131.minimized {
   opacity: 0;
 }
-.MenuStyle-1fe11131 .box {
-  width: 30px;
-  height: 30px;
-  margin-left: 18px;
+.MenuStyle-1fe11131.horizontal {
+  flow-children: right;
+  min-height: 30px;
+}
+.MenuStyle-1fe11131.vertical {
+  min-width: 30px;
   flow-children: down;
 }
-.MenuStyle-1fe11131 .box.minimized {
+.MenuStyle-1fe11131.horizontal .box {
+  height: 100%;
+  margin-left: 18px;
+}
+.MenuStyle-1fe11131.horizontal .box.minimized {
   width: 0;
 }
+.MenuStyle-1fe11131.vertical .box {
+  width: 100%;
+  margin-top: 18px;
+}
+.MenuStyle-1fe11131.vertical .box.minimized {
+  height: 0;
+}
 .MenuStyle-1fe11131 .box Image {
-  vertical-align: top;
+  vertical-align: middle;
   horizontal-align: center;
   tooltip-position: bottom;
   tooltip-body-position: 50% 50%;
@@ -35,6 +46,58 @@
   img-shadow: 0px 0px 3px 3 black;
 }
 .MenuStyle-1fe11131 .box Image:hover {
+  opacity: 1;
+  wash-color: #fff;
+}
+
+.MenuStyle-1266a4d3 {
+  margin-top: 12px;
+  margin-left: 10px;
+  horizontal-align: left;
+  vertical-align: top;
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: 0.35s;
+  transition-timing-function: ease-in-out;
+  z-index: -1;
+}
+.MenuStyle-1266a4d3.minimized {
+  opacity: 0;
+}
+.MenuStyle-1266a4d3.horizontal {
+  flow-children: right;
+  min-height: 30px;
+}
+.MenuStyle-1266a4d3.vertical {
+  min-width: 30px;
+  flow-children: down;
+}
+.MenuStyle-1266a4d3.horizontal .box {
+  height: 100%;
+  margin-left: 18px;
+}
+.MenuStyle-1266a4d3.horizontal .box.minimized {
+  width: 0;
+}
+.MenuStyle-1266a4d3.vertical .box {
+  width: 100%;
+  margin-top: 18px;
+}
+.MenuStyle-1266a4d3.vertical .box.minimized {
+  height: 0;
+}
+.MenuStyle-1266a4d3 .box Image {
+  vertical-align: middle;
+  horizontal-align: center;
+  tooltip-position: bottom;
+  tooltip-body-position: 50% 50%;
+  wash-color: #cdf;
+  opacity: 0.5;
+  transition-property: opacity;
+  transition-duration: 0.2s;
+  img-shadow: 0px 0px 3px 3 black;
+}
+.MenuStyle-1266a4d3 .box Image:hover {
   opacity: 1;
   wash-color: #fff;
 }

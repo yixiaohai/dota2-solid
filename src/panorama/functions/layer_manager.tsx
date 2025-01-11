@@ -72,15 +72,16 @@ class LayerManager {
         this.openLayer[type] = null; // 清除打开的层记录
         return true;
     }
+
+    get(name: string, type?: string) {
+        type = type ?? 'default';
+        const layer = this.layers.find(
+            layer => layer.name === name && layer.type === type
+        );
+        return layer?.show ?? false;
+    }
 }
 
 export default function () {
     GameUI.__layer = new LayerManager();
-
-    const layer = GameUI.__layer;
-    layer.create('a1', 'a');
-    layer.create('a2', 'a');
-    layer.create('a3', 'a');
-    layer.open('a1', 'a');
-    layer.open('a2', 'a');
 }

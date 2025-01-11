@@ -1,24 +1,4 @@
-'use strict'; const require = GameUI.__require;
-
-function require$1 () {
-  const root = $.GetContextPanel();
-  const modules = GameUI.__modules = {};
-  GameUI.__loadModule = function (name, exports) {
-    if (modules[name]) {
-      $.Msg(`Reload module: ${name} `, exports ? '👏' : '☠️');
-    }
-    modules[name] = exports;
-  };
-  GameUI.__require = function (name) {
-    name = name.slice(2, name.length - 3);
-    if (!modules[name]) {
-      const m = $.CreatePanel('Panel', root, name);
-      m.BLoadLayout(`file://{resources}/layout/custom_game/${name}.xml`, false, false);
-      $.Msg(`Load module: ${name} `, modules[name] ? '👏' : '☠️');
-    }
-    return modules[name];
-  };
-}
+'use strict'; const exports = {}; GameUI.__loadModule('layer_manager', exports); const require = GameUI.__require;
 
 class LayerManager {
   layers = [];
@@ -68,15 +48,15 @@ class LayerManager {
     this.openLayer[type] = null;
     return true;
   }
-  get(name, type) {
-    type = type ?? 'default';
-    const layer = this.layers.find(layer => layer.name === name && layer.type === type);
-    return layer?.show ?? false;
-  }
 }
-function layer () {
+function Layer () {
   GameUI.__layer = new LayerManager();
+  const layer = GameUI.__layer;
+  layer.create('a1', 'a');
+  layer.create('a2', 'a');
+  layer.create('a3', 'a');
+  layer.open('a1', 'a');
+  layer.open('a2', 'a');
 }
 
-require$1();
-layer();
+exports.Layer = Layer;

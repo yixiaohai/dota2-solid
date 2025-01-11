@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js';
+import { Component, createSignal, For, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
 const MenuStyle = css`
@@ -62,40 +62,27 @@ const MenuStyle = css`
     }
 `;
 
-export interface MenuItem {
-    icon: string;
-    func: Function;
-    label?: string;
-    show?: boolean;
-    style?: Partial<PanelStyle>;
+
+interface LayerProps {
+    name: string;
+    type?: string;
+    children?: JSX.Element | JSX.Element[];
 }
 
-interface MenuProps {
-    items: MenuItem[];
-    mode?: string;
-    show?: boolean;
-    style?: Partial<PanelStyle>;
-}
+export const Layer: Component<LayerProps> = props => {
 
-export const Menu: Component<MenuProps> = props => {
+    const [show, setShow] = createSignal(false);
+
+    onMount(() => {
+        console.log('Created Layer View');
+        const layer = GameUI.__layer;
+        layer.create(props.name, props.type)
+        setShow(layer.get(props.name, props.type));
+    });
+    
     return (
-        <Panel
-            class={`${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`}
-            style={props.style}
-        >
-            <For each={props.items}>
-                {i => (
-                    <Panel
-                        class="box"
-                        tooltip_text={i.label}
-                        onactivate={() => {
-                            i.func();
-                        }}
-                    >
-                        <Image src={`${i.icon}`} style={i.style} />
-                    </Panel>
-                )}
-            </For>
+        <Panel class={`${MenuStyle} ${show() ? '' : `minimized`}`}>
+            {props.children}
         </Panel>
     );
 };

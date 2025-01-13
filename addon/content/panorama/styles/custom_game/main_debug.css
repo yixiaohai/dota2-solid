@@ -64,42 +64,10 @@
 .MenuStyle-1266a4d3.minimized {
   opacity: 0;
 }
-.MenuStyle-1266a4d3.horizontal {
-  flow-children: right;
-  min-height: 30px;
-}
-.MenuStyle-1266a4d3.vertical {
-  min-width: 30px;
-  flow-children: down;
-}
-.MenuStyle-1266a4d3.horizontal .box {
-  height: 100%;
-  margin-left: 18px;
-}
-.MenuStyle-1266a4d3.horizontal .box.minimized {
-  width: 0;
-}
-.MenuStyle-1266a4d3.vertical .box {
-  width: 100%;
-  margin-top: 18px;
-}
-.MenuStyle-1266a4d3.vertical .box.minimized {
-  height: 0;
-}
-.MenuStyle-1266a4d3 .box Image {
-  vertical-align: middle;
-  horizontal-align: center;
-  tooltip-position: bottom;
-  tooltip-body-position: 50% 50%;
-  wash-color: #cdf;
-  opacity: 0.5;
-  transition-property: opacity;
-  transition-duration: 0.2s;
-  img-shadow: 0px 0px 3px 3 black;
-}
-.MenuStyle-1266a4d3 .box Image:hover {
-  opacity: 1;
-  wash-color: #fff;
+
+.rootStyle-dacfbb7a {
+  margin-left: 500px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .root {

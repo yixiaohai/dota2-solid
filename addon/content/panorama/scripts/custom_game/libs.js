@@ -1635,6 +1635,7 @@ exports.batch = batch;
 exports.createComponent = createComponent;
 exports.createEffect = createEffect;
 exports.createElement = createElement;
+exports.createMemo = createMemo;
 exports.createSignal = createSignal;
 exports.createStore = createStore;
 exports.effect = effect;

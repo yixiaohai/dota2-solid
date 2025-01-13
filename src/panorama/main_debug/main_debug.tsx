@@ -19,7 +19,6 @@ xml(
     <root>
         <styles>
             <include src="file://{resources}/styles/custom_game/main_debug.css" />
-            <include src="file://{resources}/styles/custom_game/precache.css" />
         </styles>
         <scripts>
             <include src="file://{resources}/scripts/custom_game/panorama-polyfill.js" />
@@ -44,7 +43,6 @@ export function Debug() {
     }
 
     const layer = GameUI.__layer;
-    
 
     const [menuShow, setMenuShow] = createSignal(false);
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
@@ -111,7 +109,7 @@ export function Debug() {
 
     onMount(() => {
         console.log('Created Debug View');
-        setInterval(() => {
+        setTimeout(() => {
             setMenuShow(true);
         }, 1500);
     });
@@ -119,7 +117,7 @@ export function Debug() {
     return (
         <Panel class="root">
             <Menu items={menuItem} show={menuShow()} />
-            <Layer name='toolcommon' type='a'>
+            <Layer name="toolcommon" type="a">
                 <Test />
             </Layer>
             <Layer name='tooldeveloper' type='a'>

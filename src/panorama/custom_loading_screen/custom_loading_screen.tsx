@@ -1,9 +1,7 @@
 import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import require from '../functions/require';
-import layer from '../functions/layer_manager'
 
 require()
-layer()
 
 xml(
     <root>

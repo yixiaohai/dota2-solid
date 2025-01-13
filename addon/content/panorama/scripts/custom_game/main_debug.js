@@ -62,35 +62,85 @@ const Menu = props => {
   })();
 };
 
+const [layerData, setLayerData] = libs.createStore([]);
+const create = (name, type) => {
+  const newData = [...layerData, {
+    name: name,
+    type: type ?? 'default',
+    show: true
+  }];
+  setLayerData(newData);
+  console.log('create');
+  console.logx(newData);
+};
+const open = (name, type) => {
+  const data = layerData;
+  const index = data.findIndex(l => l.name === name && l.type === type);
+  if (index !== -1) {
+    setLayerData(index, 'show', true);
+  }
+  console.log('open');
+  console.logx(data);
+};
+const close = (name, type) => {
+  setLayerData(prevData => prevData.map(l => l.name === name && l.type === type ? {
+    ...l,
+    show: false
+  } : l));
+  console.log('close');
+};
+const get = (name, type) => {
+  const data = layerData;
+  const index = data.findIndex(l => l.name === name && l.type === type);
+  if (index !== -1) {
+    return data[index].show;
+  }
+  return null;
+};
+const layer = {
+  create,
+  open,
+  close,
+  get
+};
+
 const MenuStyle = "MenuStyle-1266a4d3";
 const Layer = props => {
-  const [show, setShow] = libs.createSignal(false);
   libs.onMount(() => {
     console.log('Created Layer View');
-    const layer = GameUI.__layer;
     layer.create(props.name, props.type);
-    setShow(layer.get(props.name, props.type));
+    layer.close(props.name, props.type);
+  });
+  libs.createMemo(() => {
+    console.log('createMemo');
+    console.logx(layer.get(props.name, props.type));
   });
   return (() => {
     const _el$ = libs.createElement("Panel", {
       get ["class"]() {
-        return `${MenuStyle} ${show() ? '' : `minimized`}`;
+        return `${MenuStyle} ${layer.get(props.name, props.type) ? '' : `minimized`}`;
       }
     }, null);
     libs.insert(_el$, () => props.children);
-    libs.effect(_$p => libs.setProp(_el$, "class", `${MenuStyle} ${show() ? '' : `minimized`}`, _$p));
+    libs.effect(_$p => libs.setProp(_el$, "class", `${MenuStyle} ${layer.get(props.name, props.type) ? '' : `minimized`}`, _$p));
     return _el$;
   })();
 };
 
+const rootStyle = "rootStyle-dacfbb7a";
 const Test = () => {
   return (() => {
     const _el$ = libs.createElement("Panel", {
-        hittest: false
-      }, null);
-      libs.createElement("Label", {
-        text: "Hello World!"
+        hittest: false,
+        "class": rootStyle
+      }, null),
+      _el$2 = libs.createElement("Label", {
+        text: "Hello World1!"
       }, _el$);
+    libs.setProp(_el$, "class", rootStyle);
+    libs.setProp(_el$2, "onactivate", () => {
+      layer.close('toolcommon', 'a');
+    });
     return _el$;
   })();
 };
@@ -170,7 +220,7 @@ function Debug() {
   }]);
   libs.onMount(() => {
     console.log('Created Debug View');
-    setInterval(() => {
+    setTimeout(() => {
       setMenuShow(true);
     }, 1500);
   });
@@ -185,8 +235,8 @@ function Debug() {
       }
     }), null);
     libs.insert(_el$, libs.createComponent(Layer, {
-      name: 'toolcommon',
-      type: 'a',
+      name: "toolcommon",
+      type: "a",
       get children() {
         return libs.createComponent(Test, {});
       }

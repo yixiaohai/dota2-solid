@@ -3,19 +3,19 @@ import path, { join } from 'node:path';
 import { Plugin } from 'rollup';
 import fs from 'fs';
 
-// 构建 .vtex 文件内容
-let imagePrecacheContent = `.image-precache {\n`;
+// 构建 .vpdi 文件内容
+let imagePrecacheContent = `"DynamicImages"\n{\n  "Explicit Files"\n  {\n`;
 
 export default function LoadImage(options: { imagesPath: string }): Plugin {
     let hasRun = false; // 标记插件是否已运行
-    const generateVtexFile = (imagesPath: string) => {
+    const generateVpdiFile = (imagesPath: string) => {
         const outPathBase = join(
             __dirname,
             '../addon/content/panorama/images/custom_game'
         );
-        const cssPath = join(
+        const vpdi = join(
             __dirname,
-            '../addon/content/panorama/styles/custom_game'
+            '../addon/content/panorama'
         );
 
         // 遍历 imagesPath 中的所有图片
@@ -49,10 +49,10 @@ export default function LoadImage(options: { imagesPath: string }): Plugin {
 
                     fs.copyFileSync(filePath, outputFile);
 
-                    imagePrecacheContent += `background-image: url("file://{images}/custom_game/${relativePath}");\n`
+                    imagePrecacheContent += `    "{images}/custom_game/${relativePath}" ""\n`
 
                     console.log(
-                        `[rollup-plugin-vtex.ts] ${outputFile} 已复制`
+                        `[rollup-plugin-img.ts] ${outputFile} 已复制`
                     );
                 }
             });
@@ -60,28 +60,28 @@ export default function LoadImage(options: { imagesPath: string }): Plugin {
         };
 
         traverseDirectory(options.imagesPath); // 开始遍历指定的图片目录
-        imagePrecacheContent += '}'
+        imagePrecacheContent += '  }\n}'
         fs.writeFileSync(
-            `${cssPath}/precache.css`,
+            `${vpdi}/dynamic_images.vpdi`,
             imagePrecacheContent,
             'utf-8'
         ); // 写入文件
     };
 
     return {
-        name: 'create-vtex',
+        name: 'create-vpdi',
         buildStart() {
             if (hasRun) {
                 return;
             }
             hasRun = true;
             this.addWatchFile(options.imagesPath); // 监视 imagesPath 以便在文件变化时重新构建
-            generateVtexFile(options.imagesPath);
+            generateVpdiFile(options.imagesPath);
         },
         watchChange(id) {
             if (id.startsWith(options.imagesPath)) {
-                // 如果监视的文件发生变化，重新生成 .vtex 文件
-                generateVtexFile(options.imagesPath);
+                // 如果监视的文件发生变化，重新生成 .vpdi 文件
+                generateVpdiFile(options.imagesPath);
             }
         }
     };

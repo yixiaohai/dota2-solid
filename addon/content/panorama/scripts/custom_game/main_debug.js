@@ -63,13 +63,15 @@ const Menu = props => {
 };
 
 const [layerData, setLayerData] = libs.createStore([]);
-const create = (name, type, shade, shadeClose) => {
+const create = (name, type, shade, shadeClose, onOpen, onClose) => {
   const newData = [...layerData, {
     name: name,
     type: type,
     show: false,
     shade: shade || 0,
-    shadeClose: shadeClose || false
+    shadeClose: shadeClose || false,
+    onOpen: onOpen,
+    onClose: onClose
   }];
   setLayerData(newData);
 };
@@ -80,12 +82,15 @@ const open = (name, type) => {
   if (type) {
     const data_type = newData.filter(l => l.type === type);
     data_type.forEach(l => {
-      const index = newData.findIndex(item => item === l);
+      const index = newData.findIndex(item => item === l && item.show);
       if (index !== -1) {
         newData[index] = {
           ...newData[index],
           show: false
         };
+        if (newData[index].onClose) {
+          newData[index].onClose();
+        }
       }
     });
   }
@@ -95,14 +100,25 @@ const open = (name, type) => {
       ...newData[index],
       show: true
     };
+    if (newData[index].onOpen) {
+      newData[index].onOpen();
+    }
   }
   setLayerData(newData);
 };
 const close = (name, type) => {
-  setLayerData(prevData => prevData.map(l => l.name === name && l.type === type ? {
-    ...l,
-    show: false
-  } : l));
+  setLayerData(prevData => prevData.map(l => {
+    if (l.name === name && l.type === type) {
+      if (l.onClose) {
+        l.onClose();
+      }
+      return {
+        ...l,
+        show: false
+      };
+    }
+    return l;
+  }));
 };
 const toggle = (name, type) => {
   const state = isOpen(name, type);
@@ -154,7 +170,7 @@ const Layer = props => {
   const resolved = libs.children(() => props.children);
   libs.onMount(() => {
     console.log('Created Layer View', props.name, props.type);
-    layer.create(props.name, props.type, props.shade, props.shadeClose);
+    layer.create(props.name, props.type, props.shade, props.shadeClose, props.onOpen, props.onClose);
     const list = resolved.toArray();
     for (const [index, child] of list.entries()) {
       child.SetPanelEvent('onactivate', () => {});
@@ -208,6 +224,8 @@ const Test = () => {
   return libs.createComponent(Layer, {
     name: "toolcommon",
     type: "left",
+    onOpen: () => console.log('open'),
+    onClose: () => console.log('close'),
     get children() {
       const _el$ = libs.createElement("Panel", {
           "class": rootStyle

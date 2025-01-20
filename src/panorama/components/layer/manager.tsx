@@ -6,6 +6,8 @@ interface LayerState {
     show: boolean;
     shade: number;
     shadeClose: boolean;
+    onOpen?: () => void;
+    onClose?: () => void;
 }
 
 const [layerData, setLayerData] = createStore<LayerState[]>([]);
@@ -14,7 +16,9 @@ const create = (
     name: string,
     type?: string,
     shade?: number,
-    shadeClose?: boolean
+    shadeClose?: boolean,
+    onOpen?: () => void,
+    onClose?: () => void
 ) => {
     const newData = [
         ...layerData,
@@ -23,7 +27,9 @@ const create = (
             type: type,
             show: false,
             shade: shade || 0,
-            shadeClose: shadeClose || false
+            shadeClose: shadeClose || false,
+            onOpen: onOpen,
+            onClose: onClose
         }
     ];
     setLayerData(newData);
@@ -37,9 +43,12 @@ const open = (name: string, type?: string) => {
     if (type) {
         const data_type = newData.filter(l => l.type === type);
         data_type.forEach(l => {
-            const index = newData.findIndex(item => item === l);
+            const index = newData.findIndex(item => item === l && item.show);
             if (index !== -1) {
                 newData[index] = { ...newData[index], show: false };
+                if (newData[index].onClose) {
+                    newData[index].onClose();
+                }
             }
         });
     }
@@ -47,6 +56,10 @@ const open = (name: string, type?: string) => {
     const index = newData.findIndex(l => l.name === name && l.type === type);
     if (index !== -1) {
         newData[index] = { ...newData[index], show: true };
+
+        if (newData[index].onOpen) {
+            newData[index].onOpen();
+        }
     }
 
     setLayerData(newData); // 更新整个数组
@@ -54,9 +67,15 @@ const open = (name: string, type?: string) => {
 
 const close = (name: string, type?: string) => {
     setLayerData(prevData =>
-        prevData.map(l =>
-            l.name === name && l.type === type ? { ...l, show: false } : l
-        )
+        prevData.map(l => {
+            if (l.name === name && l.type === type) {
+                if (l.onClose) {
+                    l.onClose();
+                }
+                return { ...l, show: false };
+            }
+            return l;
+        })
     );
 };
 
@@ -104,7 +123,9 @@ interface LayerActions {
         name: string,
         type?: string,
         shade?: number,
-        shadeClose?: boolean
+        shadeClose?: boolean,
+        onOpen?: () => void,
+        onClose?: () => void
     ) => void;
     open: (name: string, type?: string) => void;
     close: (name: string, type?: string) => void;

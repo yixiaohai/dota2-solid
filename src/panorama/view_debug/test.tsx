@@ -11,7 +11,7 @@ const rootStyle = css`
 `;
 export const Test = () => {
     return (
-        <Layer name="toolcommon" type="left">
+        <Layer name="toolcommon" type="left" onOpen={() => console.log('open')} onClose={() => console.log('close')}>
             <Panel class={rootStyle}>
                 <Panel class="test1">
                     <Label

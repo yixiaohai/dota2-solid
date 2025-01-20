@@ -41,6 +41,8 @@ interface LayerProps {
     shade?: number;
     shadeClose?: boolean;
     children?: JSX.Element | JSX.Element[];
+    onOpen?: () => void;
+    onClose?: () => void;
 }
 
 const Layer: Component<LayerProps> = props => {
@@ -48,7 +50,7 @@ const Layer: Component<LayerProps> = props => {
 
     onMount(() => {
         console.log('Created Layer View', props.name, props.type);
-        layer.create(props.name, props.type, props.shade, props.shadeClose);
+        layer.create(props.name, props.type, props.shade, props.shadeClose, props.onOpen, props.onClose);
 
         const list = resolved.toArray();
         for (const [index, child] of list.entries()) {

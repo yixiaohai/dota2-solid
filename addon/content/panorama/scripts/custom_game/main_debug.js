@@ -2,12 +2,12 @@
 
 var libs = require('./libs.js');
 
-const MenuStyle$1 = "MenuStyle-1fe11131";
+const MenuStyle = "MenuStyle-1fe11131";
 const Menu = props => {
   return (() => {
     const _el$ = libs.createElement("Panel", {
       get ["class"]() {
-        return `${MenuStyle$1} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`;
+        return `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`;
       },
       get style() {
         return props.style;
@@ -49,7 +49,7 @@ const Menu = props => {
       })()
     }));
     libs.effect(_p$ => {
-      const _v$ = `${MenuStyle$1} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`,
+      const _v$ = `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`,
         _v$2 = props.style;
       _v$ !== _p$._v$ && (_p$._v$ = libs.setProp(_el$, "class", _v$, _p$._v$));
       _v$2 !== _p$._v$2 && (_p$._v$2 = libs.setProp(_el$, "style", _v$2, _p$._v$2));
@@ -63,105 +63,193 @@ const Menu = props => {
 };
 
 const [layerData, setLayerData] = libs.createStore([]);
-const create = (name, type) => {
+const create = (name, type, shade, shadeClose) => {
   const newData = [...layerData, {
     name: name,
-    type: type ?? 'default',
-    show: true
+    type: type,
+    show: false,
+    shade: shade || 0,
+    shadeClose: shadeClose || false
   }];
   setLayerData(newData);
-  console.log('create');
-  console.logx(newData);
 };
 const open = (name, type) => {
+  console.log('open', name, type);
   const data = layerData;
-  const index = data.findIndex(l => l.name === name && l.type === type);
-  if (index !== -1) {
-    setLayerData(index, 'show', true);
+  let newData = [...data];
+  if (type) {
+    const data_type = newData.filter(l => l.type === type);
+    data_type.forEach(l => {
+      const index = newData.findIndex(item => item === l);
+      if (index !== -1) {
+        newData[index] = {
+          ...newData[index],
+          show: false
+        };
+      }
+    });
   }
-  console.log('open');
-  console.logx(data);
+  const index = newData.findIndex(l => l.name === name && l.type === type);
+  if (index !== -1) {
+    newData[index] = {
+      ...newData[index],
+      show: true
+    };
+  }
+  setLayerData(newData);
 };
 const close = (name, type) => {
   setLayerData(prevData => prevData.map(l => l.name === name && l.type === type ? {
     ...l,
     show: false
   } : l));
-  console.log('close');
 };
-const get = (name, type) => {
+const toggle = (name, type) => {
+  const state = isOpen(name, type);
+  if (state === null) {
+    return;
+  }
+  if (state) {
+    close(name, type);
+  } else {
+    open(name, type);
+  }
+};
+const isOpen = (name, type) => {
   const data = layerData;
   const index = data.findIndex(l => l.name === name && l.type === type);
   if (index !== -1) {
     return data[index].show;
   }
-  return null;
+  return false;
+};
+const shade = (name, type) => {
+  const data = layerData;
+  const index = data.findIndex(l => l.name === name && l.type === type);
+  if (index !== -1) {
+    return data[index].shade;
+  }
+  return 0;
+};
+const shadeClose = (name, type) => {
+  const data = layerData;
+  const index = data.findIndex(l => l.name === name && l.type === type);
+  if (index !== -1) {
+    return data[index].shadeClose;
+  }
+  return false;
 };
 const layer = {
   create,
   open,
   close,
-  get
+  toggle,
+  isOpen,
+  shade,
+  shadeClose
 };
 
-const MenuStyle = "MenuStyle-1266a4d3";
+const LayerStyle = "LayerStyle-2dfb962a";
 const Layer = props => {
+  const resolved = libs.children(() => props.children);
   libs.onMount(() => {
-    console.log('Created Layer View');
-    layer.create(props.name, props.type);
-    layer.close(props.name, props.type);
-  });
-  libs.createMemo(() => {
-    console.log('createMemo');
-    console.logx(layer.get(props.name, props.type));
+    console.log('Created Layer View', props.name, props.type);
+    layer.create(props.name, props.type, props.shade, props.shadeClose);
+    const list = resolved.toArray();
+    for (const [index, child] of list.entries()) {
+      child.SetPanelEvent('onactivate', () => {});
+      child.SetHasClass('content', index === list.length - 1);
+    }
   });
   return (() => {
     const _el$ = libs.createElement("Panel", {
-      get ["class"]() {
-        return `${MenuStyle} ${layer.get(props.name, props.type) ? '' : `minimized`}`;
+        get ["class"]() {
+          return `${LayerStyle} ${layer.isOpen(props.name, props.type) ? '' : `minimized`}`;
+        }
+      }, null),
+      _el$2 = libs.createElement("Panel", {
+        "class": "shade",
+        get style() {
+          return {
+            backgroundColor: `rgba(0, 0, 0, ${layer.shade(props.name, props.type)})`
+          };
+        },
+        get hittest() {
+          return layer.shadeClose(props.name, props.type);
+        }
+      }, _el$);
+    libs.insert(_el$, resolved, _el$2);
+    libs.setProp(_el$2, "onactivate", () => {
+      if (layer.shadeClose(props.name, props.type)) {
+        layer.close(props.name, props.type);
       }
-    }, null);
-    libs.insert(_el$, () => props.children);
-    libs.effect(_$p => libs.setProp(_el$, "class", `${MenuStyle} ${layer.get(props.name, props.type) ? '' : `minimized`}`, _$p));
+    });
+    libs.effect(_p$ => {
+      const _v$ = `${LayerStyle} ${layer.isOpen(props.name, props.type) ? '' : `minimized`}`,
+        _v$2 = {
+          backgroundColor: `rgba(0, 0, 0, ${layer.shade(props.name, props.type)})`
+        },
+        _v$3 = layer.shadeClose(props.name, props.type);
+      _v$ !== _p$._v$ && (_p$._v$ = libs.setProp(_el$, "class", _v$, _p$._v$));
+      _v$2 !== _p$._v$2 && (_p$._v$2 = libs.setProp(_el$2, "style", _v$2, _p$._v$2));
+      _v$3 !== _p$._v$3 && (_p$._v$3 = libs.setProp(_el$2, "hittest", _v$3, _p$._v$3));
+      return _p$;
+    }, {
+      _v$: undefined,
+      _v$2: undefined,
+      _v$3: undefined
+    });
     return _el$;
   })();
 };
 
 const rootStyle = "rootStyle-dacfbb7a";
 const Test = () => {
-  return (() => {
-    const _el$ = libs.createElement("Panel", {
-        hittest: false,
-        "class": rootStyle
-      }, null),
-      _el$2 = libs.createElement("Label", {
-        text: "Hello World1!"
-      }, _el$);
-    libs.setProp(_el$, "class", rootStyle);
-    libs.setProp(_el$2, "onactivate", () => {
-      layer.close('toolcommon', 'a');
-    });
-    return _el$;
-  })();
+  return libs.createComponent(Layer, {
+    name: "toolcommon",
+    type: "left",
+    get children() {
+      const _el$ = libs.createElement("Panel", {
+          "class": rootStyle
+        }, null),
+        _el$2 = libs.createElement("Panel", {
+          "class": "test1"
+        }, _el$),
+        _el$3 = libs.createElement("Label", {
+          text: "Hello World1!"
+        }, _el$2);
+        libs.createElement("Panel", {
+          "class": "test2"
+        }, _el$);
+      libs.setProp(_el$, "class", rootStyle);
+      libs.setProp(_el$3, "onactivate", () => {
+        layer.close('toolcommon', 'left');
+      });
+      return _el$;
+    }
+  });
 };
 
 const Test2 = () => {
-  return (() => {
-    const _el$ = libs.createElement("Panel", {
-        hittest: false
-      }, null);
-      libs.createElement("Label", {
-        text: "Hello World!2"
-      }, _el$);
-    return _el$;
-  })();
+  return libs.createComponent(Layer, {
+    name: "tooldeveloper",
+    type: "left",
+    get children() {
+      const _el$ = libs.createElement("Panel", {
+          hittest: false
+        }, null);
+        libs.createElement("Label", {
+          text: "Hello World!2"
+        }, _el$);
+      return _el$;
+    }
+  });
 };
 
 function Debug() {
   if (!Game.IsInToolsMode()) {
     return;
   }
-  const layer = GameUI.__layer;
   const [menuShow, setMenuShow] = libs.createSignal(false);
   const [menuItem, setMenuItem] = libs.createStore([{
     icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
@@ -198,8 +286,7 @@ function Debug() {
   }, {
     icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
     func: () => {
-      console.log('toolcommon');
-      layer.open('toolcommon', 'a');
+      layer.toggle('toolcommon', 'left');
     },
     label: '通用工具',
     style: {
@@ -209,8 +296,7 @@ function Debug() {
   }, {
     icon: 'file://{resources}/images/custom_game/debug/icon/toolDeveloper.png',
     func: () => {
-      console.log('tooldeveloper');
-      layer.open('tooldeveloper', 'a');
+      layer.toggle('tooldeveloper', 'left');
     },
     label: '开发工具',
     style: {
@@ -234,20 +320,8 @@ function Debug() {
         return menuShow();
       }
     }), null);
-    libs.insert(_el$, libs.createComponent(Layer, {
-      name: "toolcommon",
-      type: "a",
-      get children() {
-        return libs.createComponent(Test, {});
-      }
-    }), null);
-    libs.insert(_el$, libs.createComponent(Layer, {
-      name: 'tooldeveloper',
-      type: 'a',
-      get children() {
-        return libs.createComponent(Test2, {});
-      }
-    }), null);
+    libs.insert(_el$, libs.createComponent(Test, {}), null);
+    libs.insert(_el$, libs.createComponent(Test2, {}), null);
     return _el$;
   })();
 }

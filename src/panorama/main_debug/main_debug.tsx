@@ -4,7 +4,7 @@ import css from 'solid-panorama-all-in-jsx/css.macro';
 import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
-import { Layer } from '../components/layer';
+import { layer } from '../components/layer/manager';
 import { Test } from '../view_debug/test';
 import { Test2 } from '../view_debug/test2';
 
@@ -41,8 +41,6 @@ export function Debug() {
     if (!Game.IsInToolsMode()) {
         return;
     }
-
-    const layer = GameUI.__layer;
 
     const [menuShow, setMenuShow] = createSignal(false);
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
@@ -84,8 +82,7 @@ export function Debug() {
         {
             icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
             func: () => {
-                console.log('toolcommon');
-                layer.open('toolcommon', 'a');
+                layer.toggle('toolcommon', 'left');
             },
             label: '通用工具',
             style: {
@@ -96,8 +93,7 @@ export function Debug() {
         {
             icon: 'file://{resources}/images/custom_game/debug/icon/toolDeveloper.png',
             func: () => {
-                console.log('tooldeveloper');
-                layer.open('tooldeveloper', 'a');
+                layer.toggle('tooldeveloper', 'left');
             },
             label: '开发工具',
             style: {
@@ -117,12 +113,8 @@ export function Debug() {
     return (
         <Panel class="root">
             <Menu items={menuItem} show={menuShow()} />
-            <Layer name="toolcommon" type="a">
-                <Test />
-            </Layer>
-            <Layer name='tooldeveloper' type='a'>
-                <Test2 />
-            </Layer>
+            <Test />
+            <Test2 />
         </Panel>
     );
 }

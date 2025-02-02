@@ -2,9 +2,12 @@ node_modules
 /addon/content/**/*.xml
 /addon/content/**/*.js
 /addon/content/**/*.css
-*.vjs_c
-*.vcss_c
-*.vxml_c
+/addon/content/**/*.vpdi
+/addon/game/**/*.vjs_c
+/addon/game/**/*.vcss_c
+/addon/game/**/*.vxml_c
+/addon/game/**/*.vpdi_c
+/addon/game/**/*.lua
 *.bin
 *.cfg
 .yarn

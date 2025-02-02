@@ -1,6 +1,0 @@
-<root>
-    <Panel hittest="false" >
-        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main_debug.xml" />
-        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main.xml" />
-    </Panel>
-</root>

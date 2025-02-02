@@ -1,0 +1,36 @@
+{
+    "include": ["**/*.ts", "**/*.tsx"],
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": false,
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "allowJs": true,
+        "removeComments": true,
+        "inlineSourceMap": true,
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "strict": true,
+        "target": "ESNext",
+        "types": ["@moddota/panorama-types"],
+        "lib": ["ESNext"],
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js",
+        "plugins": [
+            {
+                "name": "typescript-styled-plugin",
+                "lint": {
+                    "validProperties": [
+                        "flow-children",
+                        "horizontal-align",
+                        "wash-color",
+                        "saturation",
+                        "brightness",
+                        "contrast",
+                        "tooltip-position"
+                    ]
+                }
+            }
+        ]
+    }
+}

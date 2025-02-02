@@ -352,7 +352,7 @@ function Debug() {
     },
     show: false
   }, {
-    icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
+    icon: 's2r://panorama/images/control_icons/24px/tool.vsvg',
     onclick: () => {
       layer.toggle('toolcommon', 'left');
     },
@@ -362,7 +362,7 @@ function Debug() {
       height: '24px'
     }
   }, {
-    icon: 'file://{resources}/images/custom_game/debug/icon/toolDeveloper.png',
+    icon: 's2r://panorama/images/control_icons/24px/controller.vsvg',
     onclick: () => {
       layer.toggle('tooldeveloper', 'left');
     },

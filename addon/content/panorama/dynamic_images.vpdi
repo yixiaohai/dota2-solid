@@ -2,10 +2,5 @@
 {
   "Explicit Files"
   {
-    "{images}/custom_game/debug/icon/feedback.png" ""
-    "{images}/custom_game/debug/icon/mailbox.png" ""
-    "{images}/custom_game/debug/icon/quickCommands.png" ""
-    "{images}/custom_game/debug/icon/toolCommon.png" ""
-    "{images}/custom_game/debug/icon/toolDeveloper.png" ""
   }
 }

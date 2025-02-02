@@ -4,7 +4,7 @@ import css from 'solid-panorama-all-in-jsx/css.macro';
 interface ButtonnProps {
     icon?: string;
     text?: string;
-    type?: 1 | 2 | 3;
+    type?: 1 | 2;
     color?:
         | 'red'
         | 'green'

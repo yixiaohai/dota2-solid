@@ -1,0 +1,12 @@
+node_modules
+/addon/content/**/*.xml
+/addon/content/**/*.js
+/addon/content/**/*.css
+*.vjs_c
+*.vcss_c
+*.vxml_c
+*.bin
+*.cfg
+.yarn
+yarn.lock
+pnpm-lock.yaml

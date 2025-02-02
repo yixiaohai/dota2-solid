@@ -10,7 +10,7 @@ import {
 } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { useGameEvent } from 'solid-panorama-all-in-jsx/events.macro';
-import { CButton } from './Button';
+import { CButton } from './button';
 import difference from 'lodash/difference';
 import { UpdateList } from './utils';
 

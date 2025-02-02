@@ -50,7 +50,14 @@ const Layer: Component<LayerProps> = props => {
 
     onMount(() => {
         console.log('Created Layer View', props.name, props.type);
-        layer.create(props.name, props.type, props.shade, props.shadeClose, props.onOpen, props.onClose);
+        layer.create(
+            props.name,
+            props.type,
+            props.shade,
+            props.shadeClose,
+            props.onOpen,
+            props.onClose
+        );
 
         const list = resolved.toArray();
         for (const [index, child] of list.entries()) {
@@ -61,9 +68,8 @@ const Layer: Component<LayerProps> = props => {
 
     return (
         <Panel
-            class={`${LayerStyle} ${
-                layer.isOpen(props.name, props.type) ? '' : `minimized`
-            }`}
+            class={LayerStyle}
+            classList={{ minimized: !layer.isOpen(props.name, props.type) }}
         >
             {resolved()}
             <Panel

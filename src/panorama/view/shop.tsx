@@ -1,6 +1,5 @@
-
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { CButton } from '../components/Button';
+import { CButton } from '../components/button';
 
 const rootStyle = css`
     flow-children: right;
@@ -11,11 +10,9 @@ const rootStyle = css`
 export function Shop() {
     return (
         <Panel class={rootStyle}>
-            <CButton text="Button A" small />
+            <CButton text="Button A" />
             <CButton text="Button B" />
-            <CButton text="Button C" large />
+            <CButton text="Button C" />
         </Panel>
     );
 }
-
-

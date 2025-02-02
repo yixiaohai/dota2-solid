@@ -1,5 +1,5 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { CButton } from './Button';
+import { CButton } from './button';
 
 export function ButtonGroup() {
     const style = css`

@@ -1,6 +1,7 @@
 'use strict'; const exports = {}; GameUI.__loadModule('main', exports); const require = GameUI.__require;
 
 var libs = require('./libs.js');
+var index = require('./index.js');
 
 function default_ui_config () {
   GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_QUICK_STATS, false);
@@ -21,37 +22,6 @@ function HideTopMenu() {
   }
 }
 
-function CButton({
-  text,
-  icon,
-  color,
-  ...props
-}) {
-  return (() => {
-    const _el$ = libs.createElement("Button", {
-        "class": "btnStyle"
-      }, null),
-      _el$2 = libs.createElement("Image", {
-        src: icon ? `file://{images}/custom_game/${icon}` : ''
-      }, _el$),
-      _el$3 = libs.createElement("Label", {
-        text: text
-      }, _el$);
-    libs.setProp(_el$2, "src", icon ? `file://{images}/custom_game/${icon}` : '');
-    libs.setProp(_el$2, "visible", !!icon);
-    libs.setProp(_el$3, "text", text);
-    libs.setProp(_el$3, "visible", !!text);
-    libs.effect(_$p => libs.setProp(_el$, "classList", {
-      R: color === 'R',
-      G: color === 'G',
-      B: color === 'B',
-      small: props.small === true,
-      large: props.large === true
-    }, _$p));
-    return _el$;
-  })();
-}
-
 const rootStyle$3 = "rootStyle-b3405de9";
 function Shop() {
   return (() => {
@@ -59,16 +29,14 @@ function Shop() {
       "class": rootStyle$3
     }, null);
     libs.setProp(_el$, "class", rootStyle$3);
-    libs.insert(_el$, libs.createComponent(CButton, {
-      text: "Button A",
-      small: true
+    libs.insert(_el$, libs.createComponent(index.CButton, {
+      text: "Button A"
     }), null);
-    libs.insert(_el$, libs.createComponent(CButton, {
+    libs.insert(_el$, libs.createComponent(index.CButton, {
       text: "Button B"
     }), null);
-    libs.insert(_el$, libs.createComponent(CButton, {
-      text: "Button C",
-      large: true
+    libs.insert(_el$, libs.createComponent(index.CButton, {
+      text: "Button C"
     }), null);
     return _el$;
   })();

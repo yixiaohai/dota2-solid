@@ -64,7 +64,7 @@ const MenuStyle = css`
 
 export interface MenuItem {
     icon: string;
-    func: Function;
+    onclick: Function;
     label?: string;
     show?: boolean;
     style?: Partial<PanelStyle>;
@@ -72,7 +72,7 @@ export interface MenuItem {
 
 interface MenuProps {
     items: MenuItem[];
-    mode?: string;
+    mode?: 'vertical' | 'horizontal';
     show?: boolean;
     style?: Partial<PanelStyle>;
 }
@@ -80,7 +80,8 @@ interface MenuProps {
 export const Menu: Component<MenuProps> = props => {
     return (
         <Panel
-            class={`${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`}
+            class={`${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} `}
+            classList={{ minimized: !props.show }}
             style={props.style}
         >
             <For each={props.items}>
@@ -89,7 +90,7 @@ export const Menu: Component<MenuProps> = props => {
                         class="box"
                         tooltip_text={i.label}
                         onactivate={() => {
-                            i.func();
+                            i.onclick();
                         }}
                     >
                         <Image src={`${i.icon}`} style={i.style} />

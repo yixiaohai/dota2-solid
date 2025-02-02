@@ -1,13 +1,14 @@
 'use strict'; const exports = {}; GameUI.__loadModule('main_debug', exports); const require = GameUI.__require;
 
 var libs = require('./libs.js');
+var index = require('./index.js');
 
 const MenuStyle = "MenuStyle-1fe11131";
 const Menu = props => {
   return (() => {
     const _el$ = libs.createElement("Panel", {
       get ["class"]() {
-        return `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`;
+        return `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} `;
       },
       get style() {
         return props.style;
@@ -30,33 +31,38 @@ const Menu = props => {
             }
           }, _el$2);
         libs.setProp(_el$2, "onactivate", () => {
-          i.func();
+          i.onclick();
         });
         libs.effect(_p$ => {
-          const _v$3 = i.label,
-            _v$4 = `${i.icon}`,
-            _v$5 = i.style;
-          _v$3 !== _p$._v$3 && (_p$._v$3 = libs.setProp(_el$2, "tooltip_text", _v$3, _p$._v$3));
-          _v$4 !== _p$._v$4 && (_p$._v$4 = libs.setProp(_el$3, "src", _v$4, _p$._v$4));
-          _v$5 !== _p$._v$5 && (_p$._v$5 = libs.setProp(_el$3, "style", _v$5, _p$._v$5));
+          const _v$4 = i.label,
+            _v$5 = `${i.icon}`,
+            _v$6 = i.style;
+          _v$4 !== _p$._v$4 && (_p$._v$4 = libs.setProp(_el$2, "tooltip_text", _v$4, _p$._v$4));
+          _v$5 !== _p$._v$5 && (_p$._v$5 = libs.setProp(_el$3, "src", _v$5, _p$._v$5));
+          _v$6 !== _p$._v$6 && (_p$._v$6 = libs.setProp(_el$3, "style", _v$6, _p$._v$6));
           return _p$;
         }, {
-          _v$3: undefined,
           _v$4: undefined,
-          _v$5: undefined
+          _v$5: undefined,
+          _v$6: undefined
         });
         return _el$2;
       })()
     }));
     libs.effect(_p$ => {
-      const _v$ = `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} ${props.show ? '' : `minimized`}`,
-        _v$2 = props.style;
+      const _v$ = `${MenuStyle} ${props.mode === 'vertical' ? 'vertical' : 'horizontal'} `,
+        _v$2 = {
+          minimized: !props.show
+        },
+        _v$3 = props.style;
       _v$ !== _p$._v$ && (_p$._v$ = libs.setProp(_el$, "class", _v$, _p$._v$));
-      _v$2 !== _p$._v$2 && (_p$._v$2 = libs.setProp(_el$, "style", _v$2, _p$._v$2));
+      _v$2 !== _p$._v$2 && (_p$._v$2 = libs.setProp(_el$, "classList", _v$2, _p$._v$2));
+      _v$3 !== _p$._v$3 && (_p$._v$3 = libs.setProp(_el$, "style", _v$3, _p$._v$3));
       return _p$;
     }, {
       _v$: undefined,
-      _v$2: undefined
+      _v$2: undefined,
+      _v$3: undefined
     });
     return _el$;
   })();
@@ -179,9 +185,7 @@ const Layer = props => {
   });
   return (() => {
     const _el$ = libs.createElement("Panel", {
-        get ["class"]() {
-          return `${LayerStyle} ${layer.isOpen(props.name, props.type) ? '' : `minimized`}`;
-        }
+        "class": LayerStyle
       }, null),
       _el$2 = libs.createElement("Panel", {
         "class": "shade",
@@ -194,6 +198,7 @@ const Layer = props => {
           return layer.shadeClose(props.name, props.type);
         }
       }, _el$);
+    libs.setProp(_el$, "class", LayerStyle);
     libs.insert(_el$, resolved, _el$2);
     libs.setProp(_el$2, "onactivate", () => {
       if (layer.shadeClose(props.name, props.type)) {
@@ -201,12 +206,14 @@ const Layer = props => {
       }
     });
     libs.effect(_p$ => {
-      const _v$ = `${LayerStyle} ${layer.isOpen(props.name, props.type) ? '' : `minimized`}`,
+      const _v$ = {
+          minimized: !layer.isOpen(props.name, props.type)
+        },
         _v$2 = {
           backgroundColor: `rgba(0, 0, 0, ${layer.shade(props.name, props.type)})`
         },
         _v$3 = layer.shadeClose(props.name, props.type);
-      _v$ !== _p$._v$ && (_p$._v$ = libs.setProp(_el$, "class", _v$, _p$._v$));
+      _v$ !== _p$._v$ && (_p$._v$ = libs.setProp(_el$, "classList", _v$, _p$._v$));
       _v$2 !== _p$._v$2 && (_p$._v$2 = libs.setProp(_el$2, "style", _v$2, _p$._v$2));
       _v$3 !== _p$._v$3 && (_p$._v$3 = libs.setProp(_el$2, "hittest", _v$3, _p$._v$3));
       return _p$;
@@ -232,17 +239,60 @@ const Test = () => {
         }, null),
         _el$2 = libs.createElement("Panel", {
           "class": "test1"
-        }, _el$),
-        _el$3 = libs.createElement("Label", {
-          text: "Hello World1!"
-        }, _el$2);
+        }, _el$);
         libs.createElement("Panel", {
           "class": "test2"
         }, _el$);
       libs.setProp(_el$, "class", rootStyle);
-      libs.setProp(_el$3, "onactivate", () => {
-        layer.close('toolcommon', 'left');
-      });
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "默认",
+        type: 2
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "禁用",
+        type: 2,
+        disabled: true
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "红色",
+        type: 2,
+        color: "red"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "橙色",
+        type: 2,
+        color: "orange"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "黄色",
+        type: 2,
+        color: "yellow"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "绿色",
+        type: 2,
+        color: "green"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "青色",
+        type: 2,
+        color: "cyan"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "蓝色",
+        type: 2,
+        color: "blue"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "紫色",
+        type: 2,
+        color: "purple"
+      }), null);
+      libs.insert(_el$2, libs.createComponent(index.CButton, {
+        text: "灰色",
+        type: 2,
+        color: "grey"
+      }), null);
       return _el$;
     }
   });
@@ -271,7 +321,7 @@ function Debug() {
   const [menuShow, setMenuShow] = libs.createSignal(false);
   const [menuItem, setMenuItem] = libs.createStore([{
     icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
-    func: () => {
+    onclick: () => {
       $.DispatchEvent('DOTAHUDShowDashboard');
     },
     label: '返回主界面',
@@ -282,7 +332,7 @@ function Debug() {
     }
   }, {
     icon: 's2r://panorama/images/control_icons/gear_png.vtex',
-    func: () => {
+    onclick: () => {
       $.DispatchEvent('DOTAShowSettingsPopup');
     },
     label: '设置',
@@ -292,7 +342,7 @@ function Debug() {
     }
   }, {
     icon: 's2r://panorama/images/control_icons/hamburger_png.vtex',
-    func: () => {
+    onclick: () => {
       $.DispatchEvent('DOTAHUDToggleScoreboard');
     },
     label: '计分板',
@@ -303,7 +353,7 @@ function Debug() {
     show: false
   }, {
     icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
-    func: () => {
+    onclick: () => {
       layer.toggle('toolcommon', 'left');
     },
     label: '通用工具',
@@ -313,7 +363,7 @@ function Debug() {
     }
   }, {
     icon: 'file://{resources}/images/custom_game/debug/icon/toolDeveloper.png',
-    func: () => {
+    onclick: () => {
       layer.toggle('tooldeveloper', 'left');
     },
     label: '开发工具',

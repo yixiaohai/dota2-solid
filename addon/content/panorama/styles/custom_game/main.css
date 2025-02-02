@@ -1,33 +1,248 @@
-.btnStyle-5c109066 {
-  background-color: gradient(linear, 0% 100%, 0% 0%, from(#111111), to(#333333));
-  box-shadow: #000000 0px 0px 4px;
-  padding: 10px 30px;
+.btnStyle-70707fc4 {
+  margin: 5px;
+  padding: 5px;
 }
-.btnStyle-5c109066 Image {
-  width: 20px;
-  height: 20px;
+.btnStyle-70707fc4:disabled {
+  wash-color: rgba(0, 0, 0, 0.6666666667);
+  saturation: 0;
 }
-.btnStyle-5c109066 Label {
-  color: #ffffff;
-  font-size: 16px;
+.btnStyle-70707fc4.block {
+  width: fill-parent-flow(1);
+}
+.btnStyle-70707fc4.style1 {
+  background-color: #3e4144;
+  border: 1px solid #4e5155;
+  transition-property: background-color, border, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+.btnStyle-70707fc4.style1:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#676b70), to(#3e4144));
+  border: 1px solid #686b70;
+}
+.btnStyle-70707fc4.style1 Label {
+  horizontal-align: center;
   vertical-align: middle;
+  color: #d8dade;
+  text-transform: uppercase;
+  font-family: defaultFont;
+  font-weight: normal;
+  text-overflow: shrink;
+  letter-spacing: 1px;
 }
-.btnStyle-5c109066.small {
-  padding: 5px 15px;
-  font-size: 12px;
+.btnStyle-70707fc4.style1:enabled:hover Label {
+  color: #fff;
 }
-.btnStyle-5c109066.large {
-  padding: 20px 60px;
-  font-size: 24px;
+.btnStyle-70707fc4.style1 Label.icon {
+  brightness: 0.8;
+  saturation: 0.6;
+  background-size: 19px;
+  background-repeat: no-repeat;
+  background-position: left;
+  transition-property: brightness, saturation;
+  transition-duration: 0.2s;
+  padding-left: 24px;
 }
-.btnStyle-5c109066.R {
-  background-color: gradient(linear, 0% 100%, 0% 0%, from(#712222), to(#e70000));
+.btnStyle-70707fc4.style1.red {
+  background-color: #6d4a4e;
+  border: 1px solid #9b6369;
 }
-.btnStyle-5c109066.G {
-  background-color: gradient(linear, 0% 100%, 0% 0%, from(#2f7122), to(#00e708));
+.btnStyle-70707fc4.style1.red:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#be4f5c), to(#913943));
+  border: 1px solid #eb5f70;
 }
-.btnStyle-5c109066.B {
-  background-color: gradient(linear, 0% 100%, 0% 0%, from(#224471), to(#0083e7));
+.btnStyle-70707fc4.style1.green {
+  background-color: #42705b;
+  border: 1px solid #4e9e7a;
+}
+.btnStyle-70707fc4.style1.green:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#3cc486), to(#259c67));
+  border: 1px solid #3feb9d;
+}
+.btnStyle-70707fc4.style1.blue {
+  background-color: #35495f;
+  border: 1px solid #4e78a1;
+}
+.btnStyle-70707fc4.style1.blue:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#3e87cf), to(#2765a7));
+  border: 1px solid #499bdf;
+}
+.btnStyle-70707fc4.style1.yellow {
+  background-color: #8a804c;
+  border: 1px solid #a8995a;
+}
+.btnStyle-70707fc4.style1.yellow:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#e6c64d), to(#b89f3a));
+  border: 1px solid #ffe15e;
+}
+.btnStyle-70707fc4.style1.orange {
+  background-color: #8a5c4a;
+  border: 1px solid #a96f55;
+}
+.btnStyle-70707fc4.style1.orange:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#d9753c), to(#b0552d));
+  border: 1px solid #ff8c4f;
+}
+.btnStyle-70707fc4.style1.cyan {
+  background-color: #3d6d6d;
+  border: 1px solid #4d8f8f;
+}
+.btnStyle-70707fc4.style1.cyan:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#3cc4c4), to(#259c9c));
+  border: 1px solid #3febeb;
+}
+.btnStyle-70707fc4.style1.purple {
+  background-color: #5a4a6d;
+  border: 1px solid #735a8a;
+}
+.btnStyle-70707fc4.style1.purple:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#8a4dcf), to(#6d3aa7));
+  border: 1px solid #9b5edf;
+}
+.btnStyle-70707fc4.style1.grey {
+  background-color: #555555;
+  border: 1px solid #707070;
+}
+.btnStyle-70707fc4.style1.grey:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 70% 0%, from(#888888), to(#666666));
+  border: 1px solid #a0a0a0;
+}
+.btnStyle-70707fc4.style2 {
+  background-image: url("s2r://panorama/images/backgrounds/background_play_button_large_2x_png.vtex");
+  background-size: 320px 120px;
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#53565a), to(rgba(62, 65, 68, 0.2)));
+  box-shadow: fill rgba(58, 58, 58, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(87, 90, 95, 0.2666666667);
+  border-right: 1px solid rgba(45, 47, 50, 0.5333333333);
+  border-left: 1px solid rgba(87, 90, 95, 0.2666666667);
+  border-bottom: 1px solid rgba(45, 47, 50, 0.5333333333);
+  transition-property: box-shadow, background-color;
+  transition-delay: 0s;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+.btnStyle-70707fc4.style2:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#676b70), to(#53565a));
+  box-shadow: fill rgba(77, 77, 77, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2 Label {
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  horizontal-align: center;
+  vertical-align: center;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+.btnStyle-70707fc4.style2:enabled:hover Label {
+  color: #ffffff;
+}
+.btnStyle-70707fc4.style2 Label.icon {
+  brightness: 0.8;
+  saturation: 0.6;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: left;
+  transition-property: brightness, saturation;
+  transition-duration: 0.2s;
+  padding-left: 35px;
+}
+.btnStyle-70707fc4.style2.red {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a15a5a), to(rgba(214, 135, 135, 0.2)));
+  box-shadow: fill rgba(102, 0, 42, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(255, 204, 204, 0.2666666667);
+  border-right: 1px solid rgba(51, 0, 0, 0.5333333333);
+  border-left: 1px solid rgba(255, 204, 204, 0.2666666667);
+  border-bottom: 1px solid rgba(51, 0, 0, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.red:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a15a5a), to(#d68787));
+  box-shadow: fill rgba(79, 65, 77, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.orange {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a17d5a), to(rgba(214, 178, 135, 0.2)));
+  box-shadow: fill rgba(102, 51, 0, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(255, 228, 204, 0.2666666667);
+  border-right: 1px solid rgba(51, 26, 0, 0.5333333333);
+  border-left: 1px solid rgba(255, 228, 204, 0.2666666667);
+  border-bottom: 1px solid rgba(51, 26, 0, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.orange:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a17d5a), to(#d6b287));
+  box-shadow: fill rgba(79, 74, 65, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.yellow {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a1a15a), to(rgba(214, 214, 135, 0.2)));
+  box-shadow: fill rgba(102, 102, 0, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(255, 255, 204, 0.2666666667);
+  border-right: 1px solid rgba(51, 51, 0, 0.5333333333);
+  border-left: 1px solid rgba(255, 255, 204, 0.2666666667);
+  border-bottom: 1px solid rgba(51, 51, 0, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.yellow:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#a1a15a), to(#d6d687));
+  box-shadow: fill rgba(79, 79, 65, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.green {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5aa15e), to(rgba(135, 214, 149, 0.2)));
+  box-shadow: fill rgba(0, 42, 102, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2666666667);
+  border-right: 1px solid rgba(0, 0, 0, 0.5333333333);
+  border-left: 1px solid rgba(255, 255, 255, 0.2666666667);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.green:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5aa15e), to(#87d695));
+  box-shadow: fill rgba(65, 79, 77, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.cyan {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5aa1a1), to(rgba(135, 214, 214, 0.2)));
+  box-shadow: fill rgba(0, 102, 102, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(204, 255, 255, 0.2666666667);
+  border-right: 1px solid rgba(0, 51, 51, 0.5333333333);
+  border-left: 1px solid rgba(204, 255, 255, 0.2666666667);
+  border-bottom: 1px solid rgba(0, 51, 51, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.cyan:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5aa1a1), to(#87d6d6));
+  box-shadow: fill rgba(65, 79, 79, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.blue {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5a76a1), to(rgba(135, 156, 214, 0.2)));
+  box-shadow: fill rgba(0, 42, 102, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(204, 228, 255, 0.2666666667);
+  border-right: 1px solid rgba(0, 26, 51, 0.5333333333);
+  border-left: 1px solid rgba(204, 228, 255, 0.2666666667);
+  border-bottom: 1px solid rgba(0, 26, 51, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.blue:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#5a76a1), to(#879cd6));
+  box-shadow: fill rgba(65, 77, 79, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.purple {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#7d5aa1), to(rgba(178, 135, 214, 0.2)));
+  box-shadow: fill rgba(51, 0, 102, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(230, 204, 255, 0.2666666667);
+  border-right: 1px solid rgba(26, 0, 51, 0.5333333333);
+  border-left: 1px solid rgba(230, 204, 255, 0.2666666667);
+  border-bottom: 1px solid rgba(26, 0, 51, 0.5333333333);
+}
+.btnStyle-70707fc4.style2.purple:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#7d5aa1), to(#b287d6));
+  box-shadow: fill rgba(77, 65, 79, 0.6666666667) 0px 0px 8px 0px;
+}
+.btnStyle-70707fc4.style2.grey {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#8c8c8c), to(rgba(214, 214, 214, 0.2)));
+  box-shadow: fill rgba(58, 58, 58, 0.2666666667) 1px 1px 8px 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-right: 1px solid rgba(0, 0, 0, 0.3333333333);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3333333333);
+}
+.btnStyle-70707fc4.style2.grey:enabled:hover {
+  background-color: gradient(linear, 0% 0%, 0% 100%, from(#8c8c8c), to(#d6d6d6));
+  box-shadow: fill rgba(77, 77, 77, 0.6666666667) 0px 0px 8px 0px;
 }
 
 .rootStyle-b3405de9 {

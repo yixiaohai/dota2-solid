@@ -18,6 +18,7 @@ css`
 xml(
     <root>
         <styles>
+            <include src="s2r://panorama/styles/dotastyles.vcss_c" />
             <include src="file://{resources}/styles/custom_game/main_debug.css" />
         </styles>
         <scripts>
@@ -46,7 +47,7 @@ export function Debug() {
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
         {
             icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
-            func: () => {
+            onclick: () => {
                 $.DispatchEvent('DOTAHUDShowDashboard');
             },
             label: '返回主界面',
@@ -58,7 +59,7 @@ export function Debug() {
         },
         {
             icon: 's2r://panorama/images/control_icons/gear_png.vtex',
-            func: () => {
+            onclick: () => {
                 $.DispatchEvent('DOTAShowSettingsPopup');
             },
             label: '设置',
@@ -69,7 +70,7 @@ export function Debug() {
         },
         {
             icon: 's2r://panorama/images/control_icons/hamburger_png.vtex',
-            func: () => {
+            onclick: () => {
                 $.DispatchEvent('DOTAHUDToggleScoreboard');
             },
             label: '计分板',
@@ -81,7 +82,7 @@ export function Debug() {
         },
         {
             icon: 'file://{resources}/images/custom_game/debug/icon/toolCommon.png',
-            func: () => {
+            onclick: () => {
                 layer.toggle('toolcommon', 'left');
             },
             label: '通用工具',
@@ -92,7 +93,7 @@ export function Debug() {
         },
         {
             icon: 'file://{resources}/images/custom_game/debug/icon/toolDeveloper.png',
-            func: () => {
+            onclick: () => {
                 layer.toggle('tooldeveloper', 'left');
             },
             label: '开发工具',

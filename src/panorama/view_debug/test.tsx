@@ -2,6 +2,7 @@ import css from 'solid-panorama-all-in-jsx/css.macro';
 import { layer } from '../components/layer/manager';
 import { Layer } from '../components/layer';
 import { CButton } from '../components/button';
+import { Collapse, CollapseProps } from '../components/collapse';
 
 const rootStyle = css`
     background-color: rgba(0, 0, 0, 0.5);
@@ -14,6 +15,24 @@ const rootStyle = css`
         flow-children: right-wrap;
     }
 `;
+
+const collapseItem: CollapseProps['items'] = [
+    {
+        key: 'test',
+        label: 'testlabel',
+        children: () => <Panel>
+            <Label text={Math.random()} />
+        </Panel>
+    },
+    {
+        key: 'test2',
+        label: 'testlabel2',
+        children: () => <Panel>
+            <Label text={Math.random()} />
+        </Panel>
+    }
+];
+
 export const Test = () => {
     return (
         <Layer
@@ -24,16 +43,8 @@ export const Test = () => {
         >
             <Panel class={rootStyle}>
                 <Panel class="test1">
-                    <CButton text="默认" type={2} />
-                    <CButton text="禁用" type={2} disabled />
-                    <CButton text="红色" type={2} color="red" />
-                    <CButton text="橙色" type={2} color="orange" />
-                    <CButton text="黄色" type={2} color="yellow" />
-                    <CButton text="绿色" type={2} color="green" />
-                    <CButton text="青色" type={2} color="cyan" />
-                    <CButton text="蓝色" type={2} color="blue" />
-                    <CButton text="紫色" type={2} color="purple" />
-                    <CButton text="灰色" type={2} color="grey" />
+                    <Collapse items={collapseItem}></Collapse>
+                    <Collapse items={collapseItem}></Collapse>
                 </Panel>
                 <Panel class="test2"></Panel>
             </Panel>

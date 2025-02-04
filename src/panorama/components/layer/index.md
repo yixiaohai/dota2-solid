@@ -1,6 +1,10 @@
 # 使用
 ```ts
-<Layer name="layer_view" type="center" />
+<Layer name="layer_view" type="center" >
+    <Panel>
+        ....
+    </Panel>
+</Layer>
 ```
 
 # 参数

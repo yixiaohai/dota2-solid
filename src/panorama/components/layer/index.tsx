@@ -1,13 +1,4 @@
-import {
-    children,
-    Component,
-    createEffect,
-    createMemo,
-    createSignal,
-    mergeProps,
-    onMount
-} from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { children, Component, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { layer } from './manager';
 
@@ -45,7 +36,7 @@ interface LayerProps {
     onClose?: () => void;
 }
 
-const Layer: Component<LayerProps> = props => {
+export const Layer: Component<LayerProps> = props => {
     const resolved = children(() => props.children);
 
     onMount(() => {
@@ -90,5 +81,3 @@ const Layer: Component<LayerProps> = props => {
         </Panel>
     );
 };
-
-export { Layer };

@@ -31,7 +31,8 @@ const collapseItem: CollapseProps['items'] = [
 | --------- | ------------------ | ------------------------------- | ------ |
 | items     | 折叠项列表（必填） | [CollapseItem[]](#collapseitem) | `[]`   |
 | activeKey | 当前激活的面板 key | `string`                        | -      |
-| style     | 容器样式           | `Partial<PanelStyle>`           | -      |
+| type      | 预设样式           | 1 \| 2                          | 1      |
+| style     | 容器自定义样式     | `Partial<PanelStyle>`           | -      |
 
 # CollapseItem
 

@@ -5,7 +5,7 @@ import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
-import { Test } from '../view_debug/test';
+import { ToolCommon } from '../view_debug/toolcommon';
 import { Test2 } from '../view_debug/test2';
 
 css`
@@ -114,7 +114,7 @@ export function Debug() {
     return (
         <Panel class="root">
             <Menu items={menuItem} show={menuShow()} />
-            <Test />
+            <ToolCommon />
             <Test2 />
         </Panel>
     );

@@ -28,6 +28,7 @@ const LayerStyle = css`
 
 interface LayerProps {
     name: string;
+    class?: string;
     type?: string;
     shade?: number;
     shadeClose?: boolean;
@@ -59,7 +60,7 @@ export const Layer: Component<LayerProps> = props => {
 
     return (
         <Panel
-            class={LayerStyle}
+            class={props.class ? props.class : LayerStyle}
             classList={{ minimized: !layer.isOpen(props.name, props.type) }}
         >
             {resolved()}

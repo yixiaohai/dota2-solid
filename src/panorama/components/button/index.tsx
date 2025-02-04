@@ -15,7 +15,7 @@ interface ButtonnProps {
         | 'cyan'
         | 'purple'
         | 'grey';
-    block?: boolean;
+    flow?: boolean;
     disabled?: boolean;
     onclick?: Function;
     style?: Partial<PanelStyle>;
@@ -31,7 +31,7 @@ const btnStyle = css`
         saturation: 0;
     }
 
-    &.block {
+    &.flow {
         width: fill-parent-flow(1);
     }
 
@@ -490,7 +490,7 @@ export const CButton: Component<ButtonnProps> = props => {
                 blue: props.color === 'blue',
                 purple: props.color === 'purple',
                 grey: props.color === 'grey',
-                block: props.block === true
+                flow: props.flow === true
             }}
             style={props.style}
             enabled={!props.disabled}

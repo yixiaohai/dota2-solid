@@ -19,17 +19,26 @@ const rootStyle = css`
 const collapseItem: CollapseProps['items'] = [
     {
         key: 'test',
-        label: 'testlabel',
-        children: () => <Panel>
-            <Label text={Math.random()} />
-        </Panel>
+        label: '标题',
+        children: () => (
+            <Panel style={{ 'flowChildren': 'right' }}>
+                <CButton text="灰色" color="grey" flow/>
+                <CButton text="灰色" color="grey" flow/>
+                <CButton text="灰色" color="grey" flow/>
+                <CButton text="灰色" color="grey" flow/>
+                <CButton text="灰色" color="grey" flow/>
+                <CButton text="灰色" color="grey" flow/>
+            </Panel>
+        )
     },
     {
         key: 'test2',
         label: 'testlabel2',
-        children: () => <Panel>
-            <Label text={Math.random()} />
-        </Panel>
+        children: () => (
+            <Panel>
+                <Label text={Math.random()} />
+            </Panel>
+        )
     }
 ];
 
@@ -43,8 +52,7 @@ export const Test = () => {
         >
             <Panel class={rootStyle}>
                 <Panel class="test1">
-                    <Collapse items={collapseItem}></Collapse>
-                    <Collapse items={collapseItem}></Collapse>
+                    <Collapse items={collapseItem} activeKey="test2"></Collapse>
                 </Panel>
                 <Panel class="test2"></Panel>
             </Panel>

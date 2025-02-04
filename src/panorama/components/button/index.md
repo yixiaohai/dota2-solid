@@ -19,7 +19,7 @@
 | text | 按钮显示文本 | string | '' |
 | type | 预设样式类型：1-纯色背景，2-纹理背景 | 1 \| 2 | 1 |
 | color | 可选值：red, green, blue, grey, yellow, orange, cyan, purple | 'red' \| 'green' \| 'blue' \| 'grey' \| 'yellow' \| 'orange' \| 'cyan' \| 'purple' |  |
-| block | 是否以块级元素形式显示（占满容器宽度） | boolean | false |
+| flow | 均分占满容器宽度 | boolean | false |
 | disabled | 是否禁用按钮 | boolean | false |
 | onclick | 点击事件回调函数 | Function | - |
 | style | 自定义样式对象（会覆盖预设样式） | Partial<PanelStyle> | - |

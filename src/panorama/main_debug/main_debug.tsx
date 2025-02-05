@@ -6,7 +6,8 @@ import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
 import { ToolCommon } from '../view_debug/toolcommon';
-import { Test2 } from '../view_debug/test2';
+import { ToolDeveloper } from '../view_debug/tooldeveloper';
+import { Dialog } from '../components/dialog';
 
 css`
     .root {
@@ -115,7 +116,8 @@ export function Debug() {
         <Panel class="root">
             <Menu items={menuItem} show={menuShow()} />
             <ToolCommon />
-            <Test2 />
+            <ToolDeveloper />
+            <Dialog title='测试'/>
         </Panel>
     );
 }

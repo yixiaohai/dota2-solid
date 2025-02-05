@@ -1,4 +1,7 @@
-// 连接GameMode.Activate和GameMode.Precache到dota引擎
-function test() {
-    print('test123');
-}
+import { App } from './app/index';
+Object.assign(getfenv(), {
+    Activate: () => {
+        App.Activate();
+    },
+    Precache: App.Precache
+});

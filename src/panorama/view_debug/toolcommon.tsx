@@ -67,12 +67,27 @@ const collapseItem: CollapseProps['items'] = [
         children: () => (
             <Panel style={{ flowChildren: 'down' }}>
                 <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
+                    <CButton
+                        text="#ResetHero"
+                        flow
+                        onclick={() =>
+                            GameEvents.SendCustomGameEventToServer('test', {
+                                e: '123'
+                            })
+                        }
+                    />
                     <CButton text="#RespawnHero" flow />
                     <CButton text="#ReplaceHero" flow />
                 </Panel>
                 <Panel class={toolcommonRow}>
-                    <CButton text="#SetGold" color="blue" flow />
+                    <CButton
+                        text="#SetGold"
+                        color="blue"
+                        flow
+                        onclick={() => {
+                            layer.toggle('dialog', 'dialog');
+                        }}
+                    />
                     <CButton text="#AddHero_Friend" color="green" flow />
                     <CButton text="#AddHero_Enemy" color="red" flow />
                 </Panel>

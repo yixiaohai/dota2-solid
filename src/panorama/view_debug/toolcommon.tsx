@@ -3,6 +3,7 @@ import { layer } from '../components/layer/manager';
 import { Layer } from '../components/layer';
 import { CButton } from '../components/button';
 import { Collapse, CollapseProps } from '../components/collapse';
+import { dialog } from '../components/dialog';
 
 const toolcommonStyle = css`
     flow-children: down;
@@ -85,7 +86,7 @@ const collapseItem: CollapseProps['items'] = [
                         color="blue"
                         flow
                         onclick={() => {
-                            layer.toggle('dialog', 'dialog');
+                            dialog.open('title', 'desc');
                         }}
                     />
                     <CButton text="#AddHero_Friend" color="green" flow />

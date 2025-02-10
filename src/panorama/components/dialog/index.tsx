@@ -1,3 +1,4 @@
+import { forEach } from 'lodash';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
 const dialogStyle = css`
@@ -6,7 +7,7 @@ const dialogStyle = css`
     background-color: #060606f9;
     z-index: 9999;
     transition-property: opacity, background-color;
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
     transition-timing-function: ease-in;
 
     &.minimized {
@@ -24,55 +25,71 @@ const dialogStyle = css`
         vertical-align: middle;
         horizontal-align: center;
         opacity: 1;
-        transform: translateX(0px) translateY(0px);
-        transition-property: opacity, transform;
-        transition-duration: 0.1s;
+        transform: translateX(0px) translateY(-100px);
+        transition-property: opacity, pre-transform-scale2d;
+        transition-duration: 0.3s;
         transition-timing-function: ease-in;
     }
 
     &.minimized .box {
         opacity: 0;
-        transform: translateX(0px) translateY(-120px);
+        pre-transform-scale2d: 0.85;
     }
 
     .title {
         font-size: 30px;
         font-weight: thin;
-        color: #fff;
+        color: #afb4b4;
         horizontal-align: center;
+        margin-bottom: 20px;
     }
 
     .content {
         horizontal-align: center;
         flow-children: down;
-        margin-top: 20px;
+        width: 100%;
     }
 
-    .error {
-        height: 30px;
-        width: 100%;
-        margin-bottom: 10px;
-        flow-children: left;
+    .input {
+        border: 1px solid #373c44;
+        height: 36px;
+        padding: 5px 7px 3px 7px;
+        margin: 10px;
+        color: white;
+        font-size: 20px;
+        text-overflow: clip;
+        white-space: nowrap;
+        background-color: gradient(
+            linear,
+            0% 0%,
+            0% 100%,
+            from(#373c44),
+            to(#222222ff)
+        );
+        width: fill-parent-flow(1);
+        visibility: visible;
     }
 
-    .error Label {
-        color: #f5222d;
-        font-size: 18px;
-        horizontal-align: center;
-        vertical-align: center;
-        width: 100%;
-        text-align: left;
+    .input.big {
+        height: 144px;
+        white-space: normal;
+    }
+
+    .input.minimized {
         visibility: collapse;
     }
 
     .describe {
         font-size: 18px;
         color: #cccccc;
-        horizontal-align: center;
-        vertical-align: center;
         width: 100%;
         text-align: left;
         margin-top: 10px;
+    }
+    .describe.only {
+        font-size: 27px;
+        color: #fff;
+        text-align: center;
     }
 
     .down {
@@ -100,6 +117,11 @@ const dialogStyle = css`
         transition-delay: 0s;
         transition-duration: 0.1s;
         transition-timing-function: linear;
+        visibility: visible;
+    }
+
+    .button.minimized {
+        visibility: collapse;
     }
 
     .button:hover {
@@ -125,8 +147,18 @@ const dialogStyle = css`
     }
 `;
 
+export interface DialogProps {
+    title: string;
+    describe: string;
+    input?: boolean;
+    inputBig?: boolean;
+    defaultValue?: string;
+    onOk?: Function;
+    noCancel?: boolean;
+}
+
 interface DialogActions {
-    open: (title: string, describe: string) => void;
+    open: (props: DialogProps) => void;
     close: () => void;
 }
 
@@ -135,6 +167,10 @@ class DialogManager implements DialogActions {
     private static dialog: Panel;
     private static title: LabelPanel;
     private static describe: LabelPanel;
+    private static input: TextEntry;
+    private static button_ok: Button;
+    private static button_reset: Button;
+    private static button_cancel: Button;
 
     // 单例模式
     public static getInstance(): DialogManager {
@@ -150,34 +186,36 @@ class DialogManager implements DialogActions {
 
     private initialize() {
         console.log('Dialog init');
+
         const DialogShade = $.CreatePanel('Panel', $.GetContextPanel(), '', {
             class: dialogStyle + ' minimized'
         });
+        DialogShade.SetPanelEvent('onactivate', () => {});
         DialogShade.SetPanelEvent('oncancel', () => {
-            console.log('Dialog cancel');
+            console.log('Dialog cancel1');
             this.close();
         });
         DialogManager.dialog = DialogShade;
-        
+
         const DialogPanel = $.CreatePanel('Panel', DialogShade, '', {
             class: 'box'
         });
+
         DialogManager.title = $.CreatePanel('Label', DialogPanel, '', {
             class: 'title'
         });
         const content = $.CreatePanel('Panel', DialogPanel, '', {
             class: 'content'
         });
-        const error = $.CreatePanel('Label', content, '', {
-            class: 'error'
-        });
         const input = $.CreatePanel('TextEntry', content, '', {
             class: 'input'
         });
         input.SetPanelEvent('oncancel', () => {
-            console.log('Dialog cancel');
+            console.log('Dialog cancel2');
             this.close();
         });
+        DialogManager.input = input;
+
         DialogManager.describe = $.CreatePanel('Label', content, '', {
             class: 'describe'
         });
@@ -187,31 +225,71 @@ class DialogManager implements DialogActions {
         const button_ok = $.CreatePanel('Button', down, '', {
             class: 'button'
         });
-        $.CreatePanel('Label', button_ok, '').text = '#ok';
+        $.CreatePanel('Label', button_ok, '').text = $.Localize('#ok');
+        DialogManager.button_ok = button_ok;
         const button_reset = $.CreatePanel('Button', down, '', {
             class: 'button'
         });
-        $.CreatePanel('Label', button_reset, '').text = '#reset';
+        $.CreatePanel('Label', button_reset, '').text = $.Localize('#reset');
+        DialogManager.button_reset = button_reset;
         const button_cancel = $.CreatePanel('Button', down, '', {
             class: 'button'
         });
-        $.CreatePanel('Label', button_cancel, '').text = '#cancel';
+        $.CreatePanel('Label', button_cancel, '').text = $.Localize('#cancel');
         button_cancel.SetPanelEvent('onactivate', () => {
             console.log('Dialog cancel');
             this.close();
         });
+        DialogManager.button_cancel = button_cancel;
     }
 
-    public open = (title: string, describe: string) => {
-        DialogManager.title.text = title;
-        DialogManager.describe.text = describe;
+    public open = (props: DialogProps) => {
+        DialogManager.title.text = $.Localize(props.title);
+        DialogManager.describe.text = $.Localize(props.describe);
         DialogManager.dialog.RemoveClass('minimized');
-        DialogManager.dialog.SetFocus()
+        DialogManager.dialog.SetFocus();
+
+        if (!props.input) {
+            DialogManager.input.AddClass('minimized');
+            DialogManager.describe.AddClass('only');
+        } else {
+            DialogManager.input.RemoveClass('minimized');
+            DialogManager.describe.RemoveClass('only');
+            if (props.inputBig) {
+                DialogManager.input.AddClass('big');
+            } else {
+                DialogManager.input.RemoveClass('big');
+            }
+        }
+        if (props.defaultValue) {
+            const defaultValue = props.defaultValue;
+            DialogManager.input.text = defaultValue;
+            DialogManager.button_reset.RemoveClass('minimized');
+            DialogManager.button_reset.SetPanelEvent('onactivate', () => {
+                DialogManager.input.text = defaultValue;
+            });
+        } else {
+            DialogManager.button_reset.AddClass('minimized');
+        }
+
+        DialogManager.button_ok.SetPanelEvent('onactivate', () => {
+            if (props.onOk) {
+                props.onOk(DialogManager.input.text);
+            }
+            this.close();
+        });
+
+        if (props.noCancel) {
+            DialogManager.button_cancel.AddClass('minimized');
+        } else {
+            DialogManager.button_cancel.RemoveClass('minimized');
+        }
     };
 
     public close = () => {
         console.log('Dialog close');
         DialogManager.dialog.AddClass('minimized');
+        $.DispatchEvent('DropInputFocus');
     };
 }
 

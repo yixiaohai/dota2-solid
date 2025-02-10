@@ -27,12 +27,12 @@ const collapseItem: CollapseProps['items'] = [
 
 # 参数
 
-| 参数      | 说明               | 类型                            | 默认值 |
-| --------- | ------------------ | ------------------------------- | ------ |
-| items     | 折叠项列表（必填） | [CollapseItem[]](#collapseitem) | `[]`   |
-| activeKey | 当前激活的面板 key | `string`                        | -      |
-| type      | 预设样式           | 1 \| 2                          | 1      |
-| style     | 容器自定义样式     | `Partial<PanelStyle>`           | -      |
+| 参数      | 说明                         | 类型                            | 默认值 |
+| --------- | ---------------------------- | ------------------------------- | ------ |
+| items     | 折叠项列表（必填）           | [CollapseItem[]](#collapseitem) | `[]`   |
+| activeKey | 当前激活的面板 key           | `string`                        | -      |
+| type      | 预设样式 1 无背景 2 红蓝配色 | 1 \| 2                          | 1      |
+| style     | 容器自定义样式               | `Partial<PanelStyle>`           | -      |
 
 # CollapseItem
 

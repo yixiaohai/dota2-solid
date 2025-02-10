@@ -92,7 +92,7 @@ export function Debug() {
             }
         },
         {
-            icon: 's2r://panorama/images/control_icons/24px/controller.vsvg',
+            icon: 's2r://panorama/images/control_icons/24px/debut_tool.vsvg',
             onclick: () => {
                 layer.toggle('tooldeveloper', 'left');
             },

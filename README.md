@@ -13,7 +13,4 @@ pnpm start
 ```
 
 # TODO
-PUI中弹窗组件(注册、开启)
-PUI中Layer的z-index
-PUI中通过Layer和弹窗组件实现一个通用弹窗
 统一PUI和脚本中console和timer的用法

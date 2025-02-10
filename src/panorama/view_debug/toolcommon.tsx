@@ -86,7 +86,13 @@ const collapseItem: CollapseProps['items'] = [
                         color="blue"
                         flow
                         onclick={() => {
-                            dialog.open('title', 'desc');
+                            dialog.open({
+                                title: '确认删除',
+                                describe: '您确定要删除此项目吗？',
+                                input: true,
+                                inputBig: true,
+                                onOk: () => console.log('确认删除')
+                            });
                         }}
                     />
                     <CButton text="#AddHero_Friend" color="green" flow />

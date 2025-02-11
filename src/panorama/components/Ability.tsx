@@ -168,38 +168,38 @@ function Ability(props: { slot: number; list: AbilityList }) {
         }
 
         let cooldownTimer = 0;
-        function updateCooldown() {
-            if (Abilities.IsCooldownReady(ability())) {
-                if (cooldownTimer !== 0) {
-                    clearInterval(cooldownTimer);
-                    cooldownTimer = 0;
-                }
-                AbilityCooldown!.visible = false;
-            } else if (cooldownTimer === 0) {
-                cooldownTimer = setInterval(() => {
-                    const time = Abilities.GetCooldownTime(ability());
-                    let percent = time / Abilities.GetCooldownLength(ability());
-                    if (isNaN(percent) || percent === Infinity) {
-                        percent = 0;
-                    }
-                    AbilityCooldown!.style.clip = `radial(50% 50%, 0deg, ${
-                        percent * -360
-                    }deg)`;
-                    AbilityCooldown!.visible = true;
-                }, 0);
-            }
-        }
+        // function updateCooldown() {
+        //     if (Abilities.IsCooldownReady(ability())) {
+        //         if (cooldownTimer !== 0) {
+        //             clearInterval(cooldownTimer);
+        //             cooldownTimer = 0;
+        //         }
+        //         AbilityCooldown!.visible = false;
+        //     } else if (cooldownTimer === 0) {
+        //         cooldownTimer = setInterval(() => {
+        //             const time = Abilities.GetCooldownTime(ability());
+        //             let percent = time / Abilities.GetCooldownLength(ability());
+        //             if (isNaN(percent) || percent === Infinity) {
+        //                 percent = 0;
+        //             }
+        //             AbilityCooldown!.style.clip = `radial(50% 50%, 0deg, ${
+        //                 percent * -360
+        //             }deg)`;
+        //             AbilityCooldown!.visible = true;
+        //         }, 0);
+        //     }
+        // }
 
-        setTimer(
-            setInterval(() => {
-                batch(updateState);
-                updateCooldown();
-            }, 200)
-        );
+        // setTimer(
+        //     setInterval(() => {
+        //         batch(updateState);
+        //         updateCooldown();
+        //     }, 200)
+        // );
 
         // 清理定时器
         onCleanup(() => {
-            clearInterval(timer());
+            // clearInterval(timer());
             console.log('组件已卸载，定时器已清理');
         });
     });
@@ -365,9 +365,9 @@ export function DotaAbilities() {
     });
 
     onMount(() => {
-        setInterval(() => {
-            updater(unit);
-        }, 200);
+        // setInterval(() => {
+        //     updater(unit);
+        // }, 200);
     });
 
     return (

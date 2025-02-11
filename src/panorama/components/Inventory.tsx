@@ -249,36 +249,36 @@ function getItemList() {
  * 物品栏
  */
 function Inventory() {
-    const [itemList, setItemList] = createSignal<ItemEntityIndex[]>(
-        getItemList()
-    );
-    //调用事件监听
-    useGameEvent('dota_inventory_changed', () => {
-        setItemList(getItemList());
-    });
-    //更新当前的装备栏
-    const Update = () => {
-        setItemList(getItemList());
-    };
-    const timer = setInterval(Update, Game.GetGameFrameTime());
-    onCleanup(() => clearInterval(timer));
-    return (
-        <Panel class={rootStyle} hittest={false}>
-            <Index each={[...Array(9).keys()]}>
-                {slot => (
-                    <InventoryItem
-                        selectItem={true}
-                        IsInventory={true}
-                        SlotIndex={slot()}
-                        ItemEntityIndex={itemList()[slot()]}
-                        UnitEntityIndex={Players.GetPlayerHeroEntityIndex(
-                            Players.GetLocalPlayer()
-                        )}
-                    />
-                )}
-            </Index>
-        </Panel>
-    );
+    // const [itemList, setItemList] = createSignal<ItemEntityIndex[]>(
+    //     getItemList()
+    // );
+    // //调用事件监听
+    // useGameEvent('dota_inventory_changed', () => {
+    //     setItemList(getItemList());
+    // });
+    // //更新当前的装备栏
+    // const Update = () => {
+    //     setItemList(getItemList());
+    // };
+    // const timer = setInterval(Update, Game.GetGameFrameTime());
+    // onCleanup(() => clearInterval(timer));
+    // return (
+    //     <Panel class={rootStyle} hittest={false}>
+    //         <Index each={[...Array(9).keys()]}>
+    //             {slot => (
+    //                 <InventoryItem
+    //                     selectItem={true}
+    //                     IsInventory={true}
+    //                     SlotIndex={slot()}
+    //                     ItemEntityIndex={itemList()[slot()]}
+    //                     UnitEntityIndex={Players.GetPlayerHeroEntityIndex(
+    //                         Players.GetLocalPlayer()
+    //                     )}
+    //                 />
+    //             )}
+    //         </Index>
+    //     </Panel>
+    // );
 }
 
 export default Inventory;

@@ -5,7 +5,6 @@ require()
 xml(
     <root>
         <scripts>
-            <include src="file://{resources}/scripts/custom_game/panorama-polyfill.js" />
             <include src="file://{resources}/scripts/custom_game/custom_loading_screen.js" />
         </scripts>
         <Panel class="root" hittest={false}>

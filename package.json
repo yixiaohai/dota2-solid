@@ -44,7 +44,6 @@
         "sass": "^1.56.1",
         "solid-js": "^1.6.2",
         "solid-panorama-all-in-jsx": "^0.2.5",
-        "solid-panorama-polyfill": "^0.1.8",
         "solid-panorama-runtime": "^0.5.2",
         "steam-game-path": "^2.0.1",
         "ts-node": "^10.9.1",

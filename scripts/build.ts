@@ -24,7 +24,6 @@ import { readFile } from 'fs/promises';
 import GetRollupWatchOptions from './build-rollup-config';
 import { fileColor, getDotaPath, normalizedPath, Panorama } from './utils';
 import color from 'cli-color';
-import { bundlePanoramaPolyfill } from 'solid-panorama-polyfill';
 import { moveSync, remove } from 'fs-extra';
 
 const rootPath = normalizedPath(path.join(__dirname, '../src/panorama'));
@@ -131,12 +130,6 @@ export default async function TaskPUI() {
     } catch (error) {
         console.error('Error creating directory:', error);
     }
-
-    await bundlePanoramaPolyfill({
-        output: './addon/content/panorama/scripts/custom_game/panorama-polyfill.js',
-        using: { console: true, timers: true },
-        merges: [join(__dirname, 'custom-polyfill.js')]
-    });
 
     FsLink();
 

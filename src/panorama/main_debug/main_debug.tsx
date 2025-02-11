@@ -7,6 +7,7 @@ import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
 import { ToolCommon } from '../view_debug/toolcommon';
 import { ToolDeveloper } from '../view_debug/tooldeveloper';
+import '../functions/console';
 
 css`
     .root {
@@ -22,7 +23,6 @@ xml(
             <include src="file://{resources}/styles/custom_game/main_debug.css" />
         </styles>
         <scripts>
-            <include src="file://{resources}/scripts/custom_game/panorama-polyfill.js" />
             <include src="file://{resources}/scripts/custom_game/main_debug.js" />
         </scripts>
         <Panel class="root" hittest={false}>
@@ -106,9 +106,10 @@ export function Debug() {
 
     onMount(() => {
         console.log('Created Debug View');
-        setTimeout(() => {
-            setMenuShow(true);
-        }, 1500);
+        // setTimeout(() => {
+        //     setMenuShow(true);
+        // }, 1500);
+        setMenuShow(true);
     });
 
     return (

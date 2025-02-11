@@ -14,3 +14,9 @@ pnpm start
 
 # TODO
 统一PUI和脚本中console和timer的用法
+单选框
+滑动输入条
+开关
+二维码
+侧边提示
+封装通信模块，统一防抖

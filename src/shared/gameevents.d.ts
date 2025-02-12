@@ -1,4 +1,4 @@
-declare interface CustomGameEventDeclarations {
+interface CustomGameEventDeclarations {
     test: {
         e: string;
     };

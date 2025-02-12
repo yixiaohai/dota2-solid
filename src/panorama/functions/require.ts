@@ -7,7 +7,7 @@ export default function () {
     const modules: ModuleExports = (GameUI.__modules = {});
     GameUI.__loadModule = function (name, exports) {
         if (modules[name]) {
-            $.Msg(`Reload module: ${name} `, exports ? '👏' : '☠️');
+            $.Msg(exports ? '✅' : '❌', ` Reload module: ${name} `);
         }
         modules[name] = exports;
     };
@@ -20,7 +20,7 @@ export default function () {
                 false,
                 false
             );
-            $.Msg(`Load module: ${name} `, modules[name] ? '👏' : '☠️');
+            $.Msg(modules[name] ? '✅' : '❌', ` Load module: ${name} `);
         }
         return modules[name];
     };

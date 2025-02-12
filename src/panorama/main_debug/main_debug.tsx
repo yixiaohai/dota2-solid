@@ -7,7 +7,7 @@ import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
 import { ToolCommon } from '../view_debug/toolcommon';
 import { ToolDeveloper } from '../view_debug/tooldeveloper';
-import '../functions/console';
+import { console } from '../functions/console';
 
 css`
     .root {

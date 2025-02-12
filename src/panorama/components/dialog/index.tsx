@@ -1,5 +1,6 @@
 import { forEach } from 'lodash';
 import css from 'solid-panorama-all-in-jsx/css.macro';
+import { console } from '../../functions/console';
 
 const dialogStyle = css`
     width: 100%;

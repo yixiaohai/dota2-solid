@@ -1,6 +1,3 @@
-// 步骤3：导出空对象避免成为全局模块
-export {};
-
 class PanoramaConsole {
     private static instance: PanoramaConsole;
 
@@ -16,7 +13,11 @@ class PanoramaConsole {
     }
 
     log(...args: any[]): void {
-        this.print(args, 'log');
+        this.print(args, '✅ ');
+    }
+
+    error(...args: any[]): void {
+        this.print(args, '❌ ');
     }
 
     private print(content: any, identifier?: string, level?: number): void {
@@ -28,34 +29,45 @@ class PanoramaConsole {
             }
         }
         if (identifier) {
-            identifier = identifier + ' : ';
+            identifier = identifier + ' ';
         } else {
             identifier = '';
         }
         if (typeof content == 'object') {
-            $.Msg(tempStr + identifier + '{');
-            for (let i in content) {
-                let v = content[i];
-                if (typeof v === 'object') {
-                    this.print(v, i, level + 1);
+            let s = JSON.stringify(content);
+            if (s.length > 100) {
+                if (level == 0) {
+                    $.Msg(tempStr + identifier);
+                    $.Msg('{');
                 } else {
-                    $.Msg(
-                        tempStr +
-                            '\t' +
-                            i.padEnd(20) +
-                            ' = ' +
-                            v +
-                            ' (' +
-                            typeof v +
-                            ')'
-                    );
+                    $.Msg(tempStr + identifier + '{');
                 }
+
+                for (let i in content) {
+                    let v = content[i];
+                    if (typeof v === 'object') {
+                        this.print(v, i, level + 1);
+                    } else {
+                        $.Msg(
+                            tempStr +
+                                '\t' +
+                                i.padEnd(20) +
+                                ' = ' +
+                                v +
+                                ' (' +
+                                typeof v +
+                                ')'
+                        );
+                    }
+                }
+                $.Msg(tempStr + '}');
+            } else {
+                $.Msg(tempStr + identifier + s);
             }
-            $.Msg(tempStr + '}');
         } else {
             $.Msg(tempStr + identifier + content);
         }
     }
 }
 
-globalThis.console = PanoramaConsole.getInstance();
+export const console = PanoramaConsole.getInstance();

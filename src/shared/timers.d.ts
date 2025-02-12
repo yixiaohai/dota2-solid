@@ -9,7 +9,7 @@ type CreateTimerOptionsContext<TThis> = CreateTimerOptions & {
     callback?: (this: TThis) => void | number;
 };
 
-declare interface Timers {
+interface Timers {
     CreateTimer(callback: (this: void) => void | number): string;
     CreateTimer<T>(callback: (this: T) => void | number, context: T): string;
 
@@ -25,12 +25,3 @@ declare interface Timers {
     RemoveTimer(name: string): void;
     RemoveTimers(killAll: boolean): void;
 }
-
-declare global {
-    var Timers: Timers;
-    interface CDOTAGameRules {
-        Timers: Timers;
-    }
-}
-
-export {};

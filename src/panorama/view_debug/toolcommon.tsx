@@ -4,6 +4,7 @@ import { Layer } from '../components/layer';
 import { CButton } from '../components/button';
 import { Collapse, CollapseProps } from '../components/collapse';
 import { dialog } from '../components/dialog';
+import { console } from '../functions/console';
 
 const toolcommonStyle = css`
     flow-children: down;
@@ -77,7 +78,13 @@ const collapseItem: CollapseProps['items'] = [
                             })
                         }
                     />
-                    <CButton text="#RespawnHero" flow />
+                    <CButton
+                        text="#RespawnHero"
+                        flow
+                        onclick={() => {
+                            console.log($.GetContextPanel());
+                        }}
+                    />
                     <CButton text="#ReplaceHero" flow />
                 </Panel>
                 <Panel class={toolcommonRow}>

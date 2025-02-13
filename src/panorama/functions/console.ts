@@ -13,11 +13,15 @@ class PanoramaConsole {
     }
 
     log(...args: any[]): void {
-        this.print(args, '✅ ');
+        args.forEach(arg => {
+            this.print(arg, '✅ ');
+        });
     }
 
     error(...args: any[]): void {
-        this.print(args, '❌ ');
+        args.forEach(arg => {
+            this.print(arg, '❌ ');
+        });
     }
 
     private print(content: any, identifier?: string, level?: number): void {

@@ -10,6 +10,6 @@
         "strict": true,
         "target": "ESNext",
         "lib": ["ESNext"],
-        "typeRoots": ["./node_modules/@types"]
+        "typeRoots": ["./node_modules/@types","./node_modules/@moddota"]
     }
 }

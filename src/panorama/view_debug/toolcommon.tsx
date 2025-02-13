@@ -5,6 +5,7 @@ import { CButton } from '../components/button';
 import { Collapse, CollapseProps } from '../components/collapse';
 import { dialog } from '../components/dialog';
 import { console } from '../functions/console';
+import { timer } from '../functions/timer';
 
 const toolcommonStyle = css`
     flow-children: down;
@@ -82,7 +83,18 @@ const collapseItem: CollapseProps['items'] = [
                         text="#RespawnHero"
                         flow
                         onclick={() => {
-                            console.log($.GetContextPanel());
+                            console.log('Game.Time()');
+                            const t1 = timer.create(1, () => {
+                                console.log(`世家戳${Game.Time()}id${t1}`);
+                                if (Game.Time() < 2100) {
+                                    return 1;
+                                }
+                            });
+
+                            timer.create(3, () => {
+                                console.log(`tingzhi id${t1}`);
+                                timer.remove(t1);
+                            });
                         }}
                     />
                     <CButton text="#ReplaceHero" flow />

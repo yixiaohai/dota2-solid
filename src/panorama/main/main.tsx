@@ -38,6 +38,7 @@ console.log('Main load');
 import { Shop } from '../view/shop';
 import { Lowhud } from '../view/lowhud';
 import { ToolCommon } from '../view_debug/toolcommon';
+import { console } from '../functions/console';
 
 export function Main() {
     const [count, setCount] = createSignal(0);

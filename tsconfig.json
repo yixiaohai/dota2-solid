@@ -1,5 +1,5 @@
 {
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts","node_modules/@moddota/panorama-types/**/*.d.ts"],
     "compilerOptions": {
         "rootDir": ".",
         "noImplicitAny": true,

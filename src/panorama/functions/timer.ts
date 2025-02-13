@@ -11,13 +11,20 @@ class ScheduleTimer implements timer {
 
     private activeTimers = new Map<ScheduleID, ScheduleID>();
 
-    create(delay: number, callback: (this: void) => void | number): ScheduleID {
-        const scheduleWrapper = (parentHandle?: ScheduleID): ScheduleID => {
-            const handle = $.Schedule(delay, () => {
+    create(
+        callback: (this: void) => void | number,
+        delay?: number
+    ): ScheduleID {
+        const scheduleWrapper = (
+            parentHandle?: ScheduleID,
+            _delay?: number
+        ): ScheduleID => {
+            _delay = _delay ? _delay : delay ?? 0 ;
+            const handle = $.Schedule(_delay, () => {
                 const result = callback();
                 // 处理重新调度
                 if (typeof result === 'number') {
-                    scheduleWrapper(parentScheduleID);
+                    scheduleWrapper(parentScheduleID, result);
                 } else {
                     this.activeTimers.delete(parentScheduleID);
                 }

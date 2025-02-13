@@ -84,17 +84,17 @@ const collapseItem: CollapseProps['items'] = [
                         flow
                         onclick={() => {
                             console.log('Game.Time()');
-                            const t1 = timer.create(1, () => {
-                                console.log(`世家戳${Game.Time()}id${t1}`);
+                            const t1 = timer.create(() => {
+                                console.log(`世家戳${Game.Time()},id${t1}`, 'abc');
                                 if (Game.Time() < 2100) {
                                     return 1;
                                 }
                             });
 
-                            timer.create(3, () => {
+                            timer.create(() => {
                                 console.log(`tingzhi id${t1}`);
                                 timer.remove(t1);
-                            });
+                            }, 3);
                         }}
                     />
                     <CButton text="#ReplaceHero" flow />

@@ -1,4 +1,4 @@
 interface timer {
-    create(delay: number, callback: (this: void) => void | number): string | ScheduleID;
-    remove(name: string | ScheduleID): void;
+    create( callback: (this: void) => void | number,delay?: number): any;
+    remove(name: any): void;
 }

@@ -1,3 +1,8 @@
+interface timer {
+    create( callback: (this: void) => void | number,delay?: number): ScheduleID;
+    remove(id: ScheduleID): void;
+}
+
 class ScheduleTimer implements timer {
     private static instance: ScheduleTimer;
 

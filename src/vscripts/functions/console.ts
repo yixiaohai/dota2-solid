@@ -1,4 +1,9 @@
-class VscriptConsole {
+interface console {
+    log(...args: any[]): void;
+    error(...args: any[]): void;
+}
+
+class VscriptConsole implements console{
     private static instance: VscriptConsole;
 
     private constructor() {

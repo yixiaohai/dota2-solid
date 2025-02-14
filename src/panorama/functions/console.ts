@@ -1,4 +1,9 @@
-class PanoramaConsole {
+interface console {
+    log(...args: any[]): void;
+    error(...args: any[]): void;
+}
+
+class PanoramaConsole implements console {
     private static instance: PanoramaConsole;
 
     private constructor() {

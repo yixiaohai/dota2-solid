@@ -110,6 +110,23 @@ export function Debug() {
         //     setMenuShow(true);
         // }, 1500);
         setMenuShow(true);
+        GameEvents.Subscribe('dota_player_update_query_unit', datas => {
+            $.Msg('dota_player_update_query_unit');
+            $.Msg(datas);
+        });
+
+        $.RegisterForUnhandledEvent('StyleClassesChanged', UI_StyleClassesChanged);
+        function UI_StyleClassesChanged(panel:any) {
+            if (null != panel && panel.IsValid()) {
+                if (panel.paneltype == 'DOTAHUDShop') {
+                    var isOpen = panel.BHasClass('ShopOpen');
+                    $.Msg(isOpen);
+                    if (Players.IsValidPlayerID(Players.GetLocalPlayer()) && (isOpen)) {
+        
+                    }
+                }
+            }
+        }
     });
 
     return (

@@ -1,5 +1,5 @@
 {
-    "include": ["**/*.ts","node_modules/@moddota/panorama-types/**/*.d.ts"],
+    "include": ["**/*.ts"],
     "compilerOptions": {
         "rootDir": ".",
         "noImplicitAny": true,
@@ -10,6 +10,6 @@
         "strict": true,
         "target": "ESNext",
         "lib": ["ESNext"],
-        "typeRoots": ["./node_modules/@types","./node_modules/@moddota"]
+        "typeRoots": ["./node_modules/@types","./node_modules/@moddota"],
     }
 }

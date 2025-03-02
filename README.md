@@ -13,7 +13,6 @@ pnpm start
 ```
 
 # TODO
-统一PUI和脚本中console和timer的用法
 单选框
 滑动输入条
 开关

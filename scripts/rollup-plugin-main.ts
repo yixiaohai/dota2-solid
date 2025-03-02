@@ -1,6 +1,8 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Plugin } from 'rollup';
+import color from 'cli-color';
+
 
 const xmlFile = `<root>
     <Panel hittest="false" >
@@ -10,7 +12,7 @@ const xmlFile = `<root>
 </root>
 `;
 export default function CreateMain(options?: {}): Plugin {
-    console.log('[rollup-plugin-main.ts] create custom_ui_manifest.xml')
+    console.log(`[${color.magenta('rollup-plugin-main.ts')}] create custom_ui_manifest.xml`)
     return {
         name: 'create-main',
         generateBundle() {

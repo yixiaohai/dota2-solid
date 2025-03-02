@@ -1,7 +1,7 @@
 import { App } from './app/index';
 Object.assign(getfenv(), {
     Activate: () => {
-        App.Activate();
+        App.prototype.Activate();
     },
     Precache: App.Precache
 });

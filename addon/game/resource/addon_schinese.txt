@@ -1,0 +1,14 @@
+"lang"
+{
+    "Language" "Schinese"
+    "Tokens"
+    {
+        //schinese/1.txt
+        "addon_game_mode" "你的游戏名"
+        "ability_npc_base_title" "单位基础技能"
+        "ResetHero" "单位基础技能+{s:test}"
+        //schinese/2.txt
+        "123" "adf123"
+        "456" "是的第三方"
+    }
+}

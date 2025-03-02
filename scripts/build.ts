@@ -84,7 +84,7 @@ async function FsLink() {
                 realpathSync(sourcePath) === targetPath;
             if (isCorrect) {
                 console.log(
-                    `[build.ts] Skipping '${sourcePath}' since it is already linked`
+                    `[${color.magenta('build.ts')}] Skipping '${sourcePath}' since it is already linked`
                 );
                 continue;
             } else {

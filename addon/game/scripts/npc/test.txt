@@ -1,17 +1,42 @@
 "XLSXContent"
 {
-  "item_shj" {
-  "BaseClass" "item_lua"
-  "test" "123"
-  }
-
-  "item_shj2" {
-  "BaseClass" "item_lua"
-  "test" "456"
-  }
-
-  "item_shj3" {
-  "BaseClass" "item_lua"
-  "test" "456"
-  }
+    "item_shj" {
+        "BaseClass" "item_lua"
+        "test" "123"
+        "abilityvalue" {
+            "cooldown" {
+                "prev" "sdafsdf"
+            }
+            "range" "200"
+            "manacost" "300"
+        }
+    }
+    "item_shj2" {
+        "BaseClass" "item_lua"
+        "test" "456"
+    }
+    "item_shj3" {
+        "BaseClass" "item_lua"
+        "test" "456"
+        "abilityvalue" {
+            "cooldown" {
+                "value" "sadf"
+                "prev" "12124"
+                "next" "gag asf"
+            }
+        }
+    }
+    "item_shj4" {
+        "BaseClass" "item_lua"
+        "test" "456"
+        "abilityvalue" {
+            "cooldown" {
+                "value" "a1"
+                "prev" "b2"
+                "next" "c3"
+            }
+            "range" "789"
+            "manacost" "9101"
+        }
+    }
 }

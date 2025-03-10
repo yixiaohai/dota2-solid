@@ -6,6 +6,7 @@
     "item_shj_title" "xin翻译1"
     "item_shj2_title" "xin翻译2"
     "item_shj3_title" "xin翻译3"
+    "item_shj4_title" "本地化测试1"
     "item_shj3" "心烦意3"
     "item_shj2" "心烦意4"
     "itemsd" "心烦意5"

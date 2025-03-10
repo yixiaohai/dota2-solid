@@ -214,7 +214,7 @@ export const ToolCommon = () => {
             class={toolcommonStyle}
         >
             <Panel class={toolcommonHead}>
-                <Label text="#toolCommonButton" />
+                <Label text="#toolCommon" />
                 <Button
                     onactivate={() => {
                         layer.close('toolcommon', 'left');

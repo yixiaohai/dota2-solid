@@ -22,7 +22,7 @@ import {
 import glob from 'glob';
 import { readFile } from 'fs/promises';
 import GetRollupWatchOptions from './build-rollup-config';
-import { fileColor, getDotaPath, normalizedPath, Panorama } from './utils';
+import { fileColor, getDotaPath, normalizedPath } from './utils';
 import color from 'cli-color';
 import { moveSync, remove } from 'fs-extra';
 
@@ -42,29 +42,36 @@ function StartRollup(): void {
                 rootPath + '/',
                 ''
             );
-            console.log(evt);
+            console.log(`[${color.magenta('build.ts')}] ❌ ${evt}`);
             console.log(
-                Panorama +
-                    ' Build Error: ' +
-                    color.red(f) +
-                    ': ' +
-                    color.yellow(evt.error.loc?.line)
+                `[${color.magenta('build.ts')}] ❌ 构建错误: ${color.red(
+                    f
+                )}:${color.yellow(evt.error.loc?.line)}`
             );
             console.log(
-                Panorama + ' Build Error: ' + color.red(evt.error.message)
+                `[${color.magenta('build.ts')}] ❌ 错误信息: ${color.red(
+                    evt.error.message
+                )}`
             );
+            // ... existing code ...
         }
     });
 
     watcher.on('change', p => {
-        console.log(Panorama + ' ✒️  ' + fileColor(path.basename(p)));
+        console.log(
+            `[${color.magenta('build.ts')}] 📝 ${fileColor(path.basename(p))}`
+        );
     });
 }
 
 async function FsLink() {
     const dotaPath = await getDotaPath();
     if (dotaPath === undefined) {
-        console.log('No Dota 2 installation found. Addon linking is skipped.');
+        console.log(
+            `[${color.magenta(
+                'build.ts'
+            )}] ❌ 未找到 Dota 2 安装目录，跳过插件链接`
+        );
         return;
     }
 
@@ -84,21 +91,31 @@ async function FsLink() {
                 realpathSync(sourcePath) === targetPath;
             if (isCorrect) {
                 console.log(
-                    `[${color.magenta('build.ts')}] Skipping '${sourcePath}' since it is already linked`
+                    `[${color.magenta(
+                        'build.ts'
+                    )}] ⏭️  跳过 '${sourcePath}' (已链接)`
                 );
                 continue;
             } else {
                 // 移除目标文件夹的所有内容，
                 console.log(
-                    `'${targetPath}' is already linked to another directory, removing`
+                    `[${color.magenta(
+                        'build.ts'
+                    )}] 🗑️ '${targetPath}' 已链接到其他目录，正在移除`
                 );
                 chmodSync(targetPath, '0755');
                 remove(targetPath)
                     .then(() => {
-                        console.log('removed target path');
+                        console.log(
+                            `[${color.magenta('build.ts')}] ✅ 目标路径已移除`
+                        );
                         moveSync(sourcePath, targetPath);
                         symlinkSync(targetPath, sourcePath, 'junction');
-                        console.log(`Linked ${sourcePath} <==> ${targetPath}`);
+                        console.log(
+                            `[${color.magenta(
+                                'build.ts'
+                            )}] 🔗 已链接 ${sourcePath} <==> ${targetPath}`
+                        );
                     })
                     .catch(err => {
                         console.error('Error removing target path:', err);
@@ -107,7 +124,11 @@ async function FsLink() {
         } else {
             moveSync(sourcePath, targetPath);
             symlinkSync(targetPath, sourcePath, 'junction');
-            console.log(`Linked ${sourcePath} <==> ${targetPath}`);
+            console.log(
+                `[${color.magenta(
+                    'build.ts'
+                )}] 🔗 已链接 ${sourcePath} <==> ${targetPath}`
+            );
         }
     }
 }

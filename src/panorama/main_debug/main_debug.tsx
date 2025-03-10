@@ -50,7 +50,7 @@ export function Debug() {
             onclick: () => {
                 $.DispatchEvent('DOTAHUDShowDashboard');
             },
-            label: '返回主界面',
+            label: '#backToDashboard',
             style: {
                 width: '30px',
                 height: '30px',
@@ -62,7 +62,7 @@ export function Debug() {
             onclick: () => {
                 $.DispatchEvent('DOTAShowSettingsPopup');
             },
-            label: '设置',
+            label: '#settings',
             style: {
                 width: '26px',
                 height: '26px'
@@ -73,7 +73,7 @@ export function Debug() {
             onclick: () => {
                 $.DispatchEvent('DOTAHUDToggleScoreboard');
             },
-            label: '计分板',
+            label: '#scoreboard',
             style: {
                 width: '27px',
                 height: '27px'
@@ -96,7 +96,7 @@ export function Debug() {
             onclick: () => {
                 layer.toggle('tooldeveloper', 'left');
             },
-            label: '开发工具',
+            label: '#tooldeveloper',
             style: {
                 width: '24px',
                 height: '24px'

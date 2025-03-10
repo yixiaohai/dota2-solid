@@ -3,15 +3,14 @@
   "Language" "schinese"
   "Tokens"
   {
-    "item_shj_title" "xin翻译1"
-    "item_shj2_title" "xin翻译2"
-    "item_shj3_title" "xin翻译3"
-    "item_shj4_title" "本地化测试1"
-    "item_shj3" "心烦意3"
-    "item_shj2" "心烦意4"
-    "itemsd" "心烦意5"
-    "hero" "英雄"
+    "addon_game_mode" "solid模版"
+    "ok" "确定"
+    "reset" "重置"
+    "cancel" "取消"
+    "backToDashboard" "返回主界面"
+    "settings" "设置"
+    "scoreboard" "记分板"
     "toolcommon" "通用工具"
-    "new" "new2阿飞阿发"
+    "tooldeveloper" "开发工具"
   }
 }

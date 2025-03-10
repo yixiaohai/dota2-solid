@@ -7,8 +7,6 @@ export function normalizedPath(p: string): string {
     return p.replace(/\\/g, '/');
 }
 
-export const Panorama = `[${color.magenta('Panorama')}]`;
-
 export function fileColor(s: string) {
     return color.green(s);
 }

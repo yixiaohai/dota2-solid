@@ -2,6 +2,7 @@ import { writeFile } from 'node:fs/promises';
 import path, { join } from 'node:path';
 import { Plugin } from 'rollup';
 import fs from 'fs';
+import color from 'cli-color';
 
 // 构建 .vpdi 文件内容
 let imagePrecacheContent = `"DynamicImages"\n{\n  "Explicit Files"\n  {\n`;
@@ -52,7 +53,7 @@ export default function LoadImage(options: { imagesPath: string }): Plugin {
                     imagePrecacheContent += `    "{images}/custom_game/${relativePath}" ""\n`
 
                     console.log(
-                        `[rollup-plugin-img.ts] ${outputFile} 已复制`
+                        `[${color.magenta('rollup-plugin-img.ts')}] 📋 ${outputFile} 已复制`
                     );
                 }
             });

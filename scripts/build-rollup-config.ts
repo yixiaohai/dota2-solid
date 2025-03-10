@@ -10,12 +10,13 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import alias from '@rollup/plugin-alias';
 import replace from '@rollup/plugin-replace';
 import compatiblePanorama from './rollup-plugin-panorama';
-import { isDir, Panorama } from './utils';
+import { isDir } from './utils';
 import { rollupPluginXML } from './rollup-plugin-xml';
 import { rollupPluginScss } from './rollup-plugin-scss';
 import { mkdirSync, writeFileSync } from 'fs'; // 导入写文件的模块
 import CreateMain from './rollup-plugin-main';
 import LoadImage from './rollup-plugin-img';
+import color from 'cli-color';
 
 export default function GetRollupWatchOptions(rootPath: string) {
     // 入口文件夹
@@ -30,7 +31,9 @@ export default function GetRollupWatchOptions(rootPath: string) {
         return path.join(rootPath, `./${v}/${v}.tsx`);
     });
 
-    console.log(pages.map(v => Panorama + ' 👁️  ' + v).join('\n'));
+    console.log(
+        pages.map(v => `[${color.magenta('build-rollup-config.ts')}] 👁️  监听目录:${v}`).join('\n')
+    );
 
     const imagesPath = path.join(rootPath, 'images');
 
@@ -113,7 +116,7 @@ export default function GetRollupWatchOptions(rootPath: string) {
                     '../addon/content/panorama/styles/custom_game'
                 )
             }),
-            LoadImage({imagesPath}),
+            LoadImage({ imagesPath })
         ]
     };
 

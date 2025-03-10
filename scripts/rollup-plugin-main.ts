@@ -12,7 +12,7 @@ const xmlFile = `<root>
 </root>
 `;
 export default function CreateMain(options?: {}): Plugin {
-    console.log(`[${color.magenta('rollup-plugin-main.ts')}] create custom_ui_manifest.xml`)
+    console.log(`[${color.magenta('rollup-plugin-main.ts')}] 📝 生成UI入口文件:create custom_ui_manifest.xml`)
     return {
         name: 'create-main',
         generateBundle() {

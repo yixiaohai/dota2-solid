@@ -1,14 +1,16 @@
 "lang"
 {
-    "Language" "Schinese"
-    "Tokens"
-    {
-        //schinese/1.txt
-        "addon_game_mode" "你的游戏名"
-        "ability_npc_base_title" "单位基础技能"
-        "ResetHero" "单位基础技能+{s:test}"
-        //schinese/2.txt
-        "123" "adf123"
-        "456" "是的第三方"
-    }
+  "Language" "schinese"
+  "Tokens"
+  {
+    "item_shj_title" "xin翻译1"
+    "item_shj2_title" "xin翻译2"
+    "item_shj3_title" "xin翻译3"
+    "item_shj3" "心烦意3"
+    "item_shj2" "心烦意4"
+    "itemsd" "心烦意5"
+    "hero" "英雄"
+    "toolcommon" "通用工具"
+    "new" "new2阿飞阿发"
+  }
 }

@@ -12,6 +12,11 @@ git clone https://github.com/yixiaohai/solid-template <你的项目名>
 pnpm start
 ```
 
+# excel
+## 本地化
+#schinese#{}_title 会在addon_schinese.txt中生成 key_title 的kv
+
+
 # TODO
 单选框
 滑动输入条

@@ -1,0 +1,14 @@
+"lang"
+{
+  "Language" "english"
+  "Tokens"
+  {
+    "item_shj_desc" "英文1"
+    "item_shj2_desc" "英文4"
+    "item_shj3_desc" "英文32"
+    "itemsd_desc" "英文56"
+    "hero_desc" "Hero"
+    "toolcommon_desc" "通用工具"
+    "new_desc" "new123"
+  }
+}

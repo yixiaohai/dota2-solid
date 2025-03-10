@@ -41,7 +41,7 @@ const [menuItem, setMenuItem] = createStore<MenuItem[]>([
         func: () => {
             console.log('toolcommon');
         },
-        label: '通用工具',
+        label: '#toolcommon',
         style: {
             width: '24px',
             height: '24px'

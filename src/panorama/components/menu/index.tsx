@@ -88,7 +88,7 @@ export const Menu: Component<MenuProps> = props => {
                 {i => (
                     <Panel
                         class="box"
-                        tooltip_text={i.label}
+                        tooltip_text={i.label ? $.Localize(i.label) : ''}
                         onactivate={() => {
                             i.onclick();
                         }}

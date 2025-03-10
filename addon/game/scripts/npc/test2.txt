@@ -1,0 +1,12 @@
+"XLSXContent"
+{
+  "item_shj3" {
+  "BaseClass" "item_lua"
+  "test" "爱到疯"
+  }
+
+  "item_shj2" {
+  "BaseClass" "item_lua"
+  "test" "456水电费"
+  }
+}

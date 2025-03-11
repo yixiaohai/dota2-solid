@@ -40,8 +40,9 @@ timer.remove(t)
 
 # Excel
 ## 本地化
-\#xxx\# 会在addon_xxxx.txt中生成key_xxx,{}会替换成key
+\#xxx\# 会在addon_xxxx.txt中生成key_xxx,{}会替换成key  
 比如#schinese#{}_title 会在addon_schinese.txt中生成 key_title 的kv
+
 ## 嵌套
 单元格'xxxx{'和单元格'}'中的列会被嵌套到xxxx中
 

@@ -22,8 +22,8 @@ console.error('error')
 ```
 
 ## timer
-创建一个定时器，返回一个id，通过id删除定时器
-@callback 回调函数，根据返回的数字循环调用
+创建一个定时器，返回一个id，通过id删除定时器  
+@callback 回调函数，根据返回的数字循环调用  
 @delay 延迟，不填立即执行
 ```
 const t = timer.create(() => { return 1}, 3)

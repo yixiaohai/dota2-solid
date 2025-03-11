@@ -31,12 +31,12 @@ timer.remove(t)
 ```
 
 # PUI组件
-## [按钮](src/panorama/components/button/index.md)
-## [折叠面板](src/panorama/components/collapse/index.md)
-## [弹窗](src/panorama/components/dialog/index.md)
-## [输入框](src/panorama/components/input/index.md)
-## [弹出层](src/panorama/components/layer/index.md)
-## [菜单](src/panorama/components/menu/index.md)
+[按钮](src/panorama/components/button/index.md)
+[折叠面板](src/panorama/components/collapse/index.md)
+[弹窗](src/panorama/components/dialog/index.md)
+[输入框](src/panorama/components/input/index.md)
+[弹出层](src/panorama/components/layer/index.md)
+[菜单](src/panorama/components/menu/index.md)
 
 # excel
 ## 本地化

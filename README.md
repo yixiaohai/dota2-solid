@@ -1,4 +1,4 @@
-# solid-panorama
+# j-panorama
 此模版基于[solid-panorama](https://github.com/RobinCodeX/solid-panorama).
 
 # 开始
@@ -12,10 +12,35 @@ git clone https://github.com/yixiaohai/j-template <你的项目名>
 pnpm start
 ```
 
+# 前后端通用函数
+
+## 控制台输出
+只有ok和error，方法太多了记不住，唯一区别是前缀emoji不一样，会自动展开数组、对象
+```
+console.log('ok')
+console.error('error')
+```
+
+## timer
+创建一个定时器，返回一个id，通过id删除定时器
+@callback 回调函数，根据返回的数字循环调用
+@delay 延迟，不填立即执行
+```
+const t = timer.create(() => { return 1}, 3)
+timer.remove(t)
+```
+
+# PUI组件
+## [按钮](src/panorama/components/button/index.md)
+## [折叠面板](src/panorama/components/collapse/index.md)
+## [弹窗](src/panorama/components/dialog/index.md)
+## [输入框](src/panorama/components/input/index.md)
+## [弹出层](src/panorama/components/layer/index.md)
+## [菜单](src/panorama/components/menu/index.md)
+
 # excel
 ## 本地化
 #schinese#{}_title 会在addon_schinese.txt中生成 key_title 的kv
-
 
 # TODO
 单选框

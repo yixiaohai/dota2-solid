@@ -37,7 +37,7 @@ const create = (
 };
 
 const open = (name: string, type?: string) => {
-    console.log('open', name, type);
+    console.log(`打开Layer ${name} ${type}`);
     const data = layerData;
     let newData = [...data]; // 创建数组副本
 

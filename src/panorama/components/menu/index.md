@@ -4,7 +4,7 @@
 const [menuItem, setMenuItem] = createStore<MenuItem[]>([
     {
         icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
-        onclick: () => {
+        onClick: () => {
             $.DispatchEvent('DOTAHUDShowDashboard');
         },
         label: '#backToDashboard',
@@ -16,7 +16,7 @@ const [menuItem, setMenuItem] = createStore<MenuItem[]>([
     },
     {
         icon: 's2r://panorama/images/control_icons/gear_png.vtex',
-        onclick: () => {
+        onClick: () => {
             $.DispatchEvent('DOTAShowSettingsPopup');
         },
         label: '#settings',
@@ -27,7 +27,7 @@ const [menuItem, setMenuItem] = createStore<MenuItem[]>([
     },
     {
         icon: 's2r://panorama/images/control_icons/hamburger_png.vtex',
-        onclick: () => {
+        onClick: () => {
             $.DispatchEvent('DOTAHUDToggleScoreboard');
         },
         label: '#scoreboard',
@@ -39,10 +39,10 @@ const [menuItem, setMenuItem] = createStore<MenuItem[]>([
     },
     {
         icon: 's2r://panorama/images/control_icons/24px/tool.vsvg',
-        onclick: () => {
-            layer.toggle('toolcommon', 'left');
+        onClick: () => {
+            layer.toggle('tool_common', 'left');
         },
-        label: '#toolcommon',
+        label: '#tool_common',
         style: {
             width: '24px',
             height: '24px'
@@ -50,7 +50,7 @@ const [menuItem, setMenuItem] = createStore<MenuItem[]>([
     },
     {
         icon: 's2r://panorama/images/control_icons/24px/debut_tool.vsvg',
-        onclick: () => {
+        onClick: () => {
             layer.toggle('tooldeveloper', 'left');
         },
         label: '#tooldeveloper',

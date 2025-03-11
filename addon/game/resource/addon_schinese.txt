@@ -3,15 +3,19 @@
   "Language" "schinese"
   "Tokens"
   {
-    "addon_game_mode" "solid模版"
+    "addon_game_name" "solid模版"
     "ok" "确定"
     "reset" "重置"
     "cancel" "取消"
     "backToDashboard" "返回主界面"
     "settings" "设置"
     "scoreboard" "记分板"
-    "toolcommon" "通用工具"
+    "tool_common" "通用工具"
     "tooldeveloper" "开发工具"
-    "resetHero" "重置英雄"
+    "hero_reset" "重置英雄"
+    "debug" "调试"
+    "unit" "单位"
+    "script_reload" "重载脚本"
+    "default_UI" "默认UI"
   }
 }

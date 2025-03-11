@@ -5,9 +5,9 @@ import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
-import { ToolCommon } from '../view_debug/toolcommon';
-import { ToolDeveloper } from '../view_debug/tooldeveloper';
+import { ToolCommon } from '../view_debug/tool_common';
 import { console } from '../functions/console';
+import { DefaultUI } from '../view_debug/default_ui';
 
 css`
     .root {
@@ -47,7 +47,7 @@ export function Debug() {
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
         {
             icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
-            onclick: () => {
+            onClick: () => {
                 $.DispatchEvent('DOTAHUDShowDashboard');
             },
             label: '#backToDashboard',
@@ -59,7 +59,7 @@ export function Debug() {
         },
         {
             icon: 's2r://panorama/images/control_icons/gear_png.vtex',
-            onclick: () => {
+            onClick: () => {
                 $.DispatchEvent('DOTAShowSettingsPopup');
             },
             label: '#settings',
@@ -69,22 +69,11 @@ export function Debug() {
             }
         },
         {
-            icon: 's2r://panorama/images/control_icons/24px/tool.vsvg',
-            onclick: () => {
-                layer.toggle('toolcommon', 'left');
-            },
-            label: '#toolcommon',
-            style: {
-                width: '24px',
-                height: '24px'
-            }
-        },
-        {
             icon: 's2r://panorama/images/control_icons/24px/debut_tool.vsvg',
-            onclick: () => {
-                layer.toggle('tooldeveloper', 'left');
+            onClick: () => {
+                layer.toggle('tool_common', 'left');
             },
-            label: '#tooldeveloper',
+            label: '#tool_common',
             style: {
                 width: '24px',
                 height: '24px'
@@ -93,35 +82,14 @@ export function Debug() {
     ]);
 
     onMount(() => {
-        console.log('Created Debug View');
-        // setTimeout(() => {
-        //     setMenuShow(true);
-        // }, 1500);
         setMenuShow(true);
-        GameEvents.Subscribe('dota_player_update_query_unit', datas => {
-            $.Msg('dota_player_update_query_unit');
-            $.Msg(datas);
-        });
-
-        $.RegisterForUnhandledEvent('StyleClassesChanged', UI_StyleClassesChanged);
-        function UI_StyleClassesChanged(panel:any) {
-            if (null != panel && panel.IsValid()) {
-                if (panel.paneltype == 'DOTAHUDShop') {
-                    var isOpen = panel.BHasClass('ShopOpen');
-                    $.Msg(isOpen);
-                    if (Players.IsValidPlayerID(Players.GetLocalPlayer()) && (isOpen)) {
-        
-                    }
-                }
-            }
-        }
     });
 
     return (
         <Panel class="root">
             <Menu items={menuItem} show={menuShow()} />
             <ToolCommon />
-            <ToolDeveloper />
+            <DefaultUI />
         </Panel>
     );
 }

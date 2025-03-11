@@ -2,7 +2,7 @@ import { forEach } from 'lodash';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { console } from '../../functions/console';
 
-const dialogStyle = css`
+const main = css`
     width: 100%;
     height: 100%;
     background-color: #060606f9;
@@ -186,14 +186,13 @@ class DialogManager implements DialogActions {
     }
 
     private initialize() {
-        console.log('Dialog init');
+        console.log('Dialog初始化');
 
         const DialogShade = $.CreatePanel('Panel', $.GetContextPanel(), '', {
-            class: dialogStyle + ' minimized'
+            class: main + ' minimized'
         });
         DialogShade.SetPanelEvent('onactivate', () => {});
         DialogShade.SetPanelEvent('oncancel', () => {
-            console.log('Dialog cancel1');
             this.close();
         });
         DialogManager.dialog = DialogShade;
@@ -212,7 +211,6 @@ class DialogManager implements DialogActions {
             class: 'input'
         });
         input.SetPanelEvent('oncancel', () => {
-            console.log('Dialog cancel2');
             this.close();
         });
         DialogManager.input = input;
@@ -238,7 +236,6 @@ class DialogManager implements DialogActions {
         });
         $.CreatePanel('Label', button_cancel, '').text = $.Localize('#cancel');
         button_cancel.SetPanelEvent('onactivate', () => {
-            console.log('Dialog cancel');
             this.close();
         });
         DialogManager.button_cancel = button_cancel;
@@ -288,7 +285,6 @@ class DialogManager implements DialogActions {
     };
 
     public close = () => {
-        console.log('Dialog close');
         DialogManager.dialog.AddClass('minimized');
         $.DispatchEvent('DropInputFocus');
     };

@@ -3,15 +3,19 @@
   "Language" "english"
   "Tokens"
   {
-    "addon_game_mode" "solid template"
+    "addon_game_name" "solid template"
     "ok" "ok"
     "reset" "reset"
     "cancel" "cancel"
     "backToDashboard" "back to dashboard"
     "settings" "settings"
     "scoreboard" "scoreboard"
-    "toolcommon" "common tool"
+    "tool_common" "common tool"
     "tooldeveloper" "developer tool"
-    "resetHero" "reset hero"
+    "hero_reset" "reset hero"
+    "debug" "debug"
+    "unit" "unit"
+    "script_reload" "script reload"
+    "default_UI" "default UI"
   }
 }

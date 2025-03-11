@@ -1,25 +1,15 @@
 import { Component } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
-interface ButtonnProps {
-    icon?: string;
-    text?: string;
-    type?: 1 | 2;
-    color?:
-        | 'red'
-        | 'green'
-        | 'blue'
-        | 'grey'
-        | 'yellow'
-        | 'orange'
-        | 'cyan'
-        | 'purple'
-        | 'grey';
-    flow?: boolean;
+interface SwitchProps {
+    checked?: boolean;
+    defaultChecked?: boolean;
+    checkedText?: string;
+    unCheckedText?: string;
+    size?: 'default' | 'small';
     disabled?: boolean;
-    onClick?: Function;
+    onChange?: Function;
     style?: Partial<PanelStyle>;
-    fontsize?: number;
 }
 
 const btnStyle = css`
@@ -475,35 +465,16 @@ const btnStyle = css`
     }
 `;
 
-export const CButton: Component<ButtonnProps> = props => {
+export const CSwitch: Component<SwitchProps> = props => {
     return (
         <Button
-            class={`${btnStyle} ${
-                props.type ? `style${props.type}` : 'style1'
-            } `}
-            classList={{
-                red: props.color === 'red',
-                orange: props.color === 'orange',
-                yellow: props.color === 'yellow',
-                green: props.color === 'green',
-                cyan: props.color === 'cyan',
-                blue: props.color === 'blue',
-                purple: props.color === 'purple',
-                grey: props.color === 'grey',
-                flow: props.flow === true
-            }}
+            class={`${btnStyle}`}
             style={props.style}
             enabled={!props.disabled}
-            onactivate={() => props.onClick?.()}
+            onactivate={() => props.onChange?.()}
         >
             <Label
-                text={props.text}
-                visible={!!props.text}
-                classList={{ icon: !!props.icon }}
-                style={{
-                    backgroundImage: `url('${props.icon}')`,
-                    fontSize: props.fontsize ? `${props.fontsize}px` : '17px'
-                }}
+
             />
         </Button>
     );

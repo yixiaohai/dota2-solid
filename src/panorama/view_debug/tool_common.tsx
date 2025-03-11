@@ -7,7 +7,7 @@ import { dialog } from '../components/dialog';
 import { console } from '../functions/console';
 import { timer } from '../functions/timer';
 
-const toolcommonStyle = css`
+const main = css`
     flow-children: down;
     width: 520px;
     background-color: #181818dd;
@@ -23,16 +23,16 @@ const toolcommonStyle = css`
         transform: translateX(-520px) translateY(60px);
     }
 
-    .test1 {
-        flow-children: right-wrap;
+    .content {
+        flow-children: down;
     }
 `;
 
-const toolcommonRow = css`
+const row = css`
     flow-children: right;
 `;
 
-const toolcommonHead = css`
+const head = css`
     width: 100%;
     background-color: #181818;
     border-bottom: 2px solid #111111;
@@ -63,48 +63,50 @@ const toolcommonHead = css`
     }
 `;
 
-const collapseItem: CollapseProps['items'] = [
+const collapseItem_unit: CollapseProps['items'] = [
     {
-        key: 'hero',
-        label: '#hero',
+        key: 'unit',
+        label: '#unit',
         children: () => (
             <Panel style={{ flowChildren: 'down' }}>
-                <Panel class={toolcommonRow}>
+                <Panel class={row}>
                     <CButton
-                        text="#resetHero"
+                        text="#hero_reset"
                         flow
-                        onclick={() =>
-                            GameEvents.SendCustomGameEventToServer('debug_event', {
-                                event: 'resetHero'
-                            })
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_hero_reset',
+                                {}
+                            )
                         }
                     />
                     <CButton
                         text="#RespawnHero"
                         flow
-                        onclick={() => {
+                        onClick={() => {
                             console.log('Game.Time()');
                             const t1 = timer.create(() => {
-                                console.log(`世家戳${Game.Time()},id${t1}`, 'abc');
-                                if (Game.Time() < 2100) {
-                                    return 1;
-                                }
+                                console.log(
+                                    `当前时间${Game.Time()},id${t1}`,
+                                    'abc'
+                                );
+                                return 1;
                             });
 
                             timer.create(() => {
                                 console.log(`tingzhi id${t1}`);
                                 timer.remove(t1);
-                            }, 3);
+                            }, 10);
                         }}
                     />
-                    <CButton text="#ReplaceHero" flow />
+                    <CButton text="#ReplaceHero" flow onClick={() => {}} />
                 </Panel>
-                <Panel class={toolcommonRow}>
+                <Panel class={row}>
                     <CButton
                         text="#SetGold"
                         color="blue"
                         flow
-                        onclick={() => {
+                        onClick={() => {
                             dialog.open({
                                 title: '确认删除',
                                 describe: '您确定要删除此项目吗？',
@@ -117,84 +119,41 @@ const collapseItem: CollapseProps['items'] = [
                     <CButton text="#AddHero_Friend" color="green" flow />
                     <CButton text="#AddHero_Enemy" color="red" flow />
                 </Panel>
-                <Panel class={toolcommonRow}>
+                <Panel class={row}>
                     <CButton text="#ClearInventory" flow />
                     <CButton text="#LevelUp" flow />
                     <CButton text="#MaxLevelUp" flow />
                 </Panel>
-                <Panel class={toolcommonRow}>
+                <Panel class={row}>
                     <CButton text="#GetAbilityPoint" color="green" flow />
                     <CButton text="#RemoveAbilityPoint" color="red" flow />
                     <CButton text="#ReplaceAbility" color="blue" flow />
                 </Panel>
             </Panel>
         )
-    },
+    }
+];
+const collapseItem_debug: CollapseProps['items'] = [
     {
-        key: 'unit',
-        label: '#unit',
+        key: 'debug',
+        label: '#debug',
         children: () => (
             <Panel style={{ flowChildren: 'down' }}>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-            </Panel>
-        )
-    },
-    {
-        key: 'unit',
-        label: '#unit',
-        children: () => (
-            <Panel style={{ flowChildren: 'down' }}>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
+                <Panel class={row}>
+                    <CButton
+                        text="#script_reload"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_script_reload',
+                                {}
+                            )
+                        }
+                    />
+                    <CButton text="#default_UI" flow onClick={() => { layer.toggle('default_ui', 'center') }} />
                     <CButton text="#ResetHero" flow />
                 </Panel>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-            </Panel>
-        )
-    },
-    {
-        key: 'unit',
-        label: '#unit',
-        children: () => (
-            <Panel style={{ flowChildren: 'down' }}>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-            </Panel>
-        )
-    },
-    {
-        key: 'unit',
-        label: '#unit',
-        children: () => (
-            <Panel style={{ flowChildren: 'down' }}>
-                <Panel class={toolcommonRow}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                </Panel>
-                <Panel class={toolcommonRow}>
+                <Panel class={row}>
                     <CButton text="#ResetHero" flow />
                     <CButton text="#ResetHero" flow />
                     <CButton text="#ResetHero" flow />
@@ -207,24 +166,22 @@ const collapseItem: CollapseProps['items'] = [
 export const ToolCommon = () => {
     return (
         <Layer
-            name="toolcommon"
+            name="tool_common"
             type="left"
-            onOpen={() => console.log('open')}
-            onClose={() => console.log('close')}
-            class={toolcommonStyle}
+            class={main}
         >
-            <Panel class={toolcommonHead}>
-                <Label text="#toolCommon" />
+            <Panel class={head}>
+                <Label text="#tool_common" />
                 <Button
                     onactivate={() => {
-                        layer.close('toolcommon', 'left');
+                        layer.close('tool_common', 'left');
                     }}
                 />
             </Panel>
-            <Panel class="test1">
-                <Collapse items={collapseItem} activeKey="hero"></Collapse>
+            <Panel class="content">
+                <Collapse items={collapseItem_unit} activeKey="unit"></Collapse>
+                <Collapse items={collapseItem_debug} activeKey="debug"></Collapse>
             </Panel>
-            <Panel class="test2"></Panel>
         </Layer>
     );
 };

@@ -6,8 +6,6 @@ if (global.reloadCache === undefined) {
 }
 
 export function reloadable<T extends { new (...args: any[]): {} }>(constructor: T): T {
-    print(`[@reloadable] Applying to class: ${constructor.name}`); // 添加日志)
-    DeepPrintTable(constructor); // 添加日志)
     const className = constructor.name;
     if (global.reloadCache[className] === undefined) {
         global.reloadCache[className] = constructor;

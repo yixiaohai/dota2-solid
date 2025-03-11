@@ -1,6 +1,7 @@
 import { children, Component, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { layer } from './manager';
+import { console } from '../../functions/console';
 
 const LayerStyle = css`
     width: 100%;
@@ -19,6 +20,7 @@ const LayerStyle = css`
         width: 100%;
         height: 100%;
         z-index: 1;
+        opacity: 1;
     }
 
     .content {
@@ -50,20 +52,16 @@ export const Layer: Component<LayerProps> = props => {
             props.onOpen,
             props.onClose
         );
-
-        const list = resolved.toArray();
-        for (const [index, child] of list.entries()) {
-            child.SetPanelEvent('onactivate', () => {});
-            child.SetHasClass('content', index === list.length - 1);
-        }
     });
 
     return (
         <Panel
-            class={props.class ? props.class : LayerStyle}
+            class={LayerStyle}
             classList={{ minimized: !layer.isOpen(props.name, props.type) }}
         >
-            {resolved()}
+            <Panel class={`${props.class ?? ''} content`} onactivate={() => {}}>
+                {resolved()}
+            </Panel>
             <Panel
                 class="shade" // 添加背景遮罩层
                 style={{

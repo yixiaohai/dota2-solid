@@ -12,5 +12,6 @@
     "scoreboard" "记分板"
     "toolcommon" "通用工具"
     "tooldeveloper" "开发工具"
+    "resetHero" "重置英雄"
   }
 }

@@ -12,5 +12,6 @@
     "scoreboard" "scoreboard"
     "toolcommon" "common tool"
     "tooldeveloper" "developer tool"
+    "resetHero" "reset hero"
   }
 }

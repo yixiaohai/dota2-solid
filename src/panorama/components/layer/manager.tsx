@@ -1,4 +1,5 @@
 import { createStore } from 'solid-js/store';
+import { console } from '../../functions/console';
 
 interface LayerState {
     name: string;

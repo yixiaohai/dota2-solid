@@ -30,6 +30,9 @@ class PanoramaConsole implements console {
     }
 
     private print(content: any, identifier?: string, level?: number): void {
+        if (!Game.IsInToolsMode()) {
+            return;
+        }
         level = level || 0;
         let tempStr = '';
         if (level > 0) {

@@ -69,18 +69,6 @@ export function Debug() {
             }
         },
         {
-            icon: 's2r://panorama/images/control_icons/hamburger_png.vtex',
-            onclick: () => {
-                $.DispatchEvent('DOTAHUDToggleScoreboard');
-            },
-            label: '#scoreboard',
-            style: {
-                width: '27px',
-                height: '27px'
-            },
-            show: false
-        },
-        {
             icon: 's2r://panorama/images/control_icons/24px/tool.vsvg',
             onclick: () => {
                 layer.toggle('toolcommon', 'left');

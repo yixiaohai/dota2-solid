@@ -30,6 +30,9 @@ class VscriptConsole implements console{
     }
 
     private print(content: any, identifier?: string): void {
+        if (!IsInToolsMode()){
+            return;
+        }
         let result = '';
         if (identifier) {
             result += identifier + ' ';

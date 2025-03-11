@@ -1,6 +1,8 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { Layer } from '../components/layer';
 import { Input } from '../components/input';
+import { CButton } from '../components/button';
+import { console } from '../functions/console';
 
 const tooldeveloperStyle = css`
     flow-children: down;
@@ -23,14 +25,33 @@ const tooldeveloperStyle = css`
 
     .test1 {
         flow-children: right-wrap;
+        border: 1px solid #000000;
     }
 `;
 
 export const ToolDeveloper = () => {
     return (
-        <Layer name="tooldeveloper" class={tooldeveloperStyle} type="left">
-            <Label text="Hello World!2" />
-            <Input />
+        <Layer
+            name="tooldeveloper"
+            class={tooldeveloperStyle}
+            type="left"
+            onOpen={() => console.log('open')}
+            onClose={() => console.log('close')}
+            shade = {0.5}
+            shadeClose = {true}
+        >
+            <Button class='test1' onactivate={() => console.log('test')}>
+                <Label text="test" />
+            </Button>
+            <CButton
+                text="#reload"
+                flow
+                onclick={() =>
+                    GameEvents.SendCustomGameEventToServer('debug_event', {
+                        event: 'reload'
+                    })
+                }
+            />
         </Layer>
     );
 };

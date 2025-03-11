@@ -18,7 +18,7 @@ const toolcommonStyle = css`
     transition-duration: 0.35s;
     transition-timing-function: ease-in-out;
 
-    &.minimized {
+    .minimized & {
         opacity: 0;
         transform: translateX(-520px) translateY(60px);
     }
@@ -71,11 +71,11 @@ const collapseItem: CollapseProps['items'] = [
             <Panel style={{ flowChildren: 'down' }}>
                 <Panel class={toolcommonRow}>
                     <CButton
-                        text="#ResetHero"
+                        text="#resetHero"
                         flow
                         onclick={() =>
-                            GameEvents.SendCustomGameEventToServer('test', {
-                                e: '123'
+                            GameEvents.SendCustomGameEventToServer('debug_event', {
+                                event: 'resetHero'
                             })
                         }
                     />

@@ -38,9 +38,12 @@ timer.remove(t)
 - [弹出层](src/panorama/components/layer/index.md)
 - [菜单](src/panorama/components/menu/index.md)
 
-# excel
+# Excel
 ## 本地化
-#schinese#{}_title 会在addon_schinese.txt中生成 key_title 的kv
+\#xxx\# 会在addon_xxxx.txt中生成key_xxx,{}会替换成key
+比如#schinese#{}_title 会在addon_schinese.txt中生成 key_title 的kv
+## 嵌套
+单元格'xxxx{'和单元格'}'中的列会被嵌套到xxxx中
 
 # TODO
 单选框

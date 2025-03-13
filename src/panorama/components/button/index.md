@@ -24,3 +24,5 @@
 | onClick | 点击事件回调函数 | Function | - |
 | style | 自定义样式对象（会覆盖预设样式） | Partial<PanelStyle> | - |
 | fontsize | 字体大小 | number | 17 |
+| toggle | 可以选中 | boolean | - |
+| checked | 默认是否选中 | boolean | false |

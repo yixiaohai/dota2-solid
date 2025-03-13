@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
 interface ButtonnProps {
@@ -20,11 +20,14 @@ interface ButtonnProps {
     onClick?: Function;
     style?: Partial<PanelStyle>;
     fontsize?: number;
+    toggle?: boolean;
+    checked?: boolean;
 }
 
 const btnStyle = css`
     margin: 5px;
     padding: 5px;
+    flow-children: right;
 
     &:disabled {
         wash-color: #000000aa;
@@ -33,6 +36,33 @@ const btnStyle = css`
 
     &.flow {
         width: fill-parent-flow(1);
+    }
+
+    .toggle {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #707070;
+        background-color: #000;
+        vertical-align: middle;
+        margin-right: 5px;
+        transition-property: background-color, box-shadow, border;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+    }
+
+    &:hover .toggle {
+        border: 2px solid #697879;
+    }
+
+    .toggle.checked {
+        background-color: gradient(
+            linear,
+            0% 0%,
+            0% 100%,
+            from(#e7f6f5),
+            to(#a0d6d7)
+        );
+        box-shadow: #5b62bf77 0px 0px 8px 0px;
     }
 
     &.style1 {
@@ -476,8 +506,10 @@ const btnStyle = css`
 `;
 
 export const CButton: Component<ButtonnProps> = props => {
+    const [isChecked, setIsChecked] = createSignal(props.checked || false);
+
     return (
-        <Button
+        <Panel
             class={`${btnStyle} ${
                 props.type ? `style${props.type}` : 'style1'
             } `}
@@ -494,8 +526,18 @@ export const CButton: Component<ButtonnProps> = props => {
             }}
             style={props.style}
             enabled={!props.disabled}
-            onactivate={() => props.onClick?.()}
+            onactivate={() => {
+                if (props.toggle) {
+                    setIsChecked(!isChecked());
+                    props.onClick?.(isChecked());
+                } else {
+                    props.onClick?.();
+                }
+            }}
         >
+            {props.toggle && (
+                <Panel class={`toggle ${isChecked() ? 'checked' : ''}`}></Panel>
+            )}
             <Label
                 text={props.text}
                 visible={!!props.text}
@@ -505,6 +547,6 @@ export const CButton: Component<ButtonnProps> = props => {
                     fontSize: props.fontsize ? `${props.fontsize}px` : '17px'
                 }}
             />
-        </Button>
+        </Panel>
     );
 };

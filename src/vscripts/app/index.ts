@@ -8,10 +8,6 @@ export class App {
         print('Activate3');
     }
 
-    static Precache() {
-        print('Precache');
-    }
-
     OnShopToggled(event: any) {
         print('OnShopToggled2');
         DeepPrintTable(event);

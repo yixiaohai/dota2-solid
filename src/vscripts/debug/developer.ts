@@ -5,17 +5,16 @@ import { timer } from '../functions/timer';
 @reloadable
 export class Developer {
     constructor() {
-        CustomGameEventManager.RegisterListener('c2s_script_reload', () => {
-            this.ScriptReload();
-        });
+        CustomGameEventManager.RegisterListener(
+            'c2s_console_command',
+            (_, data) => {
+                this.ConsoleCommand(data.command);
+            }
+        );
     }
 
-    ScriptReload() {
-        console.log('c2s_script_reload');
-        SendToServerConsole('script_reload');
+    ConsoleCommand(command: string) {
+        SendToConsole(command);
     }
 
-    SpawnCallback() {
-        console.log('spawn_callback');
-    }
 }

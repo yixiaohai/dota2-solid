@@ -5,15 +5,14 @@ import { console } from '../../functions/console';
 const main = css`
     width: 100%;
     height: 100%;
-    background-color: #060606f9;
+    background-color: #000000CC;
     z-index: 9999;
-    transition-property: opacity, background-color;
-    transition-duration: 0.1s;
+    transition-property: opacity;
+    transition-duration: 0.35s;
     transition-timing-function: ease-in;
 
     &.minimized {
         opacity: 0;
-        background-color: #06060600;
     }
 
     .box {

@@ -8,9 +8,15 @@ export class Hero {
         CustomGameEventManager.RegisterListener('c2s_hero_reset', (_, data) => {
             this.Reset(data.PlayerID);
         });
+        CustomGameEventManager.RegisterListener('c2s_unit_event', (_, data) => {
+            const event = data.event as keyof Hero;
+            if (typeof this[event] === 'function') {
+                this[event](data.PlayerID, data.units);
+            }
+        });
     }
 
-    Reset(PlayerID: PlayerID) {
+    Reset(PlayerID: PlayerID, units?: { [key: number]: EntityIndex }) {
         console.log('reset');
         const player = PlayerResource.GetPlayer(PlayerID);
         if (player) {

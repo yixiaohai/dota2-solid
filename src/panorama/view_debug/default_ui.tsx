@@ -6,12 +6,14 @@ import { Collapse, CollapseProps } from '../components/collapse';
 import { dialog } from '../components/dialog';
 import { console } from '../functions/console';
 import { timer } from '../functions/timer';
-import { CSwitch } from '../components/switch';
+import { default_ui, DefaultUIState } from '../components/default_ui';
+import { createSignal, For } from 'solid-js';
+import { forEach, forIn } from 'lodash';
 
 const main = css`
     flow-children: down;
     width: 520px;
-    height: 520px;
+    height: 620px;
     horizontal-align: center;
     vertical-align: middle;
     background-color: #181818dd;
@@ -28,8 +30,44 @@ const main = css`
     }
 
     .content {
+        width: 100%;
+        flow-children: down;
+        padding: 10px;
     }
 `;
+
+const row = css`
+    width: 100%;
+    flow-children: right;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s ease 0s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    & > Label {
+        width: 420px;
+        line-height: 30px;
+        color: #fff;
+    }
+`;
+
+// 初始化列表
+const [items, setItems] = createSignal<DotaDefaultUIElement_t[]>([]);
+// 添加示例数据
+setItems([
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_QUICK_STATS,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBOARD,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_MINIMAP,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_PANEL,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_SHOP,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_KILLCAM,
+    DotaDefaultUIElement_t.DOTA_DEFAULT_UI_CUSTOMUI_BEHIND_HUD_ELEMENTS
+]);
 
 export const DefaultUI = () => {
     return (
@@ -37,21 +75,32 @@ export const DefaultUI = () => {
             name="default_ui"
             type="center"
             class={main}
-            shade={0.3}
+            shade={0.8}
             shadeClose={true}
         >
-            <Panel>
+            <Panel class="head">
+                <Label text="#default_ui" />
                 <Button
                     onactivate={() => {
                         layer.close('default_ui', 'center');
                     }}
-                >
-                    <Image src="s2r://panorama/images/control_icons/gear_return_png.vtex" />
-                </Button>
-                <Label text="#default_ui" />
+                />
             </Panel>
             <Panel class="content">
-                <CSwitch />
+                <For each={items()}>
+                    {i => (
+                        <Panel class={row}>
+                            <Label text={`#default_ui_${i}`} />
+                            <CButton
+                                text={default_ui.get(i) ? '开启' : '关闭'}
+                                color={default_ui.get(i) ? 'green' : 'grey'}
+                                onClick={() => {
+                                    default_ui.set(i, !default_ui.get(i));
+                                }}
+                            />
+                        </Panel>
+                    )}
+                </For>
             </Panel>
         </Layer>
     );

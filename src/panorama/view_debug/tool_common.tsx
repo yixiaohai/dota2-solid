@@ -6,10 +6,12 @@ import { Collapse, CollapseProps } from '../components/collapse';
 import { dialog } from '../components/dialog';
 import { console } from '../functions/console';
 import { timer } from '../functions/timer';
+import { create } from 'lodash';
+import { createSignal } from 'solid-js';
 
 const main = css`
     flow-children: down;
-    width: 520px;
+    width: 300px;
     background-color: #181818dd;
     box-shadow: #000000aa 0px 0px 8px 0px;
     transform: translateX(0px) translateY(60px);
@@ -20,7 +22,7 @@ const main = css`
 
     .minimized & {
         opacity: 0;
-        transform: translateX(-520px) translateY(60px);
+        transform: translateX(-350px) translateY(60px);
     }
 
     .content {
@@ -30,37 +32,6 @@ const main = css`
 
 const row = css`
     flow-children: right;
-`;
-
-const head = css`
-    width: 100%;
-    background-color: #181818;
-    border-bottom: 2px solid #111111;
-
-    Label {
-        font-size: 18px;
-        color: #666666;
-        margin: 6px;
-    }
-
-    Button {
-        width: 24px;
-        height: 24px;
-        wash-color: #888888;
-        horizontal-align: right;
-        background-image: url('s2r://panorama/images/control_icons/x_close_grey_psd.vtex');
-        background-size: 24px 24px;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        margin: 4px;
-        transition-property: wash-color, pre-transform-scale2d, background-color;
-        transition-duration: 0.1s;
-        transition-timing-function: ease-in;
-    }
-
-    Button:hover {
-        wash-color: #fff;
-    }
 `;
 
 const collapseItem_unit: CollapseProps['items'] = [
@@ -75,59 +46,249 @@ const collapseItem_unit: CollapseProps['items'] = [
                         flow
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
-                                'c2s_hero_reset',
-                                {}
+                                'c2s_unit_event',
+                                {
+                                    event: 'hero_reset',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton text="#hero_replace" flow onClick={HeroReplace} />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#level_up"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'level_up',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
                             )
                         }
                     />
                     <CButton
-                        text="#RespawnHero"
+                        text="#level_up_max"
                         flow
-                        onClick={() => {
-                            console.log('Game.Time()');
-                            const t1 = timer.create(() => {
-                                console.log(
-                                    `当前时间${Game.Time()},id${t1}`,
-                                    'abc'
-                                );
-                                return 1;
-                            });
-
-                            timer.create(() => {
-                                console.log(`tingzhi id${t1}`);
-                                timer.remove(t1);
-                            }, 10);
-                        }}
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'level_up_max',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
                     />
-                    <CButton text="#ReplaceHero" flow onClick={() => {}} />
                 </Panel>
                 <Panel class={row}>
                     <CButton
-                        text="#SetGold"
-                        color="blue"
+                        text="#revive"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'revive',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton
+                        text="#refresh"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'refresh',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#dummy_add"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'dummy_add'
+                                }
+                            )
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#hero_add_friend"
+                        color="green"
+                        flow
+                        onClick={HeroAddFriend}
+                    />
+                    <CButton
+                        text="#hero_add_enemy"
+                        color="red"
+                        flow
+                        onClick={HeroAddEnemy}
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#ent_info"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_info',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton
+                        text="#ent_kv"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_kv',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#ent_abilities"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_abilities',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton
+                        text="#ent_items"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_items',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#ent_modifiers"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_modifiers',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton
+                        text="#ent_states"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_states',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#ent_remove"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'ent_remove',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton text="#ent_move" flow onClick={EntMove} />
+                </Panel>
+            </Panel>
+        )
+    }
+];
+const collapseItem_ui: CollapseProps['items'] = [
+    {
+        key: 'ui',
+        label: '#ui',
+        children: () => (
+            <Panel style={{ flowChildren: 'down' }}>
+                <Panel class={row}>
+                    <CButton
+                        text="#default_UI"
                         flow
                         onClick={() => {
-                            dialog.open({
-                                title: '确认删除',
-                                describe: '您确定要删除此项目吗？',
-                                input: true,
-                                inputBig: true,
-                                onOk: () => console.log('确认删除')
-                            });
+                            layer.toggle('default_ui', 'center');
                         }}
                     />
-                    <CButton text="#AddHero_Friend" color="green" flow />
-                    <CButton text="#AddHero_Enemy" color="red" flow />
-                </Panel>
-                <Panel class={row}>
-                    <CButton text="#ClearInventory" flow />
-                    <CButton text="#LevelUp" flow />
-                    <CButton text="#MaxLevelUp" flow />
-                </Panel>
-                <Panel class={row}>
-                    <CButton text="#GetAbilityPoint" color="green" flow />
-                    <CButton text="#RemoveAbilityPoint" color="red" flow />
-                    <CButton text="#ReplaceAbility" color="blue" flow />
+                    <CButton
+                        text="#default_UI"
+                        flow
+                        onClick={() => {
+                            layer.toggle('default_ui', 'center');
+                        }}
+                    />
                 </Panel>
             </Panel>
         )
@@ -145,32 +306,80 @@ const collapseItem_debug: CollapseProps['items'] = [
                         flow
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
-                                'c2s_script_reload',
-                                {}
+                                'c2s_console_command',
+                                {
+                                    command: 'script_reload'
+                                }
                             )
                         }
                     />
-                    <CButton text="#default_UI" flow onClick={() => { layer.toggle('default_ui', 'center') }} />
-                    <CButton text="#ResetHero" flow />
+                    <CButton
+                        text="#script_clear"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_console_command',
+                                {
+                                    command: 'clear'
+                                }
+                            )
+                        }
+                    />
                 </Panel>
                 <Panel class={row}>
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
-                    <CButton text="#ResetHero" flow />
+                    <CButton
+                        toggle={true}
+                        checked={Game.GetConvarBool('cl_particle_log_creates')}
+                        flow
+                        text="#particle_log"
+                        onClick={(e: boolean) =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_console_command',
+                                {
+                                    command: `cl_particle_log_creates ${
+                                        e ? '1' : '0'
+                                    }`
+                                }
+                            )
+                        }
+                    />
                 </Panel>
             </Panel>
         )
     }
 ];
 
+const HeroReplace = () => {};
+const HeroAddFriend = () => {};
+const HeroAddEnemy = () => {};
+
+const [arrowParticle, setArrowParticle] = createSignal<ParticleID>(
+    -1 as ParticleID
+);
+const EntMove = () => {
+    let ent = Players.GetLocalPlayerPortraitUnit();
+    setArrowParticle(
+        Particles.CreateParticle(
+            'particles/selection/selection_grid_drag.vpcf',
+            ParticleAttachment_t.PATTACH_ABSORIGIN_FOLLOW,
+            ent
+        )
+    );
+    const origin = Entities.GetAbsOrigin(ent);
+    origin[2] += 50;
+    Particles.SetParticleControl(arrowParticle(), 4, origin);
+    Particles.SetParticleAlwaysSimulate(arrowParticle());
+    MoveToParticlesThink();
+};
+
+let MoveToParticlesThink = () => {
+    
+};
+
 export const ToolCommon = () => {
     return (
-        <Layer
-            name="tool_common"
-            type="left"
-            class={main}
-        >
-            <Panel class={head}>
+        <Layer name="tool_common" type="left" class={main}>
+            <Panel class="head">
                 <Label text="#tool_common" />
                 <Button
                     onactivate={() => {
@@ -180,7 +389,11 @@ export const ToolCommon = () => {
             </Panel>
             <Panel class="content">
                 <Collapse items={collapseItem_unit} activeKey="unit"></Collapse>
-                <Collapse items={collapseItem_debug} activeKey="debug"></Collapse>
+                <Collapse items={collapseItem_ui} activeKey="ui"></Collapse>
+                <Collapse
+                    items={collapseItem_debug}
+                    activeKey="debug"
+                ></Collapse>
             </Panel>
         </Layer>
     );

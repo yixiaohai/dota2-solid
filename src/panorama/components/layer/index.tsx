@@ -43,7 +43,7 @@ export const Layer: Component<LayerProps> = props => {
     const resolved = children(() => props.children);
 
     onMount(() => {
-        console.log('创建Layer', props.name, props.type);
+        console.log(`创建Layer ${props.name} ${props.type}`);
         layer.create(
             props.name,
             props.type,

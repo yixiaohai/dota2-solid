@@ -2,8 +2,8 @@ import { Component, For } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 
 const MenuStyle = css`
-    margin-top: 12px;
-    margin-left: 10px;
+    margin-top: 13px;
+    margin-left: 0px;
     horizontal-align: left;
     vertical-align: top;
     opacity: 1;

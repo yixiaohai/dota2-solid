@@ -2,9 +2,6 @@ import { createEffect, createSignal, Match, onMount, Switch } from 'solid-js';
 import { render } from 'solid-panorama-runtime';
 import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import default_ui_config from '../config/default_ui_config';
-
-default_ui_config();
 
 xml(
     <root>
@@ -15,7 +12,7 @@ xml(
             <include src="file://{resources}/scripts/custom_game/main.js" />
         </scripts>
         <Panel class="root" hittest={false}>
-            <Panel id="app" class="root" hittest={false}/>
+            <Panel id="app" class="root" hittest={false} />
         </Panel>
     </root>
 );
@@ -39,6 +36,7 @@ import { Shop } from '../view/shop';
 import { Lowhud } from '../view/lowhud';
 import { ToolCommon } from '../view_debug/tool_common';
 import { console } from '../functions/console';
+import { default_ui } from '../components/default_ui';
 
 export function Main() {
     const [count, setCount] = createSignal(0);
@@ -48,13 +46,14 @@ export function Main() {
     });
 
     onMount(() => {
+        default_ui.defaultSet();
         console.log('Created Main3', rootStyle);
     });
 
     return (
         <Panel class={rootStyle}>
-            <Button onactivate={() => setCount(count() + 1)} >
-                <Label text={`增加:${count()}`} tooltip_text="123123"/>
+            <Button onactivate={() => setCount(count() + 1)}>
+                <Label text={`增加:${count()}`} tooltip_text="123123" />
             </Button>
             <Switch>
                 <Match when={count() === 1}>
@@ -69,3 +68,11 @@ export function Main() {
 }
 
 render(() => <Main />, $('#app'));
+
+(() => {
+    const root = $.GetContextPanel().GetParent()!.GetParent()!.GetParent()!;
+    const element = root.FindChildTraverse('MenuButtons');
+    if (element != null) {
+        element.style.visibility = 'collapse';
+    }
+})();

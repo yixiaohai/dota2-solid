@@ -1,4 +1,5 @@
 import { App } from './app/index';
+import Precache from './app/Precache';
 import { Debug } from './debug';
 Object.assign(getfenv(), {
     Activate: () => {
@@ -7,5 +8,5 @@ Object.assign(getfenv(), {
         }
         App.prototype.Activate();
     },
-    Precache: App.Precache
+    Precache: Precache
 });

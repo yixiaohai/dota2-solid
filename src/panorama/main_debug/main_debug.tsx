@@ -14,6 +14,37 @@ css`
         width: 100%;
         height: 100%;
     }
+
+    .head {
+        width: 100%;
+        background-color: #181818;
+        border-bottom: 2px solid #111111;
+    }
+
+    .head Label {
+        font-size: 18px;
+        color: #666666;
+        margin: 6px;
+    }
+
+    .head Button {
+        width: 24px;
+        height: 24px;
+        wash-color: #888888;
+        horizontal-align: right;
+        background-image: url('s2r://panorama/images/control_icons/x_close_grey_psd.vtex');
+        background-size: 24px 24px;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        margin: 4px;
+        transition-property: wash-color, pre-transform-scale2d, background-color;
+        transition-duration: 0.1s;
+        transition-timing-function: ease-in;
+    }
+
+    .head Button:hover {
+        wash-color: #fff;
+    }
 `;
 
 xml(

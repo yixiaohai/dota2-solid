@@ -6,8 +6,8 @@ import color from 'cli-color';
 
 const xmlFile = `<root>
     <Panel hittest="false" >
-        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main_debug.xml" />
-        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/main.xml" />
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/debug.xml" />
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/app.xml" />
     </Panel>
 </root>
 `;

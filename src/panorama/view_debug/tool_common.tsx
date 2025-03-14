@@ -8,6 +8,7 @@ import { console } from '../functions/console';
 import { timer } from '../functions/timer';
 import { create } from 'lodash';
 import { createSignal } from 'solid-js';
+import { mouseManager } from '../components/cursor';
 
 const main = css`
     flow-children: down;
@@ -268,6 +269,29 @@ const collapseItem_unit: CollapseProps['items'] = [
         )
     }
 ];
+const collapseItem_world: CollapseProps['items'] = [
+    {
+        key: 'world',
+        label: '#world',
+        children: () => (
+            <Panel style={{ flowChildren: 'down' }}>
+                <Panel class={row}>
+                    <CButton
+                        text="#all_map_vision"
+                        flow
+                        onClick={() => {
+                        }}
+                    />
+                    <CButton text="#free_spells" flow onClick={() => { }} />
+                </Panel>
+                <Panel class={row}>
+                    <CButton text="#day_night_cycle" flow onClick={() => { }} />
+                    <CButton text="#host_timescale" flow onClick={() => { }} />
+                </Panel>
+            </Panel>
+        )
+    }
+];
 const collapseItem_ui: CollapseProps['items'] = [
     {
         key: 'ui',
@@ -282,13 +306,10 @@ const collapseItem_ui: CollapseProps['items'] = [
                             layer.toggle('default_ui', 'center');
                         }}
                     />
-                    <CButton
-                        text="#default_UI"
-                        flow
-                        onClick={() => {
-                            layer.toggle('default_ui', 'center');
-                        }}
-                    />
+                    <CButton text="#camera_distance" flow onClick={() => { }} />
+                </Panel>
+                <Panel class={row}>
+                    <CButton text="#show_range" flow onClick={() => { }} />
                 </Panel>
             </Panel>
         )
@@ -336,44 +357,83 @@ const collapseItem_debug: CollapseProps['items'] = [
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
-                                    command: `cl_particle_log_creates ${
-                                        e ? '1' : '0'
-                                    }`
+                                    command: `cl_particle_log_creates ${e ? '1' : '0'
+                                        }`
                                 }
                             )
                         }
                     />
+                    <CButton text="#combat_log" flow onClick={() => { }} />
                 </Panel>
+                
             </Panel>
         )
     }
 ];
 
-const HeroReplace = () => {};
-const HeroAddFriend = () => {};
-const HeroAddEnemy = () => {};
+const HeroReplace = () => {
+    console.error('HeroReplace');
+};
+const HeroAddFriend = () => { };
+const HeroAddEnemy = () => { };
 
 const [arrowParticle, setArrowParticle] = createSignal<ParticleID>(
     -1 as ParticleID
 );
 const EntMove = () => {
-    let ent = Players.GetLocalPlayerPortraitUnit();
+    let entself = Players.GetLocalPlayerPortraitUnit();
     setArrowParticle(
         Particles.CreateParticle(
             'particles/selection/selection_grid_drag.vpcf',
             ParticleAttachment_t.PATTACH_ABSORIGIN_FOLLOW,
-            ent
+            entself
         )
     );
-    const origin = Entities.GetAbsOrigin(ent);
+    const origin = Entities.GetAbsOrigin(entself);
+    if (origin == undefined) {
+        console.error('当前肖像实体无法获得位置');
+        return;
+    }
     origin[2] += 50;
     Particles.SetParticleControl(arrowParticle(), 4, origin);
     Particles.SetParticleAlwaysSimulate(arrowParticle());
-    MoveToParticlesThink();
-};
 
-let MoveToParticlesThink = () => {
-    
+    const think = (pos: [number, number, number]) => {
+        const origin = Entities.GetAbsOrigin(entself);
+        origin[2] += 50;
+        Particles.SetParticleControl(arrowParticle(), 4, origin);
+        Particles.SetParticleControl(arrowParticle(), 5, [
+            pos[0],
+            pos[1],
+            pos[2]
+        ]);
+        Particles.SetParticleControl(arrowParticle(), 2, [128, 128, 128]);
+    };
+
+    const handleClick = (
+        eventType: MouseEvent,
+        button: MouseButton | MouseScrollDirection,
+        pos: [number, number, number]
+    ) => {
+        if (eventType !== 'pressed' || button !== 0) {
+            return;
+        }
+        Particles.DestroyParticleEffect(arrowParticle(), true);
+        Particles.ReleaseParticleIndex(arrowParticle());
+
+        GameEvents.SendCustomGameEventToServer('c2s_ent_move', {
+            units: Players.GetSelectedEntities(Players.GetLocalPlayer()),
+            pos: {
+                x: pos[0],
+                y: pos[1],
+                z: pos[2]
+            }
+        });
+        removeListener();
+    };
+
+    // 注册监听
+    const removeListener = mouseManager.start(handleClick, think, 'cast');
 };
 
 export const ToolCommon = () => {
@@ -389,6 +449,7 @@ export const ToolCommon = () => {
             </Panel>
             <Panel class="content">
                 <Collapse items={collapseItem_unit} activeKey="unit"></Collapse>
+                <Collapse items={collapseItem_world} activeKey="world" ></Collapse>
                 <Collapse items={collapseItem_ui} activeKey="ui"></Collapse>
                 <Collapse
                     items={collapseItem_debug}

@@ -9,3 +9,4 @@ interface CScriptBindingPR_Game {
     GetConvarInt: (name: string) => number;
     GetConvarFloat: (name: string) => number;
 }
+

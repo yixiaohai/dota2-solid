@@ -1,5 +1,5 @@
 import { App } from './app/index';
-import Precache from './app/Precache';
+import Precache from './functions/Precache';
 import { Debug } from './debug';
 Object.assign(getfenv(), {
     Activate: () => {

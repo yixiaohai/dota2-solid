@@ -38,32 +38,33 @@ const create = (
 
 const open = (name: string, type?: string) => {
     console.log(`打开Layer ${name} ${type}`);
-    const data = layerData;
-    let newData = [...data]; // 创建数组副本
+    // 1. 使用 store 内置更新方法
+    setLayerData(layers => {
+        // 2. 创建新数组保持响应性
+        const newLayers = [...layers];
 
-    if (type) {
-        const data_type = newData.filter(l => l.type === type);
-        data_type.forEach(l => {
-            const index = newData.findIndex(item => item === l && item.show);
-            if (index !== -1) {
-                newData[index] = { ...newData[index], show: false };
-                if (newData[index].onClose) {
-                    newData[index].onClose();
-                }
+        // 3. 关闭同类型层
+        newLayers.forEach((layer, index) => {
+            if (layer.type === type && layer.show) {
+                newLayers[index] = { ...layer, show: false };
+                layer.onClose?.();
             }
         });
-    }
 
-    const index = newData.findIndex(l => l.name === name && l.type === type);
-    if (index !== -1) {
-        newData[index] = { ...newData[index], show: true };
-
-        if (newData[index].onOpen) {
-            newData[index].onOpen();
+        // 4. 打开目标层
+        const targetIndex = newLayers.findIndex(
+            l => l.name === name && l.type === type
+        );
+        if (targetIndex !== -1) {
+            newLayers[targetIndex] = {
+                ...newLayers[targetIndex],
+                show: true
+            };
+            newLayers[targetIndex].onOpen?.();
         }
-    }
 
-    setLayerData(newData); // 更新整个数组
+        return newLayers; // 5. 返回新数组触发更新
+    });
 };
 
 const close = (name: string, type?: string) => {

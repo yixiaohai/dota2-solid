@@ -13,7 +13,7 @@ import { forEach, forIn } from 'lodash';
 const main = css`
     flow-children: down;
     width: 520px;
-    height: 620px;
+    height: 630px;
     horizontal-align: center;
     vertical-align: middle;
     background-color: #181818dd;

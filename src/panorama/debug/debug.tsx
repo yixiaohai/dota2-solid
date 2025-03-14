@@ -51,10 +51,10 @@ xml(
     <root>
         <styles>
             <include src="s2r://panorama/styles/dotastyles.vcss_c" />
-            <include src="file://{resources}/styles/custom_game/main_debug.css" />
+            <include src="file://{resources}/styles/custom_game/debug.css" />
         </styles>
         <scripts>
-            <include src="file://{resources}/scripts/custom_game/main_debug.js" />
+            <include src="file://{resources}/scripts/custom_game/debug.js" />
         </scripts>
         <Panel class="root" hittest={false}>
             <Panel id="app_debug" class="root" hittest={false} />

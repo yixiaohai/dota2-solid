@@ -6,10 +6,10 @@ import css from 'solid-panorama-all-in-jsx/css.macro';
 xml(
     <root>
         <styles>
-            <include src="file://{resources}/styles/custom_game/main.css" />
+            <include src="file://{resources}/styles/custom_game/app.css" />
         </styles>
         <scripts>
-            <include src="file://{resources}/scripts/custom_game/main.js" />
+            <include src="file://{resources}/scripts/custom_game/app.js" />
         </scripts>
         <Panel class="root" hittest={false}>
             <Panel id="app" class="root" hittest={false} />

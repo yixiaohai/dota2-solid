@@ -17,6 +17,7 @@ import { mkdirSync, writeFileSync } from 'fs'; // 导入写文件的模块
 import CreateMain from './rollup-plugin-main';
 import LoadImage from './rollup-plugin-img';
 import color from 'cli-color';
+import CopyPanoramaAssets from './rollup-plugin-other';
 
 export default function GetRollupWatchOptions(rootPath: string) {
     // 入口文件夹
@@ -116,7 +117,8 @@ export default function GetRollupWatchOptions(rootPath: string) {
                     '../addon/content/panorama/styles/custom_game'
                 )
             }),
-            LoadImage({ imagesPath })
+            LoadImage({ imagesPath }),
+            CopyPanoramaAssets()
         ]
     };
 

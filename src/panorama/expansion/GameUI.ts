@@ -5,6 +5,7 @@ interface ModuleExports {
 export default function () {
     const root = $.GetContextPanel();
     const modules: ModuleExports = (GameUI.__modules = {});
+    
     GameUI.__loadModule = function (name, exports) {
         if (modules[name]) {
             $.Msg(exports ? '✅' : '❌', ` Reload module: ${name} `);

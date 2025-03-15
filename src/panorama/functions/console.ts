@@ -18,15 +18,33 @@ class PanoramaConsole implements console {
     }
 
     log(...args: any[]): void {
-        args.forEach(arg => {
-            this.print(arg, '✅ ');
-        });
+        if (args.length == 0) {
+            $.Msg('✅  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '✅ ');
+            });
+        }
     }
 
     error(...args: any[]): void {
-        args.forEach(arg => {
-            this.print(arg, '❌ ');
-        });
+        if (args.length == 0) {
+            $.Msg('❌  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '❌ ');
+            });
+        }
+    }
+
+    warn(...args: any[]): void {
+        if (args.length == 0) {
+            $.Msg('⚠️  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '⚠️ ');
+            });
+        }
     }
 
     private print(content: any, identifier?: string, level?: number): void {

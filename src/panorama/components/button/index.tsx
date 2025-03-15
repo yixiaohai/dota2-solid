@@ -1,20 +1,22 @@
-import { Component, createSignal } from 'solid-js';
+import { Component, createSignal, onCleanup, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
+import { console } from '../../functions/console';
 
 interface ButtonnProps {
     icon?: string;
     text?: string;
+    tooltip_text?: string;
     type?: 1 | 2;
     color?:
-        | 'red'
-        | 'green'
-        | 'blue'
-        | 'grey'
-        | 'yellow'
-        | 'orange'
-        | 'cyan'
-        | 'purple'
-        | 'grey';
+    | 'red'
+    | 'green'
+    | 'blue'
+    | 'grey'
+    | 'yellow'
+    | 'orange'
+    | 'cyan'
+    | 'purple'
+    | 'grey';
     flow?: boolean;
     disabled?: boolean;
     onClick?: Function;
@@ -508,11 +510,11 @@ const btnStyle = css`
 export const CButton: Component<ButtonnProps> = props => {
     const [isChecked, setIsChecked] = createSignal(props.checked || false);
 
+
     return (
         <Panel
-            class={`${btnStyle} ${
-                props.type ? `style${props.type}` : 'style1'
-            } `}
+            class={`${btnStyle} ${props.type ? `style${props.type}` : 'style1'
+                } `}
             classList={{
                 red: props.color === 'red',
                 orange: props.color === 'orange',
@@ -526,6 +528,7 @@ export const CButton: Component<ButtonnProps> = props => {
             }}
             style={props.style}
             enabled={!props.disabled}
+            tooltip_text={props.tooltip_text}
             onactivate={() => {
                 if (props.toggle) {
                     setIsChecked(!isChecked());

@@ -8,6 +8,8 @@ import { layer } from '../components/layer/manager';
 import { ToolCommon } from '../view_debug/tool_common';
 import { console } from '../functions/console';
 import { DefaultUI } from '../view_debug/default_ui';
+import { FastConsoleCommand } from '../view_debug/fast_console_command';
+
 
 css`
     .root {
@@ -121,6 +123,7 @@ export function Debug() {
             <Menu items={menuItem} show={menuShow()} />
             <ToolCommon />
             <DefaultUI />
+            <FastConsoleCommand />
         </Panel>
     );
 }

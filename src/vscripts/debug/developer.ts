@@ -16,5 +16,4 @@ export class Developer {
     ConsoleCommand(command: string) {
         SendToConsole(command);
     }
-
 }

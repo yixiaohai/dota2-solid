@@ -5,6 +5,9 @@ import { timer } from '../functions/timer';
 @reloadable
 export class App {
     Activate() {
+        // 强制跳过所有模型绑定
+        SendToServerConsole('dota_combine_models 0');
+
         print('Activate3');
     }
 

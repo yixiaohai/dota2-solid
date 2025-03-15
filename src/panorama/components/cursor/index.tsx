@@ -70,7 +70,10 @@ class MouseListener {
         think: (pos: [number, number, number]) => void,
         cursorStyle?: cursorStyle
     ): () => void {
-        this.end();
+        if (this.currentCallback) {
+            this.end();
+        }
+
         this.currentCallback = callback;
         if (cursorStyle) {
             GameEvents.SendCustomGameEventToServer('c2s_console_command', {
@@ -111,4 +114,4 @@ class MouseListener {
 }
 
 // 导出单例实例
-export const mouseManager = MouseListener.getInstance();
+export const cursor = MouseListener.getInstance();

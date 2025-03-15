@@ -5,7 +5,17 @@ import { console } from './console';
 // 导出的预载入方法，用来给addon_game_mode.ts调用
 export default function Precache(context: CScriptPrecacheContext) {
     // 需要预载的所有资源
-    precacheResource(['particles/selection/selection_grid_drag.vpcf'], context);
+    precacheResource(
+        [
+            'particles/selection/selection_grid_drag.vpcf',
+            'models/items/juggernaut/fall20_juggernaut_katz_legs/fall20_juggernaut_katz_legs.vmdl',
+            'models/items/juggernaut/fall20_juggernaut_katz_back/fall20_juggernaut_katz_back.vmdl',
+            'models/items/juggernaut/fall20_juggernaut_katz_arms/fall20_juggernaut_katz_arms.vmdl',
+            'models/items/juggernaut/fall20_juggernaut_katz_head/fall20_juggernaut_katz_head.vmdl',
+            'models/items/juggernaut/fall20_juggernaut_katz_weapon/fall20_juggernaut_katz_weapon.vmdl'
+        ],
+        context
+    );
     // 需要预载入的单位
     precacheUnits(
         [

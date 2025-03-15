@@ -50,7 +50,18 @@ const main = css`
         width: 100%;
     }
 
+    .slider {
+        margin: 10px;
+        width: 100%;
+        visibility: visible;
+    }
+
+    .slider.minimized {
+        visibility: collapse;
+    }
+
     .input {
+        width: 100%;
         border: 1px solid #373c44;
         height: 36px;
         padding: 5px 7px 3px 7px;
@@ -152,9 +163,14 @@ export interface DialogProps {
     describe: string;
     input?: boolean;
     inputBig?: boolean;
+    currentValue?: string,
     defaultValue?: string;
     onOk?: Function;
     noCancel?: boolean;
+    shadeClose?: boolean;
+    slider?: boolean;
+    min?: number;
+    max?: number;
 }
 
 interface DialogActions {
@@ -171,6 +187,7 @@ class DialogManager implements DialogActions {
     private static button_ok: Button;
     private static button_reset: Button;
     private static button_cancel: Button;
+    private static slider: SliderPanel;
 
     // 单例模式
     public static getInstance(): DialogManager {
@@ -190,7 +207,7 @@ class DialogManager implements DialogActions {
         const DialogShade = $.CreatePanel('Panel', $.GetContextPanel(), '', {
             class: main + ' minimized'
         });
-        DialogShade.SetPanelEvent('onactivate', () => {});
+
         DialogShade.SetPanelEvent('oncancel', () => {
             this.close();
         });
@@ -200,14 +217,26 @@ class DialogManager implements DialogActions {
             class: 'box'
         });
 
+        DialogPanel.SetPanelEvent('onactivate', () => { });
+
         DialogManager.title = $.CreatePanel('Label', DialogPanel, '', {
             class: 'title'
         });
         const content = $.CreatePanel('Panel', DialogPanel, '', {
             class: 'content'
         });
+
+        const slider = $.CreatePanel('Slider', content, '', {
+            class: 'slider HorizontalSlider ',
+            direction: "horizontal",
+        });
+        DialogManager.slider = slider;
+
         const input = $.CreatePanel('TextEntry', content, '', {
             class: 'input'
+        });
+        input.SetPanelEvent('ontextentrychange', () => {
+            DialogManager.slider.value = Number(input.text);
         });
         input.SetPanelEvent('oncancel', () => {
             this.close();
@@ -246,6 +275,21 @@ class DialogManager implements DialogActions {
         DialogManager.dialog.RemoveClass('minimized');
         DialogManager.dialog.SetFocus();
 
+        if (!props.slider) {
+            DialogManager.slider.AddClass('minimized');
+        } else {
+            props.min ? DialogManager.slider.min = props.min : DialogManager.slider.min = 0;
+            props.max ? DialogManager.slider.max = props.max : DialogManager.slider.max = 1;
+            props.defaultValue ? DialogManager.slider.value = Number(props.defaultValue) : DialogManager.slider.value = props.min || 0;
+            props.currentValue && (DialogManager.slider.value = Number(props.currentValue))
+            DialogManager.slider.RemoveClass('minimized');
+
+            DialogManager.slider.SetPanelEvent('onvaluechanged', () => {
+                DialogManager.input.text = DialogManager.slider.value.toFixed(2).toString()
+            });
+
+        }
+
         if (!props.input) {
             DialogManager.input.AddClass('minimized');
             DialogManager.describe.AddClass('only');
@@ -258,6 +302,7 @@ class DialogManager implements DialogActions {
                 DialogManager.input.RemoveClass('big');
             }
         }
+
         if (props.defaultValue) {
             const defaultValue = props.defaultValue;
             DialogManager.input.text = defaultValue;
@@ -267,6 +312,10 @@ class DialogManager implements DialogActions {
             });
         } else {
             DialogManager.button_reset.AddClass('minimized');
+        }
+
+        if (props.currentValue) {
+            DialogManager.input.text = props.currentValue;
         }
 
         DialogManager.button_ok.SetPanelEvent('onactivate', () => {
@@ -280,6 +329,14 @@ class DialogManager implements DialogActions {
             DialogManager.button_cancel.AddClass('minimized');
         } else {
             DialogManager.button_cancel.RemoveClass('minimized');
+        }
+
+        if (props.shadeClose) {
+            DialogManager.dialog.SetPanelEvent('onactivate', () => {
+                this.close();
+            });
+        } else {
+            DialogManager.dialog.SetPanelEvent('onactivate', () => { });
         }
     };
 

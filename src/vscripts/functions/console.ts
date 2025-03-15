@@ -3,7 +3,7 @@ interface console {
     error(...args: any[]): void;
 }
 
-class VscriptConsole implements console{
+class VscriptConsole implements console {
     private static instance: VscriptConsole;
 
     private constructor() {
@@ -18,19 +18,37 @@ class VscriptConsole implements console{
     }
 
     log(...args: any[]): void {
-        args.forEach(arg => {
-            this.print(arg, '✅ ');
-        });
+        if (args.length == 0) {
+            print('✅  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '✅ ');
+            });
+        }
     }
 
     error(...args: any[]): void {
-        args.forEach(arg => {
-            this.print(arg, '❌ ');
-        });
+        if (args.length == 0) {
+            print('❌  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '❌ ');
+            });
+        }
+    }
+
+    warn(...args: any[]): void {
+        if (args.length == 0) {
+            print('⚠️  nil');
+        } else {
+            args.forEach(arg => {
+                this.print(arg, '⚠️ ');
+            });
+        }
     }
 
     private print(content: any, identifier?: string): void {
-        if (!IsInToolsMode()){
+        if (!IsInToolsMode()) {
             return;
         }
         let result = '';

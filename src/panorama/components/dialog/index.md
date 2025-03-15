@@ -22,4 +22,8 @@ dialog.open({
 | inputBig     | 多行输入框                      | boolean  | false  |
 | defaultValue | 输入框默认值                    | string   | ''     |
 | noCancel     | 隐藏取消按钮                    | boolean  | false  |
+| shadeClose   | 点击空白区域关闭                | boolean  | false  |
 | onOk         | 确定回调函数，会传回 input 的值 | Function | -      |
+| slider       | 拖动条                          | boolean  | false  |
+| min          | 最小值                          | number   | 0      |
+| max          | 最大值                          | number   | 1      |

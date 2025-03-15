@@ -7,12 +7,14 @@ import { dialog } from '../components/dialog';
 import { console } from '../functions/console';
 import { timer } from '../functions/timer';
 import { create } from 'lodash';
-import { createSignal } from 'solid-js';
-import { mouseManager } from '../components/cursor';
+import { createSignal, onMount } from 'solid-js';
+import { cursor } from '../components/cursor';
+import { default_ui } from '../components/default_ui';
 
 const main = css`
     flow-children: down;
     width: 300px;
+    max-height: 1000px;
     background-color: #181818dd;
     box-shadow: #000000aa 0px 0px 8px 0px;
     transform: translateX(0px) translateY(60px);
@@ -28,6 +30,7 @@ const main = css`
 
     .content {
         flow-children: down;
+        overflow: squish scroll;
     }
 `;
 
@@ -57,7 +60,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                             )
                         }
                     />
-                    <CButton text="#hero_replace" flow onClick={HeroReplace} />
+                    <CButton text="#hero_replace" flow color='blue' onClick={HeroReplace} />
                 </Panel>
                 <Panel class={row}>
                     <CButton
@@ -110,6 +113,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#refresh"
                         flow
+                        icon='s2r://panorama/images/hud/sprout_icon_psd.vtex'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -125,11 +129,30 @@ const collapseItem_unit: CollapseProps['items'] = [
                 </Panel>
                 <Panel class={row}>
                     <CButton
-                        text="#dummy_add"
+                        text="#ent_remove"
+                        tooltip_text='#ent_remove_desc'
                         flow
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
+                                {
+                                    event: 'ent_remove',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                        }
+                    />
+                    <CButton text="#ent_move" flow onClick={EntMove} />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#dummy_add"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_event',
                                 {
                                     event: 'dummy_add'
                                 }
@@ -155,6 +178,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_info"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -170,6 +194,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_kv"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -187,6 +212,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_abilities"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -202,6 +228,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_items"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -219,6 +246,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_modifiers"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -234,6 +262,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_states"
                         flow
+                        color='blue'
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -247,24 +276,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         }
                     />
                 </Panel>
-                <Panel class={row}>
-                    <CButton
-                        text="#ent_remove"
-                        flow
-                        onClick={() =>
-                            GameEvents.SendCustomGameEventToServer(
-                                'c2s_unit_event',
-                                {
-                                    event: 'ent_remove',
-                                    units: Players.GetSelectedEntities(
-                                        Players.GetLocalPlayer()
-                                    )
-                                }
-                            )
-                        }
-                    />
-                    <CButton text="#ent_move" flow onClick={EntMove} />
-                </Panel>
+
             </Panel>
         )
     }
@@ -279,19 +291,78 @@ const collapseItem_world: CollapseProps['items'] = [
                     <CButton
                         text="#all_map_vision"
                         flow
+                        toggle={true}
+                        checked={allMapVision()}
                         onClick={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_check_event',
+                                {
+                                    event: 'all_map_vision',
+                                    checked: !allMapVision()
+                                }
+                            )
                         }}
                     />
-                    <CButton text="#free_spells" flow onClick={() => { }} />
+                    <CButton
+                        text="#free_spells"
+                        flow
+                        toggle={true}
+                        checked={Game.GetConvarBool('dota_ability_debug')}
+                        onClick={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_unit_event',
+                                {
+                                    event: 'refresh',
+                                    units: Players.GetSelectedEntities(
+                                        Players.GetLocalPlayer()
+                                    )
+                                }
+                            )
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_console_command',
+                                {
+                                    command: `dota_ability_debug ${Game.GetConvarBool('dota_ability_debug') ? '0' : '1'}`,
+                                }
+                            )
+                        }}
+                    />
                 </Panel>
                 <Panel class={row}>
-                    <CButton text="#day_night_cycle" flow onClick={() => { }} />
-                    <CButton text="#host_timescale" flow onClick={() => { }} />
+                    <CButton text="#day_night_cycle" flow onClick={() =>
+                        GameEvents.SendCustomGameEventToServer(
+                            'c2s_event',
+                            {
+                                event: 'day_night_cycle'
+                            }
+                        )
+                    } />
+                    <CButton text="#host_timescale" flow color='blue' onClick={() => {
+                        dialog.open({
+                            title: '#host_timescale',
+                            describe: '#host_timescale_desc',
+                            input: true,
+                            currentValue: Game.GetConvarFloat('host_timescale').toString(),
+                            defaultValue: '1',
+                            shadeClose: true,
+                            slider: true,
+                            max: 10,
+                            onOk: (v: string) =>
+                                GameEvents.SendCustomGameEventToServer(
+                                    'c2s_console_command',
+                                    {
+                                        command: `host_timescale ${v}`
+
+                                    }
+                                )
+                        });
+                    }} />
                 </Panel>
             </Panel>
         )
     }
 ];
+
+
 const collapseItem_ui: CollapseProps['items'] = [
     {
         key: 'ui',
@@ -302,14 +373,78 @@ const collapseItem_ui: CollapseProps['items'] = [
                     <CButton
                         text="#default_UI"
                         flow
+                        color="blue"
                         onClick={() => {
                             layer.toggle('default_ui', 'center');
                         }}
                     />
-                    <CButton text="#camera_distance" flow onClick={() => { }} />
+                    <CButton
+                        text="#camera_distance"
+                        flow
+                        color="blue"
+                        onClick={() => {
+                            dialog.open({
+                                title: '#camera_distance',
+                                describe: '#camera_distance_desc',
+                                input: true,
+                                currentValue: (default_ui.camera_distance_get() ?? 1134).toString(),
+                                defaultValue: '1134',
+                                shadeClose: true,
+                                slider: true,
+                                max: 6000,
+                                min: 100,
+                                onOk: (v: string) => {
+                                    const value = Number(v)
+                                    default_ui.camera_distance_set(value)
+                                    GameUI.SetCameraDistance(value)
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `fog_enable 0`
+
+                                        }
+                                    )
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `r_farz ${value * 2}`
+
+                                        }
+                                    )
+                                }
+                            });
+                        }}
+                    />
                 </Panel>
                 <Panel class={row}>
-                    <CButton text="#show_range" flow onClick={() => { }} />
+                    <CButton
+                        text="#show_range"
+                        flow
+                        color="blue"
+                        onClick={() => {
+                            dialog.open({
+                                title: '#show_range',
+                                describe: '#show_range_desc',
+                                input: true,
+                                currentValue: Game.GetConvarFloat('dota_range_display').toString(),
+                                defaultValue: '0',
+                                shadeClose: true,
+                                slider: true,
+                                max: 3000,
+                                min: 0,
+                                onOk: (v: string) => {
+                                    const value = Number(v)
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `dota_range_display ${value}`
+
+                                        }
+                                    )
+                                }
+                            });
+                        }}
+                    />
                 </Panel>
             </Panel>
         )
@@ -349,23 +484,36 @@ const collapseItem_debug: CollapseProps['items'] = [
                 </Panel>
                 <Panel class={row}>
                     <CButton
-                        toggle={true}
-                        checked={Game.GetConvarBool('cl_particle_log_creates')}
+                        text="#combat_log"
                         flow
-                        text="#particle_log"
-                        onClick={(e: boolean) =>
+                        color="blue"
+                        onClick={() => {
+                            $.DispatchEvent('DOTAHUDToggleCombatLog');
+                        }}
+                    />
+                    <CButton
+                        text="#fast_console_command"
+                        flow
+                        color="blue"
+                        onClick={() =>
+                            layer.toggle('fast_console_command', 'center')
+                        }
+                    />
+                </Panel>
+                <Panel class={row}>
+                    <CButton
+                        text="#game_restart"
+                        flow
+                        onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
-                                    command: `cl_particle_log_creates ${e ? '1' : '0'
-                                        }`
+                                    command: 'restart'
                                 }
                             )
                         }
                     />
-                    <CButton text="#combat_log" flow onClick={() => { }} />
                 </Panel>
-                
             </Panel>
         )
     }
@@ -433,7 +581,7 @@ const EntMove = () => {
     };
 
     // 注册监听
-    const removeListener = mouseManager.start(handleClick, think, 'cast');
+    const removeListener = cursor.start(handleClick, think, 'cast');
 };
 
 export const ToolCommon = () => {
@@ -449,7 +597,10 @@ export const ToolCommon = () => {
             </Panel>
             <Panel class="content">
                 <Collapse items={collapseItem_unit} activeKey="unit"></Collapse>
-                <Collapse items={collapseItem_world} activeKey="world" ></Collapse>
+                <Collapse
+                    items={collapseItem_world}
+                    activeKey="world"
+                ></Collapse>
                 <Collapse items={collapseItem_ui} activeKey="ui"></Collapse>
                 <Collapse
                     items={collapseItem_debug}
@@ -459,3 +610,12 @@ export const ToolCommon = () => {
         </Layer>
     );
 };
+
+const [allMapVision, setAllMapVision] = createSignal(false);
+
+onMount(() => {
+    GameEvents.Subscribe('s2c_all_map_vision_state', (data) => {
+        console.warn(data);
+        setAllMapVision(data.checked == 1 ? true : false)
+    })
+});

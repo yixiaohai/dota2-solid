@@ -48,6 +48,7 @@
     "ui" "UI"
     "default_UI" "default UI"
     "camera_distance" "set camera distance"
+    "camera_adjust" "adjust camera"
     "camera_distance_desc" "If the height is too high, it may cause stuttering. It is recommended to act within your means."
     "show_range" "show range"
     "show_range_desc" "When entering 0, the custom range will be cleared."
@@ -64,6 +65,9 @@
     "dota_unit_show_collision_radius" "collision radius"
     "debug_overlay_fullposition" "ent_text fullposition"
     "particle_log" "particle log"
+    "dota_combine_models" "combine models"
+    "showtriggers" "show triggers"
+    "cl_entitysummary" "entity summary"
     "combat_log" "combat log"
   }
 }

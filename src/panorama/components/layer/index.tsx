@@ -1,7 +1,7 @@
 import { children, Component, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { layer } from './manager';
-import { console } from '../../functions/console';
+import { console } from '../../utils/console';
 
 const LayerStyle = css`
     width: 100%;

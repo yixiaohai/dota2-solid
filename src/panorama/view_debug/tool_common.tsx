@@ -4,8 +4,8 @@ import { Layer } from '../components/layer';
 import { CButton } from '../components/button';
 import { Collapse, CollapseProps } from '../components/collapse';
 import { dialog } from '../components/dialog';
-import { console } from '../functions/console';
-import { timer } from '../functions/timer';
+import { console } from '../utils/console';
+import { timer } from '../utils/timer';
 import { create } from 'lodash';
 import { createSignal, onMount } from 'solid-js';
 import { cursor } from '../components/cursor';
@@ -38,6 +38,14 @@ const row = css`
     flow-children: right;
 `;
 
+const row_rune = css`
+    margin-top: 10px;
+    flow-children: right;
+    Button {
+        width: fill-parent-flow(1);
+    }
+`;
+
 const collapseItem_unit: CollapseProps['items'] = [
     {
         key: 'unit',
@@ -60,7 +68,12 @@ const collapseItem_unit: CollapseProps['items'] = [
                             )
                         }
                     />
-                    <CButton text="#hero_replace" flow color='blue' onClick={HeroReplace} />
+                    <CButton
+                        text="#hero_replace"
+                        flow
+                        color="blue"
+                        onClick={HeroReplace}
+                    />
                 </Panel>
                 <Panel class={row}>
                     <CButton
@@ -113,7 +126,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#refresh"
                         flow
-                        icon='s2r://panorama/images/hud/sprout_icon_psd.vtex'
+                        icon="s2r://panorama/images/hud/sprout_icon_psd.vtex"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -130,7 +143,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                 <Panel class={row}>
                     <CButton
                         text="#ent_remove"
-                        tooltip_text='#ent_remove_desc'
+                        tooltip_text="#ent_remove_desc"
                         flow
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
@@ -178,7 +191,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_info"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -194,7 +207,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_kv"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -212,7 +225,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_abilities"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -228,7 +241,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_items"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -246,7 +259,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_modifiers"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -262,7 +275,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#ent_states"
                         flow
-                        color='blue'
+                        color="blue"
                         onClick={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
@@ -276,7 +289,6 @@ const collapseItem_unit: CollapseProps['items'] = [
                         }
                     />
                 </Panel>
-
             </Panel>
         )
     }
@@ -300,7 +312,7 @@ const collapseItem_world: CollapseProps['items'] = [
                                     event: 'all_map_vision',
                                     checked: !allMapVision()
                                 }
-                            )
+                            );
                         }}
                     />
                     <CButton
@@ -317,51 +329,223 @@ const collapseItem_world: CollapseProps['items'] = [
                                         Players.GetLocalPlayer()
                                     )
                                 }
-                            )
+                            );
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
-                                    command: `dota_ability_debug ${Game.GetConvarBool('dota_ability_debug') ? '0' : '1'}`,
+                                    command: `dota_ability_debug ${
+                                        Game.GetConvarBool('dota_ability_debug')
+                                            ? '0'
+                                            : '1'
+                                    }`
                                 }
-                            )
+                            );
                         }}
                     />
                 </Panel>
                 <Panel class={row}>
-                    <CButton text="#day_night_cycle" flow onClick={() =>
-                        GameEvents.SendCustomGameEventToServer(
-                            'c2s_event',
-                            {
-                                event: 'day_night_cycle'
-                            }
-                        )
-                    } />
-                    <CButton text="#host_timescale" flow color='blue' onClick={() => {
-                        dialog.open({
-                            title: '#host_timescale',
-                            describe: '#host_timescale_desc',
-                            input: true,
-                            currentValue: Game.GetConvarFloat('host_timescale').toString(),
-                            defaultValue: '1',
-                            shadeClose: true,
-                            slider: true,
-                            max: 10,
-                            onOk: (v: string) =>
-                                GameEvents.SendCustomGameEventToServer(
-                                    'c2s_console_command',
-                                    {
-                                        command: `host_timescale ${v}`
+                    <CButton
+                        text="#day_night_cycle"
+                        flow
+                        onClick={() =>
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_event',
+                                {
+                                    event: 'day_night_cycle'
+                                }
+                            )
+                        }
+                    />
+                    <CButton
+                        text="#host_timescale"
+                        flow
+                        color="blue"
+                        onClick={() => {
+                            dialog.open({
+                                title: '#host_timescale',
+                                describe: '#host_timescale_desc',
+                                input: true,
+                                currentValue:
+                                    Game.GetConvarFloat(
+                                        'host_timescale'
+                                    ).toString(),
+                                defaultValue: '1',
+                                shadeClose: true,
+                                slider: true,
+                                max: 10,
+                                onOk: (v: string) =>
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `host_timescale ${v}`
+                                        }
+                                    )
+                            });
+                        }}
+                    />
+                </Panel>
+                <Panel class={row_rune}>
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `DOUBLEDAMAGE`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_DoubleDamage');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonDoubleDamage"
+                            alias="doubledamage"
+                            animating={false}
+                        />
+                    </Button>
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `HASTE`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Haste');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonHaste"
+                            alias="haste"
+                            animating={false}
+                        />
+                    </Button>
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `ILLUSION`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Illusion');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonIllusion"
+                            alias="illusion"
+                            animating={false}
+                        />
+                    </Button>
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `INVISIBILITY`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Invisibility');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonInvisibility"
+                            alias="invisibility"
+                            animating={false}
+                        />
+                    </Button>
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `REGENERATION`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Regeneration');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonRegeneration"
+                            alias="regeneration"
+                            animating={false}
+                        />
+                    </Button>
 
-                                    }
-                                )
-                        });
-                    }} />
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `ARCANE`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Arcane');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonArcane"
+                            alias="arcane_rune"
+                            animating={false}
+                        />
+                    </Button>
+
+                    <Button
+                        onactivate={() => {
+                            GameEvents.SendCustomGameEventToServer(
+                                'c2s_rune_event',
+                                {
+                                    type: `SHIELD`
+                                }
+                            );
+                        }}
+                        onmouseover={e => {
+                            MouseOverRune(e, '#DOTA_HUD_Rune_Shield');
+                        }}
+                        onmouseout={e => {
+                            MouseOutRune(e);
+                        }}
+                    >
+                        <DOTAEmoticon
+                            id="RuneEmoticonShield"
+                            alias="shield_rune"
+                            animating={false}
+                        />
+                    </Button>
                 </Panel>
             </Panel>
         )
     }
 ];
-
 
 const collapseItem_ui: CollapseProps['items'] = [
     {
@@ -379,40 +563,11 @@ const collapseItem_ui: CollapseProps['items'] = [
                         }}
                     />
                     <CButton
-                        text="#camera_distance"
+                        text="#combat_log"
                         flow
                         color="blue"
                         onClick={() => {
-                            dialog.open({
-                                title: '#camera_distance',
-                                describe: '#camera_distance_desc',
-                                input: true,
-                                currentValue: (default_ui.camera_distance_get() ?? 1134).toString(),
-                                defaultValue: '1134',
-                                shadeClose: true,
-                                slider: true,
-                                max: 6000,
-                                min: 100,
-                                onOk: (v: string) => {
-                                    const value = Number(v)
-                                    default_ui.camera_distance_set(value)
-                                    GameUI.SetCameraDistance(value)
-                                    GameEvents.SendCustomGameEventToServer(
-                                        'c2s_console_command',
-                                        {
-                                            command: `fog_enable 0`
-
-                                        }
-                                    )
-                                    GameEvents.SendCustomGameEventToServer(
-                                        'c2s_console_command',
-                                        {
-                                            command: `r_farz ${value * 2}`
-
-                                        }
-                                    )
-                                }
-                            });
+                            $.DispatchEvent('DOTAHUDToggleCombatLog');
                         }}
                     />
                 </Panel>
@@ -426,24 +581,69 @@ const collapseItem_ui: CollapseProps['items'] = [
                                 title: '#show_range',
                                 describe: '#show_range_desc',
                                 input: true,
-                                currentValue: Game.GetConvarFloat('dota_range_display').toString(),
+                                currentValue:
+                                    Game.GetConvarFloat(
+                                        'dota_range_display'
+                                    ).toString(),
                                 defaultValue: '0',
                                 shadeClose: true,
                                 slider: true,
                                 max: 3000,
                                 min: 0,
                                 onOk: (v: string) => {
-                                    const value = Number(v)
+                                    const value = Number(v);
                                     GameEvents.SendCustomGameEventToServer(
                                         'c2s_console_command',
                                         {
                                             command: `dota_range_display ${value}`
-
                                         }
-                                    )
+                                    );
                                 }
                             });
                         }}
+                    />
+                    <CButton
+                        text="#camera_distance"
+                        flow
+                        color="blue"
+                        onClick={() => {
+                            dialog.open({
+                                title: '#camera_distance',
+                                describe: '#camera_distance_desc',
+                                input: true,
+                                currentValue: (
+                                    default_ui.camera_distance_get() ?? 1134
+                                ).toString(),
+                                defaultValue: '1134',
+                                shadeClose: true,
+                                slider: true,
+                                max: 6000,
+                                min: 100,
+                                onOk: (v: string) => {
+                                    const value = Number(v);
+                                    default_ui.camera_distance_set(value);
+                                    GameUI.SetCameraDistance(value);
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `fog_enable 0`
+                                        }
+                                    );
+                                    GameEvents.SendCustomGameEventToServer(
+                                        'c2s_console_command',
+                                        {
+                                            command: `r_farz ${value * 2}`
+                                        }
+                                    );
+                                }
+                            });
+                        }}
+                    />
+                    <CButton
+                        text="#camera_adjust"
+                        flow
+                        color="blue"
+                        onClick={() => {}}
                     />
                 </Panel>
             </Panel>
@@ -484,24 +684,6 @@ const collapseItem_debug: CollapseProps['items'] = [
                 </Panel>
                 <Panel class={row}>
                     <CButton
-                        text="#combat_log"
-                        flow
-                        color="blue"
-                        onClick={() => {
-                            $.DispatchEvent('DOTAHUDToggleCombatLog');
-                        }}
-                    />
-                    <CButton
-                        text="#fast_console_command"
-                        flow
-                        color="blue"
-                        onClick={() =>
-                            layer.toggle('fast_console_command', 'center')
-                        }
-                    />
-                </Panel>
-                <Panel class={row}>
-                    <CButton
                         text="#game_restart"
                         flow
                         onClick={() =>
@@ -513,17 +695,41 @@ const collapseItem_debug: CollapseProps['items'] = [
                             )
                         }
                     />
+                    <CButton
+                        text="#fast_console_command"
+                        flow
+                        color="blue"
+                        onClick={() =>
+                            layer.toggle('fast_console_command', 'center')
+                        }
+                    />
                 </Panel>
             </Panel>
         )
     }
 ];
 
+const MouseOverRune = (ButtonPanle: Panel, strRuneTooltip: string) => {
+    const runePanel = ButtonPanle.GetChild(0) as AnimatedImageStrip;
+    if (!runePanel) return;
+    console.warn(runePanel);
+
+    runePanel.StartAnimating();
+    $.DispatchEvent('UIShowTextTooltip', runePanel, strRuneTooltip);
+};
+
+const MouseOutRune = (ButtonPanle: Panel) => {
+    const runePanel = ButtonPanle.GetChild(0) as AnimatedImageStrip;
+    if (!runePanel) return;
+    runePanel.StopAnimating();
+    $.DispatchEvent('UIHideTextTooltip', runePanel);
+};
+
 const HeroReplace = () => {
     console.error('HeroReplace');
 };
-const HeroAddFriend = () => { };
-const HeroAddEnemy = () => { };
+const HeroAddFriend = () => {};
+const HeroAddEnemy = () => {};
 
 const [arrowParticle, setArrowParticle] = createSignal<ParticleID>(
     -1 as ParticleID
@@ -614,8 +820,8 @@ export const ToolCommon = () => {
 const [allMapVision, setAllMapVision] = createSignal(false);
 
 onMount(() => {
-    GameEvents.Subscribe('s2c_all_map_vision_state', (data) => {
+    GameEvents.Subscribe('s2c_all_map_vision_state', data => {
         console.warn(data);
-        setAllMapVision(data.checked == 1 ? true : false)
-    })
+        setAllMapVision(data.checked == 1 ? true : false);
+    });
 });

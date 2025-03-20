@@ -1,6 +1,6 @@
 import { reloadable } from '../utils/tstl-utils';
-import { console } from '../functions/console';
-import { timer } from '../functions/timer';
+import { console } from '../utils/console';
+import { timer } from '../utils/timer';
 
 @reloadable
 export class Ent {

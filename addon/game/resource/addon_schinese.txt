@@ -48,6 +48,7 @@
     "ui" "UI"
     "default_UI" "默认UI"
     "camera_distance" "镜头距离"
+    "camera_adjust" "相机调整"
     "camera_distance_desc" "高度过高会可能会卡顿，建议量力而行。"
     "show_range" "显示范围"
     "show_range_desc" "输入0时会清除自定义范围。"
@@ -64,6 +65,9 @@
     "dota_unit_show_collision_radius" "碰撞体积"
     "debug_overlay_fullposition" "ent_text坐标"
     "particle_log" "打印特效"
+    "dota_combine_models" "跳过模型绑定"
+    "showtriggers" "显示Trigger"
+    "cl_entitysummary" "实体摘要"
     "combat_log" "战斗记录"
   }
 }

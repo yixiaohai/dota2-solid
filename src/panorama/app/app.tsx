@@ -35,7 +35,7 @@ console.log('Main load');
 import { Shop } from '../view/shop';
 import { Lowhud } from '../view/lowhud';
 import { ToolCommon } from '../view_debug/tool_common';
-import { console } from '../functions/console';
+import { console } from '../utils/console';
 import { default_ui } from '../components/default_ui';
 
 export function Main() {

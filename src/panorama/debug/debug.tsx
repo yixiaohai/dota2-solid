@@ -6,7 +6,7 @@ import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
 import { ToolCommon } from '../view_debug/tool_common';
-import { console } from '../functions/console';
+import { console } from '../utils/console';
 import { DefaultUI } from '../view_debug/default_ui';
 import { FastConsoleCommand } from '../view_debug/fast_console_command';
 
@@ -72,9 +72,9 @@ const rootStyle = css`
 `;
 
 export function Debug() {
-    if (!Game.IsInToolsMode()) {
-        return;
-    }
+    // if (!Game.IsInToolsMode()) {
+    //     return;
+    // }
 
     const [menuShow, setMenuShow] = createSignal(false);
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([

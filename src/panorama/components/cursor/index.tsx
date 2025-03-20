@@ -1,6 +1,6 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { timer } from '../../functions/timer';
-import { console } from '../../functions/console';
+import { timer } from '../../utils/timer';
+import { console } from '../../utils/console';
 
 type MouseCallback = (
     eventType: MouseEvent,

@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { console } from '../../functions/console';
+import { console } from '../../utils/console';
 import { createSignal, onCleanup, onMount } from 'solid-js';
 
 export type DefaultUIState = Record<DotaDefaultUIElement_t, boolean>;

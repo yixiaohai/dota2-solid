@@ -2,6 +2,9 @@ interface CustomGameEventDeclarations {
     c2s_event: {
         event: string;
     };
+    c2s_rune_event: {
+        type: string;
+    };
     c2s_unit_event: {
         event: string;
         units?: EntityIndex[];

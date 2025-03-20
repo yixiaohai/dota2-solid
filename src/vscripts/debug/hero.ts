@@ -1,6 +1,6 @@
 import { reloadable } from '../utils/tstl-utils';
-import { console } from '../functions/console';
-import { timer } from '../functions/timer';
+import { console } from '../utils/console';
+import { timer } from '../utils/timer';
 
 @reloadable
 export class Hero {
@@ -10,7 +10,7 @@ export class Hero {
         let ent = Entities.First()
         while (ent != null){
             if (ent.GetOwner() == hero && ent != hero){
-                ent.RemoveSelf()
+                UTIL_Remove(ent)
             }
             const ent_next = Entities.Next(ent)
             if (ent_next == null){
@@ -21,6 +21,6 @@ export class Hero {
     }
     remove_hero(hero: CDOTA_BaseNPC_Hero) {
         this.remove_hero_owner(hero)
-        hero.RemoveSelf()
+        UTIL_Remove(hero)
     }
 }

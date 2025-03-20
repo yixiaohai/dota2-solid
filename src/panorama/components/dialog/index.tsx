@@ -1,6 +1,6 @@
 import { forEach } from 'lodash';
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { console } from '../../functions/console';
+import { console } from '../../utils/console';
 
 const main = css`
     width: 100%;

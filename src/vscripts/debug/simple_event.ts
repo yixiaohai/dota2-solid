@@ -1,6 +1,6 @@
 import { reloadable } from '../utils/tstl-utils';
-import { console } from '../functions/console';
-import { timer } from '../functions/timer';
+import { console } from '../utils/console';
+import { timer } from '../utils/timer';
 import { Hero } from './hero';
 
 @reloadable
@@ -149,46 +149,15 @@ export class SimpleEvent_Units {
         for (const unit in units) {
             const ent = EntIndexToHScript(units[unit]);
             if (ent?.IsBaseNPC() && ent.IsHero()) {
+                PlayerResource.ReplaceHeroWithNoTransfer(
+                    PlayerID,
+                    PlayerResource.GetSelectedHeroName(PlayerID),
+                    PlayerResource.GetGold(PlayerID),
+                    0
+                );
+                UTIL_Remove(ent);
             }
         }
-        const hero = CreateUnitByNameAsync(
-            'npc_dota_hero_juggernaut',
-            Vector(0, 0, 0),
-            true,
-            undefined,
-            undefined,
-            DotaTeam.GOODGUYS,
-            /** @noSelf */ ent => {
-                ent.SetControllableByPlayer(PlayerID, false);
-                let model = ent.FirstMoveChild();
-                let wearables = [];
-                let solt = 0;
-                while (model != null) {
-                    if (
-                        model.GetClassname() == 'dota_item_wearable' &&
-                        model.GetModelName() != ''
-                    ) {
-                        wearables[solt] = model;
-                        solt++;
-                    }
-                    model = model.NextMovePeer();
-                }
-
-                const w = [
-                    'models/items/juggernaut/fall20_juggernaut_katz_legs/fall20_juggernaut_katz_legs.vmdl',
-                    'models/items/juggernaut/fall20_juggernaut_katz_back/fall20_juggernaut_katz_back.vmdl',
-                    'models/items/juggernaut/fall20_juggernaut_katz_arms/fall20_juggernaut_katz_arms.vmdl',
-                    'models/items/juggernaut/fall20_juggernaut_katz_head/fall20_juggernaut_katz_head.vmdl',
-                    'models/items/juggernaut/fall20_juggernaut_katz_weapon/fall20_juggernaut_katz_weapon.vmdl'
-                ];
-
-                for (let i = 0; i < wearables.length; i++) {
-                    console.warn(wearables[i].GetModelName());
-                    console.warn(w[i]);
-                    (wearables[i] as CDOTA_BaseNPC).SetModel(w[i]);
-                }
-            }
-        );
     }
 
     level_up(PlayerID: PlayerID, units?: { [key: string]: EntityIndex }) {
@@ -251,7 +220,7 @@ export class SimpleEvent_Units {
                     for (let i = 0; i < ent.GetNumItemsInInventory(); i++) {
                         const item = ent.GetItemInSlot(i);
                         if (item) {
-                            item.RemoveSelf();
+                            UTIL_Remove(item);
                         }
                     }
 
@@ -266,7 +235,7 @@ export class SimpleEvent_Units {
                         }
                     }
                 }
-                ent.RemoveSelf();
+                UTIL_Remove(ent);
             }
         }
     }

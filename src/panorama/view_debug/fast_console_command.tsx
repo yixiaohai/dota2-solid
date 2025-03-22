@@ -65,7 +65,6 @@ const [commandItems, setCommandItems] = createSignal<string[]>([]);
 // 添加示例数据
 setBoolItems([
     { name: "dota_easybuy", value: false },
-    { name: "cl_particle_log_creates", value: false },
     { name: "cl_dota_gridnav_show", value: false },
     { name: "dota_unit_show_bounding_radius", value: false },
     { name: "dota_unit_show_selection_boxes", value: false },
@@ -73,6 +72,8 @@ setBoolItems([
     { name: "debug_overlay_fullposition", value: false },
     { name: "dota_combine_models", value: false },
     { name: "showtriggers", value: false },
+    { name: "r_freezeparticles", value: false },
+    { name: "cl_particle_log_creates", value: false },
 ]);
 
 setCommandItems([

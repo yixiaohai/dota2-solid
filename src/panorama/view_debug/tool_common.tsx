@@ -712,7 +712,6 @@ const collapseItem_debug: CollapseProps['items'] = [
 const MouseOverRune = (ButtonPanle: Panel, strRuneTooltip: string) => {
     const runePanel = ButtonPanle.GetChild(0) as AnimatedImageStrip;
     if (!runePanel) return;
-    console.warn(runePanel);
 
     runePanel.StartAnimating();
     $.DispatchEvent('UIShowTextTooltip', runePanel, strRuneTooltip);
@@ -721,12 +720,14 @@ const MouseOverRune = (ButtonPanle: Panel, strRuneTooltip: string) => {
 const MouseOutRune = (ButtonPanle: Panel) => {
     const runePanel = ButtonPanle.GetChild(0) as AnimatedImageStrip;
     if (!runePanel) return;
-    runePanel.StopAnimating();
     $.DispatchEvent('UIHideTextTooltip', runePanel);
 };
 
 const HeroReplace = () => {
-    console.error('HeroReplace');
+    console.warn('HeroReplace');
+    GameEvents.SendCustomGameEventToServer('c2s_event', {
+        event: 'test'
+    });
 };
 const HeroAddFriend = () => {};
 const HeroAddEnemy = () => {};

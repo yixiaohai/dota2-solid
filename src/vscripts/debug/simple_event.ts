@@ -57,6 +57,21 @@ export class SimpleEvent_PlayerID {
             GameRules.SetTimeOfDay(0.251);
         }
     }
+
+    test(PlayerID: PlayerID) {
+        const player = PlayerResource.GetPlayer(PlayerID);
+        const hero = player?.GetAssignedHero();
+
+        let ent = Entities.First()
+        while (ent != null){
+            print(ent.GetClassname())
+            const ent_next = Entities.Next(ent)
+            if (ent_next == null){
+                break
+            }
+            ent = ent_next
+        }
+    }
 }
 
 @reloadable

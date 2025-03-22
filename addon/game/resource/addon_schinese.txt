@@ -58,6 +58,7 @@
     "game_restart" "重启游戏"
     "fast_console_command" "控制台指令"
     "dota_easybuy" "快捷购买"
+    "r_freezeparticles" "冻结特效"
     "cl_particle_log_creates" "打印特效"
     "cl_dota_gridnav_show" "显示网格"
     "dota_unit_show_bounding_radius" "边界体积"
@@ -69,5 +70,7 @@
     "showtriggers" "显示Trigger"
     "cl_entitysummary" "实体摘要"
     "combat_log" "战斗记录"
+    "testexcel1" "solid模版"
+    "oktestexcel2" "确定"
   }
 }

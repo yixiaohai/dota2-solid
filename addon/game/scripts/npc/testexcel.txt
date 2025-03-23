@@ -1,24 +1,29 @@
 "XLSXContent"
 {
-  "testexcel1" {
-  "single" "sdfsd"
-  "abilityvalues" {
-    "manacost" "1232"
-    "cooldown" "4564"
-    "range" "45646"
-  }
-  }
-
-  "oktestexcel2" {
-  "single" "sdfsdf123"
-  "mult" {
-    "a1" "213123"
-    "a2" "sdfasdf"
-  }
-  "abilityvalues" {
-    "manacost" "1"
-    "cooldown" "true"
-    "range" "false"
-  }
-  }
+    "testexcel1"  {
+        "single" "sdfsd"
+        "abilityvalues"  {
+            "manacost" "1232"
+            "cooldown" "4564"
+            "spec"  {
+                "spec_manaconst" "asdfsdf"
+                "spec_level" "sdfsdf"
+            }
+        }
+    }
+    "oktestexcel2"  {
+        "single" "sdfsdf123"
+        "mult"  {
+            "a1" "213123"
+            "a2" "sdfasdf"
+        }
+        "abilityvalues"  {
+            "manacost" "1"
+            "cooldown" "true"
+            "spec"  {
+                "spec_manaconst" "sdfdsf sdfsdf"
+                "spec_level" "123123 dfgdf asf"
+            }
+        }
+    }
 }

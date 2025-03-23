@@ -59,15 +59,20 @@ timer.remove(t)
 
 ## 嵌套
 
-单元格'xxx{'和单元格'}'中的列会被嵌套到 xxx 中  
-| AbilityValue{ | CoolDown | ManaCost | } |
-| --- | --- | --- | --- |
-| | 50 | 100 | |
+单元格'xxx{'和单元格'}'中的列会被嵌套到 xxx 中 
+单元格内{}包括的内容也会生成kv，左右括号必须单独一行，Key和value必须包裹在双引号内，中间可以用空格分隔
+不支持多重嵌套，嵌套太复杂时最好重新设计表格
+| AbilityValue{ | CoolDown | ManaCost | } | nest |
+| --- | --- | --- | --- |--- |
+| | 50 | 100 | | {\n"a""123"\n} |
 会生成
 ```
 "AbilityValue" {
     "CoolDown" "50"
     "ManaCost" "100"
+}
+"nest" {
+    "a" "123"
 }
 ```
 

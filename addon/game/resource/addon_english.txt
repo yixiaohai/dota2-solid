@@ -70,7 +70,7 @@
     "showtriggers" "show triggers"
     "cl_entitysummary" "entity summary"
     "combat_log" "combat log"
-    "testexcel1" "solid template"
-    "oktestexcel2" "ok"
+    "testexcel1aasff" "solid template"
+    "oktestexcel2aasff" "ok"
   }
 }

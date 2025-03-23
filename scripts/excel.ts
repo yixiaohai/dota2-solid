@@ -14,11 +14,8 @@ const CONFIG = {
     LANG_DIR: path.resolve(__dirname, '../addon/game/resource'),
     FILE_EXT: '.xlsx',
     IGNORE_SHEET_NAME: /(^Sheet\d*$|^charts$)/i,
-    BLOCK_MARKERS: {
-        START: '{',
-        END: '}'
-    },
-    LANG_PATTERN: /#([^#]+)#/
+    LANG_PATTERN: /#([^#]+)#/,
+    INLINE_BLOCK_REGEX: /^"([^"]*)"\s*"([^"]*)"$/i
 } as const;
 
 // === 类型定义 ===
@@ -42,38 +39,88 @@ interface IntermediateData {
 class ExcelParser {
     // 新增当前处理的块结构缓存
     private currentSheetBlocks: BlockInfo[] = [];
+
+    private checkPrecacheResource(str: string, precacheResources: Set<string>) {
+        const suffixes = ['.vpcf', '.vsndevts', '.vmdl'];
+        if (suffixes.some(suffix => str.endsWith(suffix))) {
+            precacheResources.add(str);
+        }
+    }
     private parseCell(cell: unknown): any {
-        // 强化空值处理
-        if (cell == undefined || cell === '') return ''; // 处理undefined/null/空字符串
+        if (typeof cell === 'object') {
+            return cell;
+        }
+        // 处理空值和数字
+        if (cell == undefined || cell === '') return '';
         if (typeof cell === 'number') return cell;
 
-        try {
-            // 安全转换字符串
-            const str = String(cell).trim();
-            return str === '' ? '' : this.autoConvertString(str);
-        } catch {
-            return '';
+        // 转换为字符串处理
+        const str = String(cell).trim();
+        if (str === '') return '';
+
+        // 检测内联块结构 { ... }
+        if (str.startsWith('{') && str.endsWith('}')) {
+            try {
+                const content = str.slice(1, -1).trim();
+                return this.parseInlineBlock(content);
+            } catch (e) {
+                console.error('解析内联块失败:', e);
+                return str; // 返回原始内容
+            }
         }
+
+        // 原有类型转换
+        return this.autoConvertString(str);
     }
 
-    private autoConvertString(str: string): string | number {
-        // 处理科学计数法
-        if (/^[+-]?\d+\.?\d*e[+-]?\d+$/i.test(str)) {
-            const num = Number(str);
-            return isNaN(num) ? str : num;
-        }
+    private parseInlineBlock(content: string): Record<string, any> {
+        const obj: Record<string, any> = {};
+        const lines = content
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line);
 
-        const num = Number(str);
-        return isNaN(num) ? str : num;
+        lines.forEach(line => {
+            // 增强匹配带嵌套结构的行
+            const kvMatch = line.match(CONFIG.INLINE_BLOCK_REGEX);
+
+            if (kvMatch) {
+                const key = kvMatch[1].trim();
+                const value = kvMatch[2].trim();
+                if (key && value) {
+                    obj[key] = this.autoConvertString(value);
+                }
+            } else {
+                console.error(
+                    `[${color.magenta('excel.ts')}] ❌  KV匹配失败 ${line}`
+                );
+            }
+        });
+        return obj;
     }
 
+    private autoConvertString(str: string): string | number | boolean {
+        // 布尔值检测
+        const lowerStr = str.toLowerCase();
+        if (lowerStr === 'true') return true;
+        if (lowerStr === 'false') return false;
+
+        // 数值检测
+        if (/^-?\d+$/.test(str)) return parseInt(str, 10);
+        if (/^-?\d+\.\d+$/.test(str)) return parseFloat(str);
+
+        // 默认返回字符串
+        return str;
+    }
+
+    // 表头块结构
     detectBlocks(headers: string[]): BlockInfo[] {
         const blocks: BlockInfo[] = [];
         const stack: BlockInfo[] = [];
 
         headers.forEach((header, index) => {
             const trimmed = header.trim();
-            if (trimmed.endsWith(CONFIG.BLOCK_MARKERS.START)) {
+            if (trimmed.endsWith('{')) {
                 const newBlock: BlockInfo = {
                     name: trimmed.slice(0, -1).trim(),
                     start: index,
@@ -83,7 +130,7 @@ class ExcelParser {
                 };
                 stack.at(-1)?.children.push(newBlock);
                 stack.push(newBlock);
-            } else if (trimmed === CONFIG.BLOCK_MARKERS.END) {
+            } else if (trimmed === '}') {
                 const block = stack.pop();
                 if (block) {
                     block.end = index;
@@ -98,7 +145,7 @@ class ExcelParser {
 
     private processBlock(
         block: BlockInfo,
-        row: string[],
+        row: any[], // 允许对象类型
         headers: string[],
         indentLevel: number
     ): ProcessedBlock {
@@ -157,7 +204,7 @@ class ExcelParser {
     }
 
     private processFields(
-        row: string[],
+        row: any[],
         headers: string[],
         start: number,
         end: number,
@@ -169,13 +216,76 @@ class ExcelParser {
         for (let i = start; i < end; i++) {
             const value = row[i];
             const key = headers[i];
-            if (key && value) {
-                entries.push(
-                    `${indent}"${this.escape(key)}" "${this.escape(value)}"`
-                );
+            if (!key || value === undefined || value === '') continue;
+
+            // 深度检测对象类型（包括数组）
+            if (typeof value === 'object' && value !== null) {
+                entries.push(...this.formatNestedKV(key, value, indentLevel));
+            } else {
+                if (typeof value === 'object') {
+                    entries.push(
+                        ...this.formatNestedKV(key, value, indentLevel)
+                    );
+                } else {
+                    entries.push(
+                        `${indent}"${this.escape(key)}" "${this.escape(
+                            value.toString()
+                        )}"`
+                    );
+                }
             }
         }
 
+        return entries;
+    }
+
+    private formatNestedKV(
+        key: string,
+        value: any,
+        indentLevel: number
+    ): string[] {
+        const indent = '  '.repeat(indentLevel);
+        const entries: string[] = [];
+
+        entries.push(`${indent}"${this.escape(key)}" {`);
+
+        // 处理对象类型
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            Object.entries(value).forEach(([k, v]) => {
+                // 递归处理所有值类型
+                if (v && typeof v === 'object') {
+                    entries.push(
+                        ...this.formatNestedKV(k as any, v, indentLevel + 1)
+                    );
+                } else {
+                    const val = v?.toString() ?? '';
+                    entries.push(
+                        `${indent}  "${this.escape(k as any)}" "${this.escape(
+                            val
+                        )}"`
+                    );
+                }
+            });
+        }
+        // 处理数组类型
+        else if (Array.isArray(value)) {
+            value.forEach((item, index) => {
+                if (item && typeof item === 'object') {
+                    entries.push(
+                        ...this.formatNestedKV(
+                            index.toString(),
+                            item,
+                            indentLevel + 1
+                        )
+                    );
+                } else {
+                    const val = item?.toString() ?? '';
+                    entries.push(`${indent}  "${index}" "${this.escape(val)}"`);
+                }
+            });
+        }
+
+        entries.push(`${indent}}`);
         return entries;
     }
 
@@ -210,44 +320,54 @@ class ExcelParser {
         langColumns: Map<number, { lang: string; template: string }>,
         isBlockField = false
     ) {
-        // 确保处理范围有效
         const safeEnd = Math.min(end, headers.length - 1, row.length - 1);
 
         for (let i = start; i <= safeEnd; i++) {
-            // 跳过越界索引
             if (i < 0 || i >= headers.length || i >= row.length) continue;
 
             const value = this.parseCell(row[i]);
+
             const rawKey = headers[i]?.trim() || '';
 
-            // 清理键名
             const key = rawKey
                 .replace(/{|}/g, '')
-                .replace(/^[^a-zA-Z_]/g, '_') // 非法开头字符替换
-                .replace(/[^\w]/g, '_'); // 特殊字符转下划线
+                .replace(/^[^a-zA-Z_]/g, '_')
+                .replace(/[^\w]/g, '_');
 
             if (!key || value === '' || langColumns.has(i)) continue;
 
-            // 仅当字段不在其他块中时处理
-            if (!this.isFieldInAnyBlock(i) || isBlockField) {
+            // 递归处理嵌套对象
+            if (typeof value === 'object' && value !== null) {
+                obj[key] = {};
+                this.deepProcessObject(value, obj[key]);
+            } else {
                 obj[key] = value;
             }
         }
     }
 
-    private autoConvertValue(value: any): any {
-        if (typeof value === 'string') {
-            // 转换数字字符串
-            const num = Number(value);
-            return isNaN(num) ? value : num;
-        }
-        return value;
+    private deepProcessObject(source: any, target: any) {
+        Object.entries(source).forEach(([k, v]) => {
+            if (typeof v === 'object' && v !== null) {
+                target[k as any] = {};
+                this.deepProcessObject(v, target[k as any]);
+            } else {
+                target[k as any] = this.autoConvertString(String(v));
+            }
+        });
     }
 
-    private isFieldInAnyBlock(columnIndex: number): boolean {
-        return this.currentSheetBlocks.some(
-            b => columnIndex > b.start && columnIndex < b.end && !b.parent // 仅检查顶级块
-        );
+    // 添加深度克隆方法
+    private deepCloneObject(obj: Record<string, any>): Record<string, any> {
+        const clone: Record<string, any> = {};
+        Object.entries(obj).forEach(([k, v]) => {
+            if (typeof v === 'object' && v !== null) {
+                clone[k] = this.deepCloneObject(v);
+            } else {
+                clone[k] = v;
+            }
+        });
+        return clone;
     }
 
     parseSheet(data: unknown[][]): {
@@ -255,8 +375,6 @@ class ExcelParser {
         structuredData: IntermediateData[];
         langData: LangData;
     } {
-        console.log('Raw data sample:', data.slice(0, 3)); // 打印前3行数据
-
         const langData: LangData = new Map();
         const kvEntries: string[] = [];
         const structuredData: IntermediateData[] = [];
@@ -279,22 +397,22 @@ class ExcelParser {
 
         data.slice(2).forEach((rowData, index) => {
             try {
-                console.log(`Processing row ${index}:`, rowData);
                 const safeRowData = Array.isArray(rowData) ? rowData : [];
-                const row = safeRowData.map(cell => this.parseCell(cell));
+
+                const row = safeRowData.map(cell => {
+                    return this.parseCell(cell);
+                });
                 // 跳过无效行
                 if (
                     !row ||
                     row.length === 0 ||
                     row.every(cell => cell === '')
                 ) {
-                    console.log(`⚠️ 跳过空行: 第${index + 3}行`);
                     return;
                 }
 
                 const rowKey = row[0]?.toString()?.trim();
                 if (!rowKey) {
-                    console.log(`⚠️ 跳过无效键行: 第${index + 3}行`);
                     return;
                 }
 
@@ -323,12 +441,13 @@ class ExcelParser {
                         }
                     });
 
-                structuredData.push({ [rowKey.toString()]: entry });
+                if (Object.keys(entry).length > 0) {
+                    structuredData.push({ [rowKey.toString()]: entry });
+                }
 
                 // 处理KV数据
-                const strRow = row.map(c => c.toString());
                 const normalEntries = headers
-                    .map((key, idx) => ({ key, idx, value: strRow[idx] }))
+                    .map((key, idx) => ({ key, idx, value: row[idx] }))
                     .filter(
                         ({ key, idx, value }) =>
                             idx !== 0 &&
@@ -337,17 +456,24 @@ class ExcelParser {
                             key &&
                             value
                     )
-                    .map(
-                        ({ key, value }) =>
-                            `  "${this.escape(key)}" "${this.escape(value)}"`
-                    );
+                    .map(({ key, value }) => {
+                        // 递归处理嵌套对象
+                        if (typeof value === 'object') {
+                            return this.formatNestedKV(key, value, 1).join(
+                                '\n'
+                            );
+                        }
+                        return `  "${this.escape(key)}" "${this.escape(
+                            value.toString()
+                        )}"`;
+                    });
 
                 const blockEntries = blocks
                     .filter(b => !b.parent)
                     .flatMap(block => {
                         const result = this.processBlock(
                             block,
-                            strRow,
+                            row,
                             headers,
                             1
                         );
@@ -355,7 +481,7 @@ class ExcelParser {
                     });
 
                 langColumns.forEach(({ lang, template }, index) => {
-                    const value = strRow[index];
+                    const value = row[index];
                     if (!value) return;
 
                     const finalKey = template.replace(/{}/g, _ =>
@@ -375,7 +501,12 @@ class ExcelParser {
                     );
                 }
             } catch (e) {
-                console.error(`处理第${index + 3}行时发生错误:`, e);
+                console.error(
+                    `[${color.magenta('excel.ts')}] ❌  处理第${
+                        index + 3
+                    }行时发生错误:`,
+                    e
+                );
             }
         });
 
@@ -431,56 +562,36 @@ class FileSystem {
 
 // === 格式生成器 ===
 class FormatGenerator {
-    private static LUA_KEYWORDS = new Set([
-        'and',
-        'break',
-        'do',
-        'else',
-        'elseif',
-        'end',
-        'false',
-        'for',
-        'function',
-        'goto',
-        'if',
-        'in',
-        'local',
-        'nil',
-        'not',
-        'or',
-        'repeat',
-        'return',
-        'then',
-        'true',
-        'until',
-        'while'
-    ]);
-
-    static toLua(data: IntermediateData[]): string {
-        const validEntries = data
-            .map(item => {
-                const [key, value] = Object.entries(item)[0];
-                const formattedValue = this.formatValue(value, 1);
-                return formattedValue !== null
-                    ? `${this.formatKey(key)} = ${formattedValue}`
-                    : null;
-            })
-            .filter((entry): entry is string => entry !== null);
-
-        return validEntries.length > 0
-            ? `return {\n${validEntries.join(',\n')}\n}`
-            : '';
-    }
 
     static toJSON(data: IntermediateData[]): string {
-        const filteredData = data.filter(item => {
-            const entryValue = Object.values(item)[0];
-            return entryValue && Object.keys(entryValue).length > 0;
-        });
+        const combined = data.reduce((acc, item) => {
+            const [key, value] = Object.entries(item)[0];
+            acc[key] = this.deepFormatJSON(value);
+            return acc;
+        }, {} as Record<string, any>);
 
-        const combined =
-            filteredData.length > 0 ? Object.assign({}, ...filteredData) : null;
-        return combined ? JSON.stringify(combined, null, 2) : '';
+        return JSON.stringify(combined, null, 2);
+    }
+
+    private static deepFormatJSON(value: any): any {
+        if (Array.isArray(value)) {
+            return value.map(item => this.deepFormatJSON(item));
+        }
+        if (value && typeof value === 'object') {
+            // 过滤系统字段
+            const cleanObj = Object.entries(value).reduce((acc, [k, v]) => {
+                if ((k as any).startsWith('_')) return acc;
+                acc[k as any] = this.deepFormatJSON(v);
+                return acc;
+            }, {} as Record<string, any>);
+            return Object.keys(cleanObj).length ? cleanObj : undefined;
+        }
+        // 自动转换数值类型
+        if (typeof value === 'string') {
+            const num = Number(value);
+            return isNaN(num) ? value : num;
+        }
+        return value;
     }
 
     private static formatKey(key: string): string {
@@ -543,9 +654,7 @@ class KVConverter {
     constructor() {
         this.setupWatcher();
         console.log(
-            `[${color.magenta('excel.ts')}] 👁️  Watching directory: ${
-                CONFIG.EXCEL_DIR
-            }`
+            `[${color.magenta('excel.ts')}] 👁️  监听目录: ${CONFIG.EXCEL_DIR}`
         );
     }
 
@@ -568,7 +677,7 @@ class KVConverter {
     private async processFile(filePath: string) {
         try {
             console.log(
-                `[${color.magenta('excel.ts')}] 🔄 Processing: ${path.basename(
+                `[${color.magenta('excel.ts')}] 🔄 解析: ${path.basename(
                     filePath
                 )}`
             );
@@ -592,7 +701,7 @@ class KVConverter {
                     console.log(
                         `[${color.magenta(
                             'excel.ts'
-                        )}] 📝 Generated KV: ${sheetName}.txt`
+                        )}] 📝 生成 KV: ${sheetName}.txt`
                     );
                 }
 
@@ -608,21 +717,20 @@ class KVConverter {
                             ),
                             jsonContent
                         );
-                        console.log(`Generated JSON...`);
-                    }
-
-                    // Lua
-                    const luaContent = FormatGenerator.toLua(structuredData);
-                    if (luaContent && luaContent !== '') {
                         FileSystem.writeFileSync(
                             path.join(
                                 CONFIG.LUA_OUTPUT_DIR,
-                                `${sheetName}.lua`
+                                `${sheetName}.json`
                             ),
-                            luaContent
+                            jsonContent
                         );
-                        console.log(`Generated Lua...`);
+                        console.log(
+                            `[${color.magenta(
+                                'excel.ts'
+                            )}] 📝 生成 Json: ${sheetName}.json`
+                        );
                     }
+
                 }
 
                 // 合并语言数据
@@ -636,7 +744,7 @@ class KVConverter {
             this.saveLangFiles();
         } catch (error) {
             console.error(
-                `❌ Processing failed: ${filePath}`,
+                `❌ 处理失败: ${filePath}`,
                 error instanceof Error ? error.message : error
             );
         }
@@ -664,7 +772,7 @@ class KVConverter {
             console.log(
                 `[${color.magenta(
                     'excel.ts'
-                )}] 🌐 Generated lang file: addon_${lang}.txt`
+                )}] 🌐 生成的本地化文件: addon_${lang}.txt`
             );
         });
     }

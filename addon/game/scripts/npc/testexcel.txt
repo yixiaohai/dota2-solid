@@ -11,8 +11,14 @@
 
   "oktestexcel2" {
   "single" "sdfsdf123"
+  "mult" {
+    "a1" "213123"
+    "a2" "sdfasdf"
+  }
   "abilityvalues" {
     "manacost" "1"
+    "cooldown" "true"
+    "range" "false"
   }
   }
 }

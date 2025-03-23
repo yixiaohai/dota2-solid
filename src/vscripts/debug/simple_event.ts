@@ -2,6 +2,7 @@ import { reloadable } from '../utils/tstl-utils';
 import { console } from '../utils/console';
 import { timer } from '../utils/timer';
 import { Hero } from './hero';
+import * as json from '../kv/testexcel.json';
 
 @reloadable
 export class SimpleEvent_PlayerID {
@@ -61,16 +62,16 @@ export class SimpleEvent_PlayerID {
     test(PlayerID: PlayerID) {
         const player = PlayerResource.GetPlayer(PlayerID);
         const hero = player?.GetAssignedHero();
-
-        let ent = Entities.First()
-        while (ent != null){
-            print(ent.GetClassname())
-            const ent_next = Entities.Next(ent)
-            if (ent_next == null){
-                break
-            }
-            ent = ent_next
-        }
+        console.warn(json.testexcel1);
+        // let ent = Entities.First();
+        // while (ent != null) {
+        //     print(ent.GetClassname());
+        //     const ent_next = Entities.Next(ent);
+        //     if (ent_next == null) {
+        //         break;
+        //     }
+        //     ent = ent_next;
+        // }
     }
 }
 

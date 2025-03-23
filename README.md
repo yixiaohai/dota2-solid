@@ -72,7 +72,6 @@ timer.remove(t)
 ```
 
 # TODO
-单选框
 二维码
 侧边提示
 封装通信模块，统一防抖
@@ -84,7 +83,6 @@ timer.remove(t)
 单位信息 单位KV
 单位技能 单位物品
 modifiers 状态
-神符
 相机控制
 
 

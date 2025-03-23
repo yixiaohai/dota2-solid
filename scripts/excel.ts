@@ -40,12 +40,6 @@ class ExcelParser {
     // 新增当前处理的块结构缓存
     private currentSheetBlocks: BlockInfo[] = [];
 
-    private checkPrecacheResource(str: string, precacheResources: Set<string>) {
-        const suffixes = ['.vpcf', '.vsndevts', '.vmdl'];
-        if (suffixes.some(suffix => str.endsWith(suffix))) {
-            precacheResources.add(str);
-        }
-    }
     private parseCell(cell: unknown): any {
         if (typeof cell === 'object') {
             return cell;

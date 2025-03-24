@@ -46,6 +46,8 @@ timer.remove(t)
 
 -   [按钮](src/panorama/components/button/index.md)
 -   [折叠面板](src/panorama/components/collapse/index.md)
+-   [光标](src/panorama/components/cursor/index.md)
+-   [默认面板](src/panorama/components/default_ui/index.md)
 -   [弹窗](src/panorama/components/dialog/index.md)
 -   [输入框](src/panorama/components/input/index.md)
 -   [弹出层](src/panorama/components/layer/index.md)
@@ -94,7 +96,7 @@ excel中的vpcf,vsndevts,vmdl会生成在kv/precache.json中
 更换英雄
 
 -   英雄 + 单位
-    单位信息 单位 KV
-    单位技能 单位物品
-    modifiers 状态
-    相机控制
+单位信息 单位 KV
+单位技能 单位物品
+modifiers 状态
+相机控制

@@ -1,16 +1,19 @@
 /** @noSelfInFile */
 
 import { console } from './console';
+import * as precacheData from '../kv/precache.json';
 
 // 导出的预载入方法，用来给addon_game_mode.ts调用
 export default function Precache(context: CScriptPrecacheContext) {
+
+    for (const key in precacheData) {
+        const typedKey = key as keyof typeof precacheData;
+        precacheResource(precacheData[typedKey], context);
+    }
+
     // 需要预载的所有资源
-    precacheResource(
-        [
-            'particles/selection/selection_grid_drag.vpcf',
-        ],
-        context
-    );
+    precacheResource([], context);
+
     // 需要预载入的单位
     precacheUnits(
         [
@@ -35,7 +38,8 @@ export default function Precache(context: CScriptPrecacheContext) {
         ],
         context
     );
-    console.log(`[Precache] Precache finished.`);
+
+    console.log(`预载入完成`);
 }
 
 // 预载入资源列表

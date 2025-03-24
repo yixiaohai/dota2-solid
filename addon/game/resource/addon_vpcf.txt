@@ -1,0 +1,9 @@
+"lang"
+{
+  "Language" "vpcf"
+  "Tokens"
+  {
+    "0" "test3.vpcf"
+    "1" "test2.vpcf"
+  }
+}

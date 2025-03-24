@@ -14,11 +14,14 @@ const CONFIG = {
     FILE_EXT: '.xlsx',
     IGNORE_SHEET_NAME: /(^Sheet\d*$|^charts$)/i,
     LANG_PATTERN: /#([^#]+)#/, // 匹配本地化表头
-    INLINE_BLOCK_REGEX: /^"([^"]*)"\s*"([^"]*)"$/i // 匹配单元格嵌套kv
+    INLINE_BLOCK_REGEX: /^"([^"]*)"\s*"([^"]*)"$/i, // 匹配单元格嵌套kv
+    EXT_PATTERN: /\.(vpcf|vsndevts|vmdl)$/
 } as const;
 
 type LangEntry = Map<string, string>;
 type LangData = Map<string, LangEntry>;
+
+type PrecacheData = Map<string, string[]>;
 
 interface BlockInfo {
     name: string;
@@ -96,29 +99,6 @@ class ExcelParser {
         return { blocks, langColumns, headers };
     }
 
-    // 处理单元格
-    private parseCell(cell: unknown): any {
-        if (typeof cell === 'object') {
-            return cell;
-        }
-
-        if (typeof cell === 'number') return cell;
-
-        if (cell == undefined || cell === '') return '';
-
-        const str = String(cell).trim();
-        if (str === '') return '';
-
-        // 检测内联块结构 { ... }
-        if (str.startsWith('{') && str.endsWith('}')) {
-            const content = str.slice(1, -1).trim();
-            return this.parseInlineBlock(content);
-        }
-
-        // 原有类型转换
-        return this.autoConvertString(str);
-    }
-
     // 处理每行
     private processRow(
         obj: IntermediateData,
@@ -127,19 +107,18 @@ class ExcelParser {
         start: number,
         end: number,
         langColumns: Map<number, { lang: string; template: string }>,
-        blocks: BlockInfo[],
-        parent: BlockInfo | null
+        parent: BlockInfo | null,
+        blocks?: BlockInfo[]
     ) {
-        const safeEnd = Math.min(end, headers.length - 1, row.length - 1);
         const block_key: number[] = [];
 
-        blocks.forEach(block => {
+        blocks?.forEach(block => {
             for (let index = block.start; index < block.end; index++) {
                 block_key.push(index);
             }
         });
 
-        for (let i = start; i <= safeEnd; i++) {
+        for (let i = start; i <= end; i++) {
             if (
                 i < 0 ||
                 i >= headers.length ||
@@ -150,8 +129,8 @@ class ExcelParser {
             if (block_key.includes(i)) continue;
             const key = headers[i];
             if (!key) continue;
-            const value = this.parseCell(row[i]);
-            if (value === '') continue;
+            const value = row[i];
+            if (value === '' || value === undefined) continue;
 
             if (typeof value === 'object') {
                 obj[key] = {};
@@ -165,7 +144,7 @@ class ExcelParser {
             }
         }
 
-        if (blocks.length > 0) {
+        if (blocks && blocks.length > 0) {
             blocks
                 .filter(block => block.parent === parent)
                 .forEach(block => {
@@ -177,14 +156,36 @@ class ExcelParser {
                         block.start,
                         block.end,
                         langColumns,
-                        block.children,
-                        block
+                        block,
+                        block.children
                     );
                 });
         }
     }
 
-    private parseInlineBlock(content: string): Record<string, any> {
+    // 处理单元格
+    private parseCell(cell: unknown, PrecacheData?: PrecacheData): any {
+        if (typeof cell === 'number') return cell;
+
+        if (cell == undefined || cell === '') return '';
+
+        const str = String(cell).trim();
+        if (str === '') return '';
+
+        // 检测内联块结构 { ... }
+        if (str.startsWith('{') && str.endsWith('}')) {
+            const content = str.slice(1, -1).trim();
+            return this.parseInlineBlock(content, PrecacheData);
+        }
+
+        // 原有类型转换
+        return this.autoConvertString(str, PrecacheData);
+    }
+
+    private parseInlineBlock(
+        content: string,
+        PrecacheData?: PrecacheData
+    ): Record<string, any> {
         const obj: Record<string, any> = {};
         const lines = content
             .split('\n')
@@ -199,7 +200,7 @@ class ExcelParser {
                 const key = kvMatch[1].trim();
                 const value = kvMatch[2].trim();
                 if (key && value) {
-                    obj[key] = this.autoConvertString(value);
+                    obj[key] = this.autoConvertString(value, PrecacheData);
                 }
             } else {
                 console.error(
@@ -210,7 +211,10 @@ class ExcelParser {
         return obj;
     }
 
-    private autoConvertString(str: string): string | number | boolean {
+    private autoConvertString(
+        str: string,
+        PrecacheData?: PrecacheData
+    ): string | number | boolean {
         // 布尔值检测
         const lowerStr = str.toLowerCase();
         if (lowerStr === 'true') return true;
@@ -220,6 +224,15 @@ class ExcelParser {
         if (/^-?\d+$/.test(str)) return parseInt(str, 10);
         if (/^-?\d+\.\d+$/.test(str)) return parseFloat(str);
 
+        if (typeof str === 'string' && PrecacheData) {
+            const match = str.match(CONFIG.EXT_PATTERN);
+            if (match) {
+                const key = match[1];
+                const existing = PrecacheData.get(key) || [];
+                PrecacheData.set(key, [...new Set([...existing, str])]);
+            }
+        }
+
         // 默认返回字符串
         return str;
     }
@@ -227,9 +240,10 @@ class ExcelParser {
     parseSheet(data: unknown[][]): {
         structuredData: IntermediateData[];
         langData: LangData;
+        PrecacheData: PrecacheData;
     } {
+        const PrecacheData: PrecacheData = new Map();
         const langData: LangData = new Map();
-        const kvEntries: string[] = [];
         const structuredData: IntermediateData[] = [];
 
         const rawHeaderRow = data.length > 1 ? data[1] : [];
@@ -242,7 +256,8 @@ class ExcelParser {
                 const safeRowData = Array.isArray(rowData) ? rowData : [];
 
                 const row = safeRowData.map(cell => {
-                    return this.parseCell(cell);
+                    const row_cell = this.parseCell(cell, PrecacheData);
+                    return row_cell;
                 });
 
                 if (
@@ -266,8 +281,8 @@ class ExcelParser {
                     1,
                     headers.length,
                     langColumns,
-                    blocks,
-                    null
+                    null,
+                    blocks
                 );
 
                 if (Object.keys(entry).length > 0) {
@@ -297,12 +312,9 @@ class ExcelParser {
 
         return {
             structuredData,
-            langData
+            langData,
+            PrecacheData
         };
-    }
-
-    private escape(str: string): string {
-        return str.replace(/"/g, '\\"');
     }
 }
 
@@ -384,6 +396,7 @@ class FormatGenerator {
 class KVConverter {
     private parser = new ExcelParser();
     private langData: LangData = new Map();
+    private PrecacheData: PrecacheData = new Map();
 
     constructor() {
         this.setupWatcher();
@@ -417,13 +430,14 @@ class KVConverter {
             );
             const workbook = FileSystem.readWorkbook(filePath);
             this.langData.clear();
+            this.PrecacheData.clear();
 
             workbook.SheetNames.filter(
                 name => !CONFIG.IGNORE_SHEET_NAME.test(name)
             ).forEach(sheetName => {
                 const sheet = workbook.Sheets[sheetName];
                 const data = FileSystem.sheetToData(sheet);
-                const { structuredData, langData } =
+                const { structuredData, langData, PrecacheData } =
                     this.parser.parseSheet(data);
 
                 if (structuredData.length > 0) {
@@ -468,6 +482,12 @@ class KVConverter {
                     entries.forEach((v, k) => target.set(k, v));
                     this.langData.set(lang, target);
                 });
+
+                PrecacheData.forEach((resources, type) => {
+                    const existing = this.PrecacheData.get(type) || [];
+                    const merged = [...new Set([...existing, ...resources])];
+                    this.PrecacheData.set(type, merged);
+                });
             });
 
             this.saveLangFiles();
@@ -504,6 +524,22 @@ class KVConverter {
                 )}] 🌐 生成的本地化文件: addon_${lang}.txt`
             );
         });
+
+        const replacer = (key: string, value: any) => {
+            if (value instanceof Map) {
+                return Object.fromEntries(value); // 转换为 {key: value} 格式
+            }
+            return value;
+        };
+
+        const precache_content = JSON.stringify(this.PrecacheData, replacer, 4);
+        FileSystem.writeFileSync(
+            path.join(CONFIG.LUA_OUTPUT_DIR, 'precache.json'),
+            precache_content
+        );
+        console.log(
+            `[${color.magenta('excel.ts')}] 🎮 生成资源文件: precache.json`
+        );
     }
 }
 

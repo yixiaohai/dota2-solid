@@ -70,7 +70,5 @@
     "showtriggers" "显示Trigger"
     "cl_entitysummary" "实体摘要"
     "combat_log" "战斗记录"
-    "kaskflkas_testexcel1" "solid模版"
-    "kaskflkas_oktestexcel2" "确定"
   }
 }

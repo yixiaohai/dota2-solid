@@ -70,5 +70,9 @@
     "showtriggers" "show triggers"
     "cl_entitysummary" "entity summary"
     "combat_log" "combat log"
+    "pitch" "height_offset"
+    "yaw" "yaw"
+    "distance" "distance"
+    "height_offset" "height offset"
   }
 }

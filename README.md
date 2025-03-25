@@ -52,6 +52,7 @@ timer.remove(t)
 -   [输入框](src/panorama/components/input/index.md)
 -   [弹出层](src/panorama/components/layer/index.md)
 -   [菜单](src/panorama/components/menu/index.md)
+-   [滑动输入条](src/panorama/components/slider/index.md)
 
 # Excel
 
@@ -81,10 +82,12 @@ timer.remove(t)
 ```
 
 ## 预加载
-excel中的vpcf,vsndevts,vmdl会生成在kv/precache.json中
+
+excel 中的 vpcf,vsndevts,vmdl 会生成在 kv/precache.json 中
 
 ## 忽略的列
-除了本地化的列，表头第二行的key不填写也会被忽略
+
+除了本地化的列，表头第二行的 key 不填写也会被忽略
 
 # TODO
 
@@ -96,7 +99,7 @@ excel中的vpcf,vsndevts,vmdl会生成在kv/precache.json中
 更换英雄
 
 -   英雄 + 单位
-单位信息 单位 KV
-单位技能 单位物品
-modifiers 状态
-相机控制
+    单位信息 单位 KV
+    单位技能 单位物品
+    modifiers 状态
+    相机位置 默认值 记录镜头位置 

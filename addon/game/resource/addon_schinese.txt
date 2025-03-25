@@ -70,5 +70,9 @@
     "showtriggers" "显示Trigger"
     "cl_entitysummary" "实体摘要"
     "combat_log" "战斗记录"
+    "pitch" "俯仰角"
+    "yaw" "水平角"
+    "distance" "距离"
+    "height_offset" "高度偏移"
   }
 }

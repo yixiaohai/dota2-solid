@@ -75,7 +75,6 @@ setBoolItems([
     { name: "r_freezeparticles", value: false },
     { name: "cl_particle_log_creates", value: false },
     { name: "fog_enable", value: false },
-    
 ]);
 
 setCommandItems([

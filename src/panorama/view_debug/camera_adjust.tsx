@@ -82,7 +82,7 @@ export const CameraAdjust = () => {
             </Panel>
             <Panel class="content">
                 <Panel class="slider_container">
-                    <Label text="俯仰角" />
+                    <Label text="#pitch" />
                     <CSlider
                         min={1}
                         max={421}
@@ -105,7 +105,7 @@ export const CameraAdjust = () => {
                     />
                 </Panel>
                 <Panel class="slider_container">
-                    <Label text="水平角" />
+                    <Label text="#yaw" />
                     <CSlider
                         min={0}
                         max={361}
@@ -127,7 +127,7 @@ export const CameraAdjust = () => {
                     />
                 </Panel>
                 <Panel class="slider_container">
-                    <Label text="距离" />
+                    <Label text="#distance" />
                     <CSlider
                         min={0}
                         max={6000}
@@ -166,7 +166,7 @@ export const CameraAdjust = () => {
                     />
                 </Panel>
                 <Panel class="slider_container">
-                    <Label text="高度偏移" />
+                    <Label text="#height_offset" />
                     <CSlider
                         min={0}
                         max={3000}

@@ -12,6 +12,12 @@ const CONFIG = {
     LUA_OUTPUT_DIR: path.resolve(__dirname, '../src/vscripts/kv'),
     LANG_DIR: path.resolve(__dirname, '../addon/game/resource'),
     FILE_EXT: '.xlsx',
+    ALLOWED_KV_SHEETS: new Set([
+        'npc_abilities_custom',
+        'npc_heroes_custom',
+        'npc_items_custom',
+        'npc_units_custom'
+    ]),
     IGNORE_SHEET_NAME: /(^Sheet\d*$|^charts$)/i,
     LANG_PATTERN: /#([^#]+)#/, // 匹配本地化表头
     INLINE_BLOCK_REGEX: /^"([^"]*)"\s*"([^"]*)"$/i, // 匹配单元格嵌套kv
@@ -441,16 +447,25 @@ class KVConverter {
                     this.parser.parseSheet(data);
 
                 if (structuredData.length > 0) {
-                    const kvContent = FormatGenerator.toKV(structuredData);
-                    FileSystem.writeFileSync(
-                        path.join(CONFIG.KV_OUTPUT_DIR, `${sheetName}.txt`),
-                        kvContent
-                    );
-                    console.log(
-                        `[${color.magenta(
-                            'excel.ts'
-                        )}] 📝 生成 KV: ${sheetName}.txt`
-                    );
+                    if (CONFIG.ALLOWED_KV_SHEETS.has(sheetName)) {
+                        const kvContent = FormatGenerator.toKV(structuredData);
+                        FileSystem.writeFileSync(
+                            path.join(CONFIG.KV_OUTPUT_DIR, `${sheetName}.txt`),
+                            kvContent
+                        );
+                        console.log(
+                            `[${color.magenta(
+                                'excel.ts'
+                            )}] 📝 生成 KV: ${sheetName}.txt`
+                        );
+                    } else {
+                        console.log(
+                            `[${color.magenta(
+                                'excel.ts'
+                            )}] ⏭️ 已跳过未配置 KV: ${sheetName}.txt`
+                        );
+                    }
+
                     // JSON
                     const jsonContent = FormatGenerator.toJSON(structuredData);
                     if (jsonContent && jsonContent !== '{}') {

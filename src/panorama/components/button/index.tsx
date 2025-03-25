@@ -19,7 +19,7 @@ interface ButtonnProps {
     | 'grey';
     flow?: boolean;
     disabled?: boolean;
-    onClick?: Function;
+    onactivate?: Function;
     style?: Partial<PanelStyle>;
     fontsize?: number;
     toggle?: boolean;
@@ -532,9 +532,9 @@ export const CButton: Component<ButtonnProps> = props => {
             onactivate={() => {
                 if (props.toggle) {
                     setIsChecked(!isChecked());
-                    props.onClick?.(isChecked());
+                    props.onactivate?.(isChecked());
                 } else {
-                    props.onClick?.();
+                    props.onactivate?.();
                 }
             }}
         >

@@ -64,7 +64,7 @@ const MenuStyle = css`
 
 export interface MenuItem {
     icon: string;
-    onClick: Function;
+    onactivate: Function;
     label?: string;
     show?: boolean;
     style?: Partial<PanelStyle>;
@@ -90,7 +90,7 @@ export const Menu: Component<MenuProps> = props => {
                         class="box"
                         tooltip_text={i.label ? $.Localize(i.label) : ''}
                         onactivate={() => {
-                            i.onClick();
+                            i.onactivate();
                         }}
                     >
                         <Image src={`${i.icon}`} style={i.style} />

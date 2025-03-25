@@ -5,6 +5,8 @@ interface InputProps {
     type?: 1 | 2;
     flow?: boolean;
     style?: Partial<PanelStyle>;
+    text?: string;
+    ontextentrychange?: Function;
 }
 
 const inputStyle = css`
@@ -51,6 +53,10 @@ export const Input: Component<InputProps> = props => {
             }}
             style={props.style}
             ref={textEntryRef}
+            text={props.text}
+            ontextentrychange={() => {
+                props.ontextentrychange?.(textEntryRef?.text);
+            }}
         ></TextEntry>
     );
 };

@@ -285,7 +285,7 @@ class DialogManager implements DialogActions {
             DialogManager.slider.RemoveClass('minimized');
 
             DialogManager.slider.SetPanelEvent('onvaluechanged', () => {
-                DialogManager.input.text = DialogManager.slider.value.toFixed(2).toString()
+                DialogManager.input.text = DialogManager.slider.value.toFixed(0).toString()
             });
 
         }

@@ -94,7 +94,7 @@ export const DefaultUI = () => {
                             <CButton
                                 text={default_ui.get(i) ? '开启' : '关闭'}
                                 color={default_ui.get(i) ? 'green' : 'grey'}
-                                onClick={() => {
+                                onactivate={() => {
                                     default_ui.set(i, !default_ui.get(i));
                                 }}
                             />

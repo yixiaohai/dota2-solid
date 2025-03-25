@@ -9,6 +9,8 @@ import { ToolCommon } from '../view_debug/tool_common';
 import { console } from '../utils/console';
 import { DefaultUI } from '../view_debug/default_ui';
 import { FastConsoleCommand } from '../view_debug/fast_console_command';
+import { CameraAdjust } from '../view_debug/camera_adjust';
+import { CSlider } from '../components/slider';
 
 css`
     .root {
@@ -79,7 +81,7 @@ export function Debug() {
     const [menuItem, setMenuItem] = createStore<MenuItem[]>([
         {
             icon: 's2r://panorama/images/control_icons/return_to_game_png.vtex',
-            onClick: () => {
+            onactivate: () => {
                 $.DispatchEvent('DOTAHUDShowDashboard');
             },
             label: '#backToDashboard',
@@ -91,7 +93,7 @@ export function Debug() {
         },
         {
             icon: 's2r://panorama/images/control_icons/gear_png.vtex',
-            onClick: () => {
+            onactivate: () => {
                 $.DispatchEvent('DOTAShowSettingsPopup');
             },
             label: '#settings',
@@ -102,7 +104,7 @@ export function Debug() {
         },
         {
             icon: 's2r://panorama/images/control_icons/24px/debut_tool.vsvg',
-            onClick: () => {
+            onactivate: () => {
                 layer.toggle('tool_common', 'left');
             },
             label: '#tool_common',
@@ -123,6 +125,7 @@ export function Debug() {
             <ToolCommon />
             <DefaultUI />
             <FastConsoleCommand />
+            <CameraAdjust />
         </Panel>
     );
 }

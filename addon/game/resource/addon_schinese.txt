@@ -47,7 +47,7 @@
     "rune" "神符"
     "ui" "UI"
     "default_UI" "默认UI"
-    "camera_distance" "镜头距离"
+    "fog_enable" "雾"
     "camera_adjust" "相机调整"
     "camera_distance_desc" "高度过高会可能会卡顿，建议量力而行。"
     "show_range" "显示范围"

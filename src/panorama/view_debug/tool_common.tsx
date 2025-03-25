@@ -56,7 +56,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#hero_reset"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -72,14 +72,14 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#hero_replace"
                         flow
                         color="blue"
-                        onClick={HeroReplace}
+                        onactivate={HeroReplace}
                     />
                 </Panel>
                 <Panel class={row}>
                     <CButton
                         text="#level_up"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -94,7 +94,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#level_up_max"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -111,7 +111,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                     <CButton
                         text="#revive"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -127,7 +127,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#refresh"
                         flow
                         icon="s2r://panorama/images/hud/sprout_icon_psd.vtex"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -145,7 +145,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_remove"
                         tooltip_text="#ent_remove_desc"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -157,13 +157,13 @@ const collapseItem_unit: CollapseProps['items'] = [
                             )
                         }
                     />
-                    <CButton text="#ent_move" flow onClick={EntMove} />
+                    <CButton text="#ent_move" flow onactivate={EntMove} />
                 </Panel>
                 <Panel class={row}>
                     <CButton
                         text="#dummy_add"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_event',
                                 {
@@ -178,13 +178,13 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#hero_add_friend"
                         color="green"
                         flow
-                        onClick={HeroAddFriend}
+                        onactivate={HeroAddFriend}
                     />
                     <CButton
                         text="#hero_add_enemy"
                         color="red"
                         flow
-                        onClick={HeroAddEnemy}
+                        onactivate={HeroAddEnemy}
                     />
                 </Panel>
                 <Panel class={row}>
@@ -192,7 +192,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_info"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -208,7 +208,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_kv"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -226,7 +226,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_abilities"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -242,7 +242,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_items"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -260,7 +260,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_modifiers"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -276,7 +276,7 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#ent_states"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -305,7 +305,7 @@ const collapseItem_world: CollapseProps['items'] = [
                         flow
                         toggle={true}
                         checked={allMapVision()}
-                        onClick={() => {
+                        onactivate={() => {
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_check_event',
                                 {
@@ -320,7 +320,7 @@ const collapseItem_world: CollapseProps['items'] = [
                         flow
                         toggle={true}
                         checked={Game.GetConvarBool('dota_ability_debug')}
-                        onClick={() => {
+                        onactivate={() => {
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_unit_event',
                                 {
@@ -347,7 +347,7 @@ const collapseItem_world: CollapseProps['items'] = [
                     <CButton
                         text="#day_night_cycle"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_event',
                                 {
@@ -360,7 +360,7 @@ const collapseItem_world: CollapseProps['items'] = [
                         text="#host_timescale"
                         flow
                         color="blue"
-                        onClick={() => {
+                        onactivate={() => {
                             dialog.open({
                                 title: '#host_timescale',
                                 describe: '#host_timescale_desc',
@@ -558,7 +558,7 @@ const collapseItem_ui: CollapseProps['items'] = [
                         text="#default_UI"
                         flow
                         color="blue"
-                        onClick={() => {
+                        onactivate={() => {
                             layer.toggle('default_ui', 'center');
                         }}
                     />
@@ -566,7 +566,7 @@ const collapseItem_ui: CollapseProps['items'] = [
                         text="#combat_log"
                         flow
                         color="blue"
-                        onClick={() => {
+                        onactivate={() => {
                             $.DispatchEvent('DOTAHUDToggleCombatLog');
                         }}
                     />
@@ -576,7 +576,7 @@ const collapseItem_ui: CollapseProps['items'] = [
                         text="#show_range"
                         flow
                         color="blue"
-                        onClick={() => {
+                        onactivate={() => {
                             dialog.open({
                                 title: '#show_range',
                                 describe: '#show_range_desc',
@@ -603,47 +603,12 @@ const collapseItem_ui: CollapseProps['items'] = [
                         }}
                     />
                     <CButton
-                        text="#camera_distance"
-                        flow
-                        color="blue"
-                        onClick={() => {
-                            dialog.open({
-                                title: '#camera_distance',
-                                describe: '#camera_distance_desc',
-                                input: true,
-                                currentValue: (
-                                    default_ui.camera_distance_get() ?? 1134
-                                ).toString(),
-                                defaultValue: '1134',
-                                shadeClose: true,
-                                slider: true,
-                                max: 6000,
-                                min: 100,
-                                onOk: (v: string) => {
-                                    const value = Number(v);
-                                    default_ui.camera_distance_set(value);
-                                    GameUI.SetCameraDistance(value);
-                                    GameEvents.SendCustomGameEventToServer(
-                                        'c2s_console_command',
-                                        {
-                                            command: `fog_enable 0`
-                                        }
-                                    );
-                                    GameEvents.SendCustomGameEventToServer(
-                                        'c2s_console_command',
-                                        {
-                                            command: `r_farz ${value * 2}`
-                                        }
-                                    );
-                                }
-                            });
-                        }}
-                    />
-                    <CButton
                         text="#camera_adjust"
                         flow
                         color="blue"
-                        onClick={() => {}}
+                        onactivate={() => {
+                            layer.toggle('camera_adjust', 'right');
+                        }}
                     />
                 </Panel>
             </Panel>
@@ -660,7 +625,7 @@ const collapseItem_debug: CollapseProps['items'] = [
                     <CButton
                         text="#script_reload"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
@@ -672,7 +637,7 @@ const collapseItem_debug: CollapseProps['items'] = [
                     <CButton
                         text="#script_clear"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
@@ -686,7 +651,7 @@ const collapseItem_debug: CollapseProps['items'] = [
                     <CButton
                         text="#game_restart"
                         flow
-                        onClick={() =>
+                        onactivate={() =>
                             GameEvents.SendCustomGameEventToServer(
                                 'c2s_console_command',
                                 {
@@ -699,7 +664,7 @@ const collapseItem_debug: CollapseProps['items'] = [
                         text="#fast_console_command"
                         flow
                         color="blue"
-                        onClick={() =>
+                        onactivate={() =>
                             layer.toggle('fast_console_command', 'center')
                         }
                     />
@@ -720,6 +685,7 @@ const MouseOverRune = (ButtonPanle: Panel, strRuneTooltip: string) => {
 const MouseOutRune = (ButtonPanle: Panel) => {
     const runePanel = ButtonPanle.GetChild(0) as AnimatedImageStrip;
     if (!runePanel) return;
+    runePanel.StopAnimating();
     $.DispatchEvent('UIHideTextTooltip', runePanel);
 };
 

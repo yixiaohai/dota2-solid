@@ -47,7 +47,7 @@
     "rune" "rune"
     "ui" "UI"
     "default_UI" "default UI"
-    "camera_distance" "set camera distance"
+    "fog_enable" "fog"
     "camera_adjust" "adjust camera"
     "camera_distance_desc" "If the height is too high, it may cause stuttering. It is recommended to act within your means."
     "show_range" "show range"

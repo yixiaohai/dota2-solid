@@ -24,7 +24,7 @@
 | color        | 可选值：red, green, blue, grey, yellow, orange, cyan, purple | 'red' \| 'green' \| 'blue' \| 'grey' \| 'yellow' \| 'orange' \| 'cyan' \| 'purple' |        |
 | flow         | 均分占满容器宽度                                             | boolean                                                                            | false  |
 | disabled     | 是否禁用按钮                                                 | boolean                                                                            | false  |
-| onClick      | 点击事件回调函数                                             | Function                                                                           | -      |
+| onactivate   | 点击事件回调函数                                             | Function                                                                           | -      |
 | style        | 自定义样式对象（会覆盖预设样式）                             | Partial<PanelStyle>                                                                | -      |
 | fontsize     | 字体大小                                                     | number                                                                             | 17     |
 | toggle       | 可以选中                                                     | boolean                                                                            | -      |

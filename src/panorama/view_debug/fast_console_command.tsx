@@ -12,13 +12,13 @@ import { forEach, forIn } from 'lodash';
 const main = css`
     flow-children: down;
     width: 520px;
-    height: 900px;
+    height: 950px;
     horizontal-align: center;
     vertical-align: top;
     background-color: #181818dd;
     box-shadow: #000000aa 0px 0px 8px 0px;
     opacity: 1;
-    transform: translateX(0px) translateY(100px);
+    transform: translateX(0px) translateY(80px);
     transition-property: opacity, pre-transform-scale2d;
     transition-duration: 0.3s;
     transition-timing-function: ease-in;
@@ -74,6 +74,8 @@ setBoolItems([
     { name: "showtriggers", value: false },
     { name: "r_freezeparticles", value: false },
     { name: "cl_particle_log_creates", value: false },
+    { name: "fog_enable", value: false },
+    
 ]);
 
 setCommandItems([
@@ -111,7 +113,7 @@ export const FastConsoleCommand = () => {
                             <CButton
                                 text={i.value ? '开启' : '关闭'}
                                 color={i.value ? 'green' : 'grey'}
-                                onClick={() => {
+                                onactivate={() => {
                                     setBoolItems(prevData =>
                                         prevData.map(l => {
                                             if (l.name === i.name) {
@@ -138,7 +140,7 @@ export const FastConsoleCommand = () => {
                             <CButton
                                 text="发送"
                                 color="cyan"
-                                onClick={() => {
+                                onactivate={() => {
                                     GameEvents.SendCustomGameEventToServer(
                                         'c2s_console_command',
                                         {

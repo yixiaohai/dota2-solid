@@ -521,6 +521,7 @@ export const CButton: Component<ButtonnProps> = props => {
 
     return (
         <Panel
+            onfocus="DropInputFocus()"
             ref={Ref}
             class={`${btnStyle} ${
                 props.type ? `style${props.type}` : 'style1'

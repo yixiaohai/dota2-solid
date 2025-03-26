@@ -102,4 +102,4 @@ excel 中的 vpcf,vsndevts,vmdl 会生成在 kv/precache.json 中
     单位信息 单位 KV
     单位技能 单位物品
     modifiers 状态
-    默认值 记录镜头位置 
+    记录镜头位置

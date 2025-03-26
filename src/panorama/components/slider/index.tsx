@@ -1,5 +1,6 @@
 import { Accessor, Component, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
+import { console } from '../../utils/console';
 
 interface CSliderProps {
     min?: number;

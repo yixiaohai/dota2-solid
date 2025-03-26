@@ -74,5 +74,7 @@
     "yaw" "yaw"
     "distance" "distance"
     "height_offset" "height offset"
+    "postion" "postion"
+    "default_position" "default position"
   }
 }

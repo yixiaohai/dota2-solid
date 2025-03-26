@@ -80,7 +80,8 @@ export const DefaultUI = () => {
         >
             <Panel class="head">
                 <Label text="#default_ui" />
-                <Button
+                <CButton
+                class='button'
                     onactivate={() => {
                         layer.close('default_ui', 'center');
                     }}

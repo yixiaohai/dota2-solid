@@ -30,7 +30,7 @@ css`
         margin: 6px;
     }
 
-    .head Button {
+    .head .button {
         width: 24px;
         height: 24px;
         wash-color: #888888;
@@ -45,7 +45,7 @@ css`
         transition-timing-function: ease-in;
     }
 
-    .head Button:hover {
+    .head .button:hover {
         wash-color: #fff;
     }
 `;

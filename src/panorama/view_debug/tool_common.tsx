@@ -762,7 +762,8 @@ export const ToolCommon = () => {
         <Layer name="tool_common" type="left" class={main}>
             <Panel class="head">
                 <Label text="#tool_common" />
-                <Button
+                <CButton
+                    class='button'
                     onactivate={() => {
                         layer.close('tool_common', 'left');
                     }}

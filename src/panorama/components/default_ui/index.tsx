@@ -8,7 +8,9 @@ const [defaultUIData, setDefaultUIData] = createStore<DefaultUIState>(
     {} as DefaultUIState
 );
 
-const [cameraDistance, setCameraDistance] = createSignal<number | null>(null);
+const [cameraDistance, setCameraDistance] = createSignal<number>(1134);
+const [cameraDefaultDistance, setCameraDefaultDistance] =
+    createSignal<number>(1134);
 
 const set = (name: DotaDefaultUIElement_t, state: boolean) => {
     GameUI.SetDefaultUIEnabled(name, state);
@@ -24,12 +26,19 @@ const camera_distance_set = (height: number) => {
 };
 
 const camera_distance_get = () => {
-    return cameraDistance()
+    return cameraDistance();
 };
 
+const camera_distance_default_set = (height: number) => {
+    setCameraDefaultDistance(height);
+};
+
+const camera_distance_default_get = () => {
+    return cameraDefaultDistance();
+};
 
 const defaultSet = () => {
-    GameUI.SetCameraDistance(1200)
+    GameUI.SetCameraDistance(1200);
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_QUICK_STATS, false); // 击杀助攻数据
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR, false); // 顶部
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBOARD, false); // 左侧默认计分板
@@ -48,7 +57,9 @@ interface DefaultUIActions {
     get: (name: DotaDefaultUIElement_t) => boolean | undefined;
     defaultSet: () => void;
     camera_distance_set: (height: number) => void;
-    camera_distance_get: () => number | null;
+    camera_distance_get: () => number;
+    camera_distance_default_set: (height: number) => void;
+    camera_distance_default_get: () => number;
 }
 
 export const default_ui: DefaultUIActions = {
@@ -57,19 +68,21 @@ export const default_ui: DefaultUIActions = {
     defaultSet,
     camera_distance_set,
     camera_distance_get,
+    camera_distance_default_set,
+    camera_distance_default_get
 };
 
 onMount(() => {
-    GameEvents.SendCustomGameEventToServer(
-        'c2s_event',
-        {
-            event: 'get_camera_distance'
+    GameEvents.SendCustomGameEventToServer('c2s_event', {
+        event: 'get_camera_distance'
+    });
+
+    const s2c_camera_distance = GameEvents.Subscribe(
+        's2c_camera_distance',
+        data => {
+            default_ui.camera_distance_set(data.distance);
+            default_ui.camera_distance_default_set(data.distance);
+            GameEvents.Unsubscribe(s2c_camera_distance);
         }
-    )
-
-    const s2c_camera_distance = GameEvents.Subscribe('s2c_camera_distance', (data) => {
-        default_ui.camera_distance_set(data.distance)
-        GameEvents.Unsubscribe(s2c_camera_distance);
-    })
-
+    );
 });

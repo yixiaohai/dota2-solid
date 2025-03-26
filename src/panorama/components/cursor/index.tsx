@@ -67,7 +67,7 @@ class MouseListener {
 
     public start(
         callback: MouseCallback,
-        think: (pos: [number, number, number]) => void,
+        think?: (pos: [number, number, number]) => void,
         cursorStyle?: cursorStyle
     ): () => void {
         if (this.currentCallback) {
@@ -89,10 +89,12 @@ class MouseListener {
                 (pos_cursor[1] - 16) / MouseListener.cursor.actualuiscale_y,
                 0
             );
-            if (pos) {
-                think(pos);
-            } else {
-                console.error('监听期间鼠标位置获取失败');
+            if (think) {
+                if (pos) {
+                    think(pos);
+                } else {
+                    console.error('监听期间鼠标位置获取失败');
+                }
             }
             return 0;
         });
@@ -103,7 +105,9 @@ class MouseListener {
         GameEvents.SendCustomGameEventToServer('c2s_console_command', {
             command: 'dota_hide_cursor 0'
         });
-        MouseListener.cursor.AddClass('minimized');
+        if (MouseListener.cursor) {
+            MouseListener.cursor.AddClass('minimized');
+        }
 
         if (this.thinkID) {
             timer.remove(this.thinkID);

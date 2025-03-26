@@ -8,15 +8,15 @@ interface ButtonnProps {
     tooltip_text?: string;
     type?: 1 | 2;
     color?:
-    | 'red'
-    | 'green'
-    | 'blue'
-    | 'grey'
-    | 'yellow'
-    | 'orange'
-    | 'cyan'
-    | 'purple'
-    | 'grey';
+        | 'red'
+        | 'green'
+        | 'blue'
+        | 'grey'
+        | 'yellow'
+        | 'orange'
+        | 'cyan'
+        | 'purple'
+        | 'grey';
     flow?: boolean;
     disabled?: boolean;
     onactivate?: Function;
@@ -24,6 +24,7 @@ interface ButtonnProps {
     fontsize?: number;
     toggle?: boolean;
     checked?: boolean;
+    class?: string;
 }
 
 const btnStyle = css`
@@ -95,6 +96,7 @@ const btnStyle = css`
         font-weight: normal;
         text-overflow: shrink;
         letter-spacing: 1px;
+        font-size: 17px;
     }
 
     &.style1:enabled:hover Label {
@@ -508,13 +510,21 @@ const btnStyle = css`
 `;
 
 export const CButton: Component<ButtonnProps> = props => {
+    let Ref: Panel | undefined;
     const [isChecked, setIsChecked] = createSignal(props.checked || false);
 
+    onMount(() => {
+        if (Ref) {
+            Ref.SetDisableFocusOnMouseDown(false);
+        }
+    });
 
     return (
         <Panel
-            class={`${btnStyle} ${props.type ? `style${props.type}` : 'style1'
-                } `}
+            ref={Ref}
+            class={`${btnStyle} ${
+                props.type ? `style${props.type}` : 'style1'
+            } ${props.class}`}
             classList={{
                 red: props.color === 'red',
                 orange: props.color === 'orange',

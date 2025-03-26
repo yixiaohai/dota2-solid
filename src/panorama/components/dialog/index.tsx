@@ -1,11 +1,12 @@
 import { forEach } from 'lodash';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { console } from '../../utils/console';
+import { cursor } from '../cursor';
 
 const main = css`
     width: 100%;
     height: 100%;
-    background-color: #000000CC;
+    background-color: #000000cc;
     z-index: 9999;
     transition-property: opacity;
     transition-duration: 0.35s;
@@ -163,7 +164,7 @@ export interface DialogProps {
     describe: string;
     input?: boolean;
     inputBig?: boolean;
-    currentValue?: string,
+    currentValue?: string;
     defaultValue?: string;
     onOk?: Function;
     noCancel?: boolean;
@@ -217,7 +218,7 @@ class DialogManager implements DialogActions {
             class: 'box'
         });
 
-        DialogPanel.SetPanelEvent('onactivate', () => { });
+        DialogPanel.SetPanelEvent('onactivate', () => {});
 
         DialogManager.title = $.CreatePanel('Label', DialogPanel, '', {
             class: 'title'
@@ -228,7 +229,7 @@ class DialogManager implements DialogActions {
 
         const slider = $.CreatePanel('Slider', content, '', {
             class: 'slider HorizontalSlider ',
-            direction: "horizontal",
+            direction: 'horizontal'
         });
         DialogManager.slider = slider;
 
@@ -278,16 +279,24 @@ class DialogManager implements DialogActions {
         if (!props.slider) {
             DialogManager.slider.AddClass('minimized');
         } else {
-            props.min ? DialogManager.slider.min = props.min : DialogManager.slider.min = 0;
-            props.max ? DialogManager.slider.max = props.max : DialogManager.slider.max = 1;
-            props.defaultValue ? DialogManager.slider.value = Number(props.defaultValue) : DialogManager.slider.value = props.min || 0;
-            props.currentValue && (DialogManager.slider.value = Number(props.currentValue))
+            props.min
+                ? (DialogManager.slider.min = props.min)
+                : (DialogManager.slider.min = 0);
+            props.max
+                ? (DialogManager.slider.max = props.max)
+                : (DialogManager.slider.max = 1);
+            props.defaultValue
+                ? (DialogManager.slider.value = Number(props.defaultValue))
+                : (DialogManager.slider.value = props.min || 0);
+            props.currentValue &&
+                (DialogManager.slider.value = Number(props.currentValue));
             DialogManager.slider.RemoveClass('minimized');
 
             DialogManager.slider.SetPanelEvent('onvaluechanged', () => {
-                DialogManager.input.text = DialogManager.slider.value.toFixed(0).toString()
+                DialogManager.input.text = DialogManager.slider.value
+                    .toFixed(0)
+                    .toString();
             });
-
         }
 
         if (!props.input) {
@@ -301,6 +310,34 @@ class DialogManager implements DialogActions {
             } else {
                 DialogManager.input.RemoveClass('big');
             }
+
+            DialogManager.input.SetPanelEvent('onfocus', () => {
+                const handleClick = (
+                    eventType: MouseEvent,
+                    button: MouseButton | MouseScrollDirection,
+                    pos: [number, number, number]
+                ) => {
+                    if (eventType == 'wheeled') {
+                        if (button == 1) {
+                            DialogManager.input.text = (
+                                parseInt(DialogManager.input.text) + 1
+                            ).toString();
+                        }
+                        if (button == -1) {
+                            DialogManager.input.text = (
+                                parseInt(DialogManager.input.text) - 1
+                            ).toString();
+                        }
+                        return;
+                    }
+                    if (eventType == 'pressed' && button == 0) {
+                        removeListener();
+                        return;
+                    }
+                };
+
+                const removeListener = cursor.start(handleClick);
+            });
         }
 
         if (props.defaultValue) {
@@ -336,7 +373,7 @@ class DialogManager implements DialogActions {
                 this.close();
             });
         } else {
-            DialogManager.dialog.SetPanelEvent('onactivate', () => { });
+            DialogManager.dialog.SetPanelEvent('onactivate', () => {});
         }
     };
 

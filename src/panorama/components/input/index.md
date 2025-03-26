@@ -18,3 +18,4 @@ TODO：调整样式来适配应用场景
 | flow              | 均分占满容器宽度                 | boolean             | false  |
 | style             | 自定义样式对象（会覆盖预设样式） | Partial<PanelStyle> | -      |
 | ontextentrychange | text 改变时回调                  | Function            | -      |
+| number            | 获得焦点时滚轮可增减             | boolean             | -      |

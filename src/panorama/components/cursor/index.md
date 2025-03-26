@@ -43,4 +43,5 @@ start()
 
 # MouseButton说明
 type MouseButton = 0 | 1 | 2 | 3 | 4 | 5 | 6  
-0 - Left 1 - Right 2 - Middle 3 - Mouse 4 4 - Mouse 5 5 - Scroll up 6 - Scroll down
+pressed 0 - Left 1 - Right 2 - Middle 3 - Mouse 4 4 - Mouse 5 5 - Scroll up 6 - Scroll down
+wheeled 1 - Scroll up -1 - Scroll down

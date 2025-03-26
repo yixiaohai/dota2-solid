@@ -64,22 +64,20 @@ const [boolItems, setBoolItems] = createSignal<CommandState[]>([]);
 const [commandItems, setCommandItems] = createSignal<string[]>([]);
 // 添加示例数据
 setBoolItems([
-    { name: "dota_easybuy", value: false },
-    { name: "cl_dota_gridnav_show", value: false },
-    { name: "dota_unit_show_bounding_radius", value: false },
-    { name: "dota_unit_show_selection_boxes", value: false },
-    { name: "dota_unit_show_collision_radius", value: false },
-    { name: "debug_overlay_fullposition", value: false },
-    { name: "dota_combine_models", value: false },
-    { name: "showtriggers", value: false },
-    { name: "r_freezeparticles", value: false },
-    { name: "cl_particle_log_creates", value: false },
-    { name: "fog_enable", value: false },
+    { name: 'dota_easybuy', value: false },
+    { name: 'cl_dota_gridnav_show', value: false },
+    { name: 'dota_unit_show_bounding_radius', value: false },
+    { name: 'dota_unit_show_selection_boxes', value: false },
+    { name: 'dota_unit_show_collision_radius', value: false },
+    { name: 'debug_overlay_fullposition', value: false },
+    { name: 'dota_combine_models', value: false },
+    { name: 'showtriggers', value: false },
+    { name: 'r_freezeparticles', value: false },
+    { name: 'cl_particle_log_creates', value: false },
+    { name: 'fog_enable', value: false }
 ]);
 
-setCommandItems([
-    'cl_entitysummary',
-]);
+setCommandItems(['cl_entitysummary']);
 
 setBoolItems(prevData =>
     prevData.map(l => {
@@ -98,7 +96,8 @@ export const FastConsoleCommand = () => {
         >
             <Panel class="head">
                 <Label text="#fast_console_command" />
-                <Button
+                <CButton
+                    class="button"
                     onactivate={() => {
                         layer.close('fast_console_command', 'center');
                     }}
@@ -116,7 +115,10 @@ export const FastConsoleCommand = () => {
                                     setBoolItems(prevData =>
                                         prevData.map(l => {
                                             if (l.name === i.name) {
-                                                return { ...l, value: !i.value };
+                                                return {
+                                                    ...l,
+                                                    value: !i.value
+                                                };
                                             }
                                             return l;
                                         })
@@ -124,9 +126,11 @@ export const FastConsoleCommand = () => {
                                     GameEvents.SendCustomGameEventToServer(
                                         'c2s_console_command',
                                         {
-                                            command: `${i.name} ${i.value ? '0' : '1'}`
+                                            command: `${i.name} ${
+                                                i.value ? '0' : '1'
+                                            }`
                                         }
-                                    )
+                                    );
                                 }}
                             />
                         </Panel>
@@ -145,7 +149,7 @@ export const FastConsoleCommand = () => {
                                         {
                                             command: `${i}`
                                         }
-                                    )
+                                    );
                                 }}
                             />
                         </Panel>

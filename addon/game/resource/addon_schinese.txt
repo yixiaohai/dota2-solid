@@ -74,5 +74,7 @@
     "yaw" "水平角"
     "distance" "距离"
     "height_offset" "高度偏移"
+    "postion" "位置"
+    "default_position" "默认位置"
   }
 }

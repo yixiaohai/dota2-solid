@@ -514,9 +514,7 @@ export const CButton: Component<ButtonnProps> = props => {
     const [isChecked, setIsChecked] = createSignal(props.checked || false);
 
     onMount(() => {
-        if (Ref) {
-            Ref.SetDisableFocusOnMouseDown(false);
-        }
+        Ref?.SetDisableFocusOnMouseDown(false);
     });
 
     return (

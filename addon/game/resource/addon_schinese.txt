@@ -76,5 +76,12 @@
     "height_offset" "高度偏移"
     "postion" "位置"
     "default_position" "默认位置"
+    "camera_lens" "相机镜头"
+    "record" "记录"
+    "play" "播放"
+    "delete" "删除"
+    "play_all" "播放全部"
+    "second" "秒"
+    "add" "新增"
   }
 }

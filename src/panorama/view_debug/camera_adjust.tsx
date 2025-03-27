@@ -7,28 +7,29 @@ import { dialog } from '../components/dialog';
 import { console } from '../utils/console';
 import { timer } from '../utils/timer';
 import { default_ui, DefaultUIState } from '../components/default_ui';
-import { createSignal, For } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 import { forEach, forIn } from 'lodash';
 import { Input } from '../components/input';
 import { CSlider } from '../components/slider';
+import { createStore } from 'solid-js/store';
 
 const main = css`
     flow-children: down;
     width: 420px;
-    height: 800px;
+    height: 1000px;
     horizontal-align: right;
-    vertical-align: middle;
+    vertical-align: top;
     background-color: #181818dd;
     box-shadow: #000000aa 0px 0px 8px 0px;
     opacity: 1;
-    transform: translateX(0px) translateY(-100px);
+    transform: translateX(0px) translateY(50px);
     transition-property: opacity, transform;
     transition-duration: 0.3s;
     transition-timing-function: ease-in;
 
     .minimized & {
         opacity: 0;
-        transform: translateX(400px) translateY(-100px);
+        transform: translateX(400px) translateY(50px);
     }
 
     .content {
@@ -75,8 +76,32 @@ const main = css`
         width: 15px;
     }
 
-    .reset {
+    .reset,
+    .play_all {
         padding: 10px;
+    }
+
+    .camera_pos {
+        flow-children: down;
+        max-height: 500px;
+        overflow: scroll;
+    }
+
+    .camera_pos_list {
+        flow-children: right;
+        padding: 5px 10px;
+        width: fill-parent-flow(1);
+    }
+
+    .camera_pos_list_title {
+        vertical-align: center;
+        margin-right: 5px;
+    }
+
+    .camera_pos_list_second {
+        vertical-align: center;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 `;
 
@@ -97,6 +122,22 @@ const [cameraHeightOffset, setCameraHeightOffset] = createSignal(
     Math.round(GameUI.GetCameraLookAtPositionHeightOffset())
 );
 
+// 类型定义
+type CameraPos = {
+    time: number;
+    x: number;
+    y: number;
+    z: number;
+    pitch: number;
+    yaw: number;
+    distance: number;
+    heightOffset: number;
+};
+
+// 原始数据存储
+const [cameraPosList, setCameraPosList] = createStore<CameraPos[]>([]);
+const [posTime, setPosTime] = createSignal('-1');
+
 let timeid: ScheduleID | undefined;
 const onOpen = () => {
     timeid = timer.create(() => {
@@ -110,6 +151,36 @@ const onOpen = () => {
 
 const onClose = () => {
     if (timeid) timer.remove(timeid);
+};
+
+const CameraPlay = (pos: CameraPos) => {
+    GameUI.SetCameraTargetPosition([pos.x, pos.y, pos.z], pos.time);
+
+    if (pos.time > 0) {
+        const current_pitch = cameraPitch();
+        const current_yaw = cameraYaw();
+        const current_distance = cameraDistance();
+        const current_heightOffset = cameraHeightOffset();
+        const step_pitch = (pos.pitch - current_pitch) / pos.time;
+        const step_yaw = (pos.yaw - current_yaw) / pos.time;
+        const step_distance = (pos.distance - current_distance) / pos.time;
+        const step_heightOffset =
+            (pos.heightOffset - current_heightOffset) / pos.time;
+        const start_time = Game.GetGameTime();
+        const timeid = timer.create(() => {
+            const t = Game.GetGameTime() - start_time;
+            setCameraPitch(current_pitch + step_pitch * t);
+            setCameraYaw(current_yaw + step_yaw * t);
+            setCameraDistance(current_distance + step_distance * t);
+            setCameraHeightOffset(current_heightOffset + step_heightOffset * t);
+
+            if (t >= pos.time) {
+                timer.remove(timeid);
+            } else {
+                return 0;
+            }
+        });
+    }
 };
 
 export const CameraAdjust = () => {
@@ -333,6 +404,133 @@ export const CameraAdjust = () => {
                                 default_ui.camera_distance_default_get()
                             );
                             setCameraHeightOffset(0);
+                        }}
+                    />
+                </Panel>
+                <Panel class="camera_pos">
+                    <For each={cameraPosList}>
+                        {(pos, index) => (
+                            <Panel class="camera_pos_list" data-index={index()}>
+                                <Label
+                                    class="camera_pos_list_title"
+                                    text={`${$.Localize('#camera_lens')} ${
+                                        index() + 1
+                                    }`}
+                                />
+                                {/* 输入绑定 */}
+                                <Input
+                                    text={`${pos.time ?? -1}`}
+                                    style={{
+                                        width: '60px',
+                                        verticalAlign: 'center'
+                                    }}
+                                    number={true}
+                                    ontextentrychange={(e: string) => {
+                                        pos.time = Number(e);
+                                        setCameraPosList(
+                                            index(),
+                                            'time',
+                                            pos.time
+                                        );
+                                    }}
+                                />
+                                <Label
+                                    class="camera_pos_list_second"
+                                    text={`${$.Localize('#second')}`}
+                                />
+
+                                {/* 记录按钮 */}
+                                <CButton
+                                    text="#record"
+                                    onactivate={() => {
+                                        setCameraPosList(index(), {
+                                            time: pos.time,
+                                            x: Number(cameraPosX()),
+                                            y: Number(cameraPosY()),
+                                            z: Number(cameraPosZ()),
+                                            pitch: cameraPitch(),
+                                            yaw: cameraYaw(),
+                                            distance: cameraDistance(),
+                                            heightOffset: cameraHeightOffset()
+                                        });
+                                    }}
+                                />
+                                <CButton
+                                    text="#play"
+                                    onactivate={() => {
+                                        CameraPlay(pos);
+                                    }}
+                                />
+                                {/* 删除按钮 */}
+                                <CButton
+                                    text="#delete"
+                                    onactivate={() => {
+                                        setCameraPosList(list =>
+                                            list.filter((_, i) => i !== index())
+                                        );
+                                    }}
+                                />
+                            </Panel>
+                        )}
+                    </For>
+                    <Panel class="camera_pos_list">
+                        <Label
+                            class="camera_pos_list_title"
+                            text={`${$.Localize('#add')}`}
+                        />
+                        {/* 输入绑定 */}
+                        <Input
+                            text={posTime}
+                            style={{
+                                width: '60px',
+                                verticalAlign: 'center'
+                            }}
+                            number={true}
+                            ontextentrychange={(e: string) => {
+                                setPosTime(e);
+                            }}
+                        />
+                        <Label
+                            class="camera_pos_list_second"
+                            text={`${$.Localize('#second')}`}
+                        />
+
+                        {/* 记录按钮 */}
+                        <CButton
+                            text="#record"
+                            onactivate={() => {
+                                setCameraPosList([
+                                    ...cameraPosList,
+                                    {
+                                        time: Number(posTime()),
+                                        x: Number(cameraPosX()),
+                                        y: Number(cameraPosY()),
+                                        z: Number(cameraPosZ()),
+                                        pitch: cameraPitch(),
+                                        yaw: cameraYaw(),
+                                        distance: cameraDistance(),
+                                        heightOffset: cameraHeightOffset()
+                                    }
+                                ]);
+                            }}
+                        />
+                    </Panel>
+                </Panel>
+                <Panel class="play_all">
+                    <CButton
+                        text="#play_all"
+                        flow
+                        color="cyan"
+                        onactivate={() => {
+                            console.log('cameraPosList');
+                            console.log(cameraPosList);
+                            let t = 0;
+                            cameraPosList.forEach(pos => {
+                                timer.create(() => {
+                                    CameraPlay(pos);
+                                }, t);
+                                t += pos.time;
+                            });
                         }}
                     />
                 </Panel>

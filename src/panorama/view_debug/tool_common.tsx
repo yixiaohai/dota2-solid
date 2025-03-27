@@ -157,7 +157,12 @@ const collapseItem_unit: CollapseProps['items'] = [
                             )
                         }
                     />
-                    <CButton text="#ent_move" flow onactivate={EntMove} />
+                    <CButton
+                        text="#ent_move"
+                        flow
+                        color="purple"
+                        onactivate={EntMove}
+                    />
                 </Panel>
                 <Panel class={row}>
                     <CButton
@@ -742,6 +747,14 @@ const EntMove = () => {
         Particles.DestroyParticleEffect(arrowParticle(), true);
         Particles.ReleaseParticleIndex(arrowParticle());
 
+        const pid = Particles.CreateParticle(
+            'particles/items_fx/blink_dagger_start.vpcf',
+            ParticleAttachment_t.PATTACH_ABSORIGIN_FOLLOW,
+            entself
+        );
+        Particles.DestroyParticleEffect(pid, false);
+        Particles.ReleaseParticleIndex(pid);
+
         GameEvents.SendCustomGameEventToServer('c2s_ent_move', {
             units: Players.GetSelectedEntities(Players.GetLocalPlayer()),
             pos: {
@@ -763,7 +776,7 @@ export const ToolCommon = () => {
             <Panel class="head">
                 <Label text="#tool_common" />
                 <CButton
-                    class='button'
+                    class="button"
                     onactivate={() => {
                         layer.close('tool_common', 'left');
                     }}

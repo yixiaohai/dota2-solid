@@ -1,6 +1,7 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { timer } from '../../utils/timer';
 import { console } from '../../utils/console';
+import { onCleanup } from 'solid-js';
 
 type MouseCallback = (
     eventType: MouseEvent,
@@ -25,12 +26,16 @@ const main = css`
 class MouseListener {
     private static instance: MouseListener;
     private currentCallback: MouseCallback | null = null;
-    private static cursor: Panel;
+    private static cursor: Panel | null;
     private thinkID: ScheduleID | null = null;
 
     private constructor() {
         this.cursor_init();
         this.setupGlobalListener();
+
+        onCleanup(() => {
+            console.log('销毁 MouseListener 实例');
+        });
     }
 
     private cursor_init() {
@@ -79,12 +84,12 @@ class MouseListener {
             GameEvents.SendCustomGameEventToServer('c2s_console_command', {
                 command: 'dota_hide_cursor 1'
             });
-            MouseListener.cursor.RemoveClass('minimized');
+            MouseListener.cursor?.RemoveClass('minimized');
         }
         this.thinkID = timer.create(() => {
             const pos_cursor = GameUI.GetCursorPosition();
             const pos = GameUI.GetScreenWorldPosition(pos_cursor);
-            MouseListener.cursor.SetPositionInPixels(
+            MouseListener.cursor?.SetPositionInPixels(
                 (pos_cursor[0] - 16) / MouseListener.cursor.actualuiscale_x,
                 (pos_cursor[1] - 16) / MouseListener.cursor.actualuiscale_y,
                 0
@@ -105,8 +110,11 @@ class MouseListener {
         GameEvents.SendCustomGameEventToServer('c2s_console_command', {
             command: 'dota_hide_cursor 0'
         });
-        if (MouseListener.cursor) {
-            MouseListener.cursor.AddClass('minimized');
+        try {
+            MouseListener.cursor?.AddClass('minimized');
+        } catch (e) {
+            console.error(e);
+            MouseListener.cursor = null;
         }
 
         if (this.thinkID) {

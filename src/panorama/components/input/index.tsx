@@ -1,4 +1,4 @@
-import { Accessor, Component, onMount } from 'solid-js';
+import { Accessor, Component, onCleanup, onMount } from 'solid-js';
 import css from 'solid-panorama-all-in-jsx/css.macro';
 import { console } from '../../utils/console';
 import { cursor } from '../cursor';
@@ -46,10 +46,10 @@ export const Input: Component<InputProps> = props => {
         button: MouseButton | MouseScrollDirection,
         pos: [number, number, number]
     ) => {
-        if (textEntryRef) {
+        if (textEntryRef !== undefined) {
             if (!textEntryRef.BHasKeyFocus()) {
                 removeListener?.();
-                return
+                return;
             }
             if (eventType == 'wheeled') {
                 if (button == 1) {
@@ -69,9 +69,12 @@ export const Input: Component<InputProps> = props => {
 
     // 组件挂载后执行
     onMount(() => {
-        if (textEntryRef) {
-            textEntryRef.SetDisableFocusOnMouseDown(false);
-        }
+        textEntryRef?.SetDisableFocusOnMouseDown(false);
+    });
+
+    onCleanup(() => {
+        textEntryRef == undefined;
+        removeListener?.();
     });
 
     return (

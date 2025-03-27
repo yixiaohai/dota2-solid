@@ -76,5 +76,12 @@
     "height_offset" "height offset"
     "postion" "postion"
     "default_position" "default position"
+    "camera_lens" "camera lens"
+    "record" "record"
+    "play" "play"
+    "delete" "delete"
+    "play_all" "play all"
+    "second" "second"
+    "add" "add"
   }
 }

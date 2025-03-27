@@ -44,7 +44,7 @@ export const Input: Component<InputProps> = props => {
     const handleClick = (
         eventType: MouseEvent,
         button: MouseButton | MouseScrollDirection,
-        pos: [number, number, number]
+        pos: [number, number, number] | null
     ) => {
         if (textEntryRef !== undefined) {
             if (!textEntryRef.BHasKeyFocus()) {

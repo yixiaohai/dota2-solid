@@ -180,6 +180,11 @@ const CameraPlay = (pos: CameraPos) => {
                 return 0;
             }
         });
+    }else{
+        setCameraPitch(pos.pitch);
+        setCameraYaw(pos.yaw);
+        setCameraDistance(pos.distance);
+        setCameraHeightOffset(pos.heightOffset);
     }
 };
 
@@ -529,7 +534,7 @@ export const CameraAdjust = () => {
                                 timer.create(() => {
                                     CameraPlay(pos);
                                 }, t);
-                                t += pos.time;
+                                t += pos.time > 0 ? pos.time : 0;
                             });
                         }}
                     />

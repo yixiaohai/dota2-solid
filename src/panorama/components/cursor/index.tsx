@@ -6,7 +6,7 @@ import { onCleanup } from 'solid-js';
 type MouseCallback = (
     eventType: MouseEvent,
     button: MouseButton | MouseScrollDirection,
-    pos: [number, number, number]
+    pos: [number, number, number] | null
 ) => void;
 
 type cursorStyle = 'cast';
@@ -60,10 +60,6 @@ class MouseListener {
                 const pos = GameUI.GetScreenWorldPosition(
                     GameUI.GetCursorPosition()
                 );
-                if (!pos) {
-                    console.error('点击鼠标位置获取失败');
-                    return false;
-                }
                 this.currentCallback?.(eventType, button, pos);
                 return false;
             }
@@ -88,7 +84,9 @@ class MouseListener {
         }
         this.thinkID = timer.create(() => {
             const pos_cursor = GameUI.GetCursorPosition();
+            console.warn(`pos_cursor ${pos_cursor}`)
             const pos = GameUI.GetScreenWorldPosition(pos_cursor);
+            console.warn(`pos ${pos}`)
             MouseListener.cursor?.SetPositionInPixels(
                 (pos_cursor[0] - 16) / MouseListener.cursor.actualuiscale_x,
                 (pos_cursor[1] - 16) / MouseListener.cursor.actualuiscale_y,

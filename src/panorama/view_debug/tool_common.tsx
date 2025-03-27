@@ -739,9 +739,9 @@ const EntMove = () => {
     const handleClick = (
         eventType: MouseEvent,
         button: MouseButton | MouseScrollDirection,
-        pos: [number, number, number]
+        pos: [number, number, number] | null
     ) => {
-        if (eventType !== 'pressed' || button !== 0) {
+        if (eventType !== 'pressed' || button !== 0 || !pos) {
             return;
         }
         Particles.DestroyParticleEffect(arrowParticle(), true);

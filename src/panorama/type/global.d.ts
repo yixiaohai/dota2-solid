@@ -24,3 +24,7 @@ interface SliderPanel extends Panel {
     SetShowDefaultValue(value: boolean): void;
     SetValueNoEvents(value: number): void;
 }
+
+interface IntermediateData {
+    [key: string]: any; // 根据需要定义更具体的类型
+}

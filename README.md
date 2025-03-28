@@ -91,6 +91,7 @@ excel 中的 vpcf,vsndevts,vmdl 会生成在 kv/precache.json 中
 
 # TODO
 
+组件和辅助函数的分类
 二维码
 侧边提示
 封装通信模块，统一防抖

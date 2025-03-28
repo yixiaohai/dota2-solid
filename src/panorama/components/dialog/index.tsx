@@ -315,7 +315,7 @@ class DialogManager implements DialogActions {
                 const handleClick = (
                     eventType: MouseEvent,
                     button: MouseButton | MouseScrollDirection,
-                    pos: [number, number, number]
+                    pos: [number, number, number] | null
                 ) => {
                     if (eventType == 'wheeled') {
                         if (button == 1) {

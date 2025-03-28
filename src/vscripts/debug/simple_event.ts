@@ -2,7 +2,7 @@ import { reloadable } from '../utils/tstl-utils';
 import { console } from '../utils/console';
 import { timer } from '../utils/timer';
 import { Hero } from './hero';
-import * as json from '../kv/testexcel.json';
+import { ckv } from '../utils/kv';
 
 @reloadable
 export class SimpleEvent_PlayerID {
@@ -59,19 +59,38 @@ export class SimpleEvent_PlayerID {
         }
     }
 
+    get_native_hero_kv(PlayerID: PlayerID) {
+        const kv = ckv.get('npc_heroes');
+        const data: IntermediateData[] = [];
+        for (const key in kv) {
+            if (key != 'Version' && key != 'npc_dota_hero_base') {
+                const value = kv[key];
+                let v_data = {
+                    hero_name: key,
+                    Facets: value.Facets
+                };
+                data.push(v_data);
+            }
+        }
+        CustomGameEventManager.Send_ServerToAllClients('s2c_native_hero_kv', {
+            kv: data
+        });
+    }
+
     test(PlayerID: PlayerID) {
         const player = PlayerResource.GetPlayer(PlayerID);
-        const hero = player?.GetAssignedHero();
-        console.warn(json.testexcel1);
-        // let ent = Entities.First();
-        // while (ent != null) {
-        //     print(ent.GetClassname());
-        //     const ent_next = Entities.Next(ent);
-        //     if (ent_next == null) {
-        //         break;
-        //     }
-        //     ent = ent_next;
-        // }
+        if (!player) return;
+
+        Hero.prototype.create_facet_hero(
+            PlayerID,
+            'npc_dota_hero_juggernaut',
+            RandomInt(1, 2),
+            DotaTeam.GOODGUYS,
+            hero => {
+                hero.SetControllableByPlayer(PlayerID, false);
+                player.SetAssignedHeroEntity(hero);
+            }
+        );
     }
 }
 
@@ -127,8 +146,6 @@ export class SimpleEvent_Check {
     }
 
     free_spells(PlayerID: PlayerID, checked: boolean) {
-        console.warn(checked);
-        console.warn(this.fow_viewer_id);
         if (checked) {
             if (this.fow_viewer_id == undefined) {
                 this.fow_viewer_id = AddFOWViewer(

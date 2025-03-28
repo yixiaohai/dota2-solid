@@ -17,7 +17,7 @@ const main = css`
     max-height: 1000px;
     background-color: #181818dd;
     box-shadow: #000000aa 0px 0px 8px 0px;
-    transform: translateX(0px) translateY(60px);
+    transform: translateX(0px) translateY(50px);
     opacity: 1;
     transition-property: opacity, transform;
     transition-duration: 0.35s;
@@ -25,7 +25,7 @@ const main = css`
 
     .minimized & {
         opacity: 0;
-        transform: translateX(-350px) translateY(60px);
+        transform: translateX(-350px) translateY(50px);
     }
 
     .content {
@@ -72,7 +72,9 @@ const collapseItem_unit: CollapseProps['items'] = [
                         text="#hero_replace"
                         flow
                         color="blue"
-                        onactivate={HeroReplace}
+                        onactivate={() => {
+                            layer.toggle('hero_pick', 'center');
+                        }}
                     />
                 </Panel>
                 <Panel class={row}>
@@ -696,11 +698,13 @@ const MouseOutRune = (ButtonPanle: Panel) => {
 
 const HeroReplace = () => {
     console.warn('HeroReplace');
+
+};
+const HeroAddFriend = () => {
     GameEvents.SendCustomGameEventToServer('c2s_event', {
         event: 'test'
     });
 };
-const HeroAddFriend = () => {};
 const HeroAddEnemy = () => {};
 
 const [arrowParticle, setArrowParticle] = createSignal<ParticleID>(

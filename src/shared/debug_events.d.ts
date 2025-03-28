@@ -30,5 +30,8 @@ interface CustomGameEventDeclarations {
     };
     s2c_all_map_vision_state: {
         checked: boolean;
-    }
+    };
+    s2c_native_hero_kv: {
+        kv: IntermediateData[];
+    };
 }

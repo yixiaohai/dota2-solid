@@ -18,7 +18,7 @@ const CONFIG = {
         'npc_items_custom',
         'npc_units_custom'
     ]),
-    IGNORE_SHEET_NAME: /(^Sheet\d*$|^charts$)/i,
+    IGNORE_SHEET_NAME: /^Sheet.*/i,
     LANG_PATTERN: /#([^#]+)#/, // 匹配本地化表头
     INLINE_BLOCK_REGEX: /^"([^"]*)"\s*"([^"]*)"$/i, // 匹配单元格嵌套kv
     EXT_PATTERN: /\.(vpcf|vsndevts|vmdl)$/
@@ -37,9 +37,7 @@ interface BlockInfo {
     children: BlockInfo[];
 }
 
-interface IntermediateData {
-    [key: string]: any;
-}
+
 
 // === 核心解析器 ===
 class ExcelParser {
@@ -430,7 +428,7 @@ class KVConverter {
     private async processFile(filePath: string) {
         try {
             console.log(
-                `[${color.magenta('excel.ts')}] 🔄 解析: ${path.basename(
+                `[${color.magenta('excel.ts')}] 🔄 解析文件: ${path.basename(
                     filePath
                 )}`
             );
@@ -438,9 +436,19 @@ class KVConverter {
             this.langData.clear();
             this.PrecacheData.clear();
 
-            workbook.SheetNames.filter(
-                name => !CONFIG.IGNORE_SHEET_NAME.test(name)
-            ).forEach(sheetName => {
+            workbook.SheetNames.filter(name => {
+                if (CONFIG.IGNORE_SHEET_NAME.test(name)) {
+                    console.log(
+                        `[${color.magenta('excel.ts')}] ⏭️  忽略工作表: ${name}`
+                    );
+                    return false;
+                } else {
+                    console.log(
+                        `[${color.magenta('excel.ts')}] 🔄 解析工作表: ${name}`
+                    );
+                    return true;
+                }
+            }).forEach(sheetName => {
                 const sheet = workbook.Sheets[sheetName];
                 const data = FileSystem.sheetToData(sheet);
                 const { structuredData, langData, PrecacheData } =
@@ -494,7 +502,20 @@ class KVConverter {
                 // 合并语言数据
                 langData.forEach((entries, lang) => {
                     const target = this.langData.get(lang) || new Map();
-                    entries.forEach((v, k) => target.set(k, v));
+                    entries.forEach((v, k) => {
+                        if (target.has(k)) {
+                            // 检查键是否已存在
+                            console.log(
+                                `[${color.magenta(
+                                    'excel.ts'
+                                )}] ⏭️ 已跳过重复键: ${k}`,
+                                `在语言: ${lang}`,
+                                `已存在值: ${target.get(k)}`,
+                                `新值: ${v}`
+                            );
+                        }
+                        target.set(k, v);
+                    });
                     this.langData.set(lang, target);
                 });
 

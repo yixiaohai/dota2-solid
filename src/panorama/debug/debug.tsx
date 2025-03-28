@@ -11,6 +11,7 @@ import { DefaultUI } from '../view_debug/default_ui';
 import { FastConsoleCommand } from '../view_debug/fast_console_command';
 import { CameraAdjust } from '../view_debug/camera_adjust';
 import { CSlider } from '../components/slider';
+import { HeroPick } from '../view_debug/hero_pick';
 
 css`
     .root {
@@ -126,6 +127,7 @@ export function Debug() {
             <DefaultUI />
             <FastConsoleCommand />
             <CameraAdjust />
+            <HeroPick />
         </Panel>
     );
 }

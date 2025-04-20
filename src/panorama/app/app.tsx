@@ -1,4 +1,13 @@
-import { createEffect, createSignal, Match, onMount, Switch } from 'solid-js';
+import {
+    createEffect,
+    createMemo,
+    createSignal,
+    For,
+    Index,
+    Match,
+    onMount,
+    Switch
+} from 'solid-js';
 import { render } from 'solid-panorama-runtime';
 import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import css from 'solid-panorama-all-in-jsx/css.macro';
@@ -27,42 +36,34 @@ css`
 const rootStyle = css`
     flow-children: down;
     horizontal-align: center;
-    vertical-align: bottom;
+    vertical-align: center;
+    font-size: 20px;
+    color: #ffffff;
+    width: 300px;
 `;
 
 console.log('Main load');
 
-import { Shop } from '../view/shop';
-import { Lowhud } from '../view/lowhud';
 import { ToolCommon } from '../view_debug/tool_common';
 import { console } from '../utils/console';
 import { default_ui } from '../components/default_ui';
+import { createStore } from 'solid-js/store';
+
+
 
 export function Main() {
-    const [count, setCount] = createSignal(0);
-
-    createEffect(() => {
-        console.log(`当前计数: ${count()}`);
-    });
-
     onMount(() => {
         default_ui.defaultSet();
-        console.log('Created Main3', rootStyle);
+
     });
 
+
+
     return (
-        <Panel class={rootStyle}>
-            <Button onactivate={() => setCount(count() + 1)}>
-                <Label text={`增加:${count()}`} tooltip_text="123123" />
-            </Button>
-            <Switch>
-                <Match when={count() === 1}>
-                    <Shop />
-                </Match>
-                <Match when={count() === 2}>
-                    <Lowhud />
-                </Match>
-            </Switch>
+        <Panel class="root">
+            <Panel class={rootStyle}>
+                
+            </Panel>
         </Panel>
     );
 }

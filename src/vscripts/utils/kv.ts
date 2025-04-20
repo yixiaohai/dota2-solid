@@ -9,6 +9,7 @@ class VscriptKV implements ckv {
 
     private constructor() {
         this.data['npc_heroes'] = LoadKeyValues('scripts/npc/npc_heroes.txt');
+        this.data['npc_heroes_custom'] = LoadKeyValues('scripts/npc/npc_heroes_custom.txt');
     }
 
     static getInstance(): VscriptKV {

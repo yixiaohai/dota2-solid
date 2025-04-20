@@ -93,7 +93,7 @@ export function GameConfig() {
     // 是否禁用战争迷雾
     game_mode.SetFogOfWarDisabled(false)
     // 是否开启黑色迷雾，开启后地图一开始是全黑的，需要探索后才会显示
-    game_mode.SetUnseenFogOfWarEnabled(false)
+    game_mode.SetUnseenFogOfWarEnabled(true)
     // 设置泉水回复魔法值的速率
     // game_mode.SetFountainConstantManaRegen(1)
     // 设置泉水回复生命值的速率

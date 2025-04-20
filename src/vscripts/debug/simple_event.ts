@@ -60,18 +60,65 @@ export class SimpleEvent_PlayerID {
     }
 
     get_native_hero_kv(PlayerID: PlayerID) {
-        const kv = ckv.get('npc_heroes');
+        const kv_npc_heroes = ckv.get('npc_heroes');
+        const kv_npc_heroes_custom = ckv.get('npc_heroes_custom');
         const data: IntermediateData[] = [];
-        for (const key in kv) {
+        for (const key in kv_npc_heroes) {
             if (key != 'Version' && key != 'npc_dota_hero_base') {
-                const value = kv[key];
+                const info = kv_npc_heroes[key];
+                let primary = Attributes.STRENGTH;
+                switch (info.AttributePrimary) {
+                    case 'DOTA_ATTRIBUTE_STRENGTH':
+                        primary = Attributes.STRENGTH;
+                        break;
+                    case 'DOTA_ATTRIBUTE_AGILITY':
+                        primary = Attributes.AGILITY;
+                        break;
+                    case 'DOTA_ATTRIBUTE_INTELLECT':
+                        primary = Attributes.INTELLECT;
+                    case 'DOTA_ATTRIBUTE_ALL':
+                        primary = Attributes.ALL;
+                }
+
+                let facet_data = [];
+                if (info.Facets) {
+                    for (const key in info.Facets) {
+                        console.warn(info.Facets[key].Deprecated);
+                        if (
+                            info.Facets?.[key]?.Deprecated === undefined ||
+                            (info.Facets[key].Deprecated !== 'true' &&
+                                info.Facets[key].Deprecated !== 'True' &&
+                                info.Facets[key].Deprecated !== 1)
+                        ) {
+                            let facet_data_sigle = {
+                                facet_name: key,
+                                Icon: info.Facets[key].Icon,
+                                Color: info.Facets[key].Color,
+                                GradientID: info.Facets[key].GradientID
+                            };
+                            facet_data.push(facet_data_sigle);
+                        }
+                    }
+                }
+
                 let v_data = {
                     hero_name: key,
-                    Facets: value.Facets
+                    HeroOrderID: info.HeroOrderID,
+                    AttributePrimary: primary,
+                    Facets: facet_data
                 };
                 data.push(v_data);
             }
         }
+        for (const key in kv_npc_heroes_custom) {
+            if (kv_npc_heroes[key]) {
+                const index = data.findIndex(item => item.hero_name === key);
+                if (index !== -1) {
+                    data.splice(index, 1);
+                }
+            }
+        }
+
         CustomGameEventManager.Send_ServerToAllClients('s2c_native_hero_kv', {
             kv: data
         });
@@ -83,12 +130,29 @@ export class SimpleEvent_PlayerID {
 
         Hero.prototype.create_facet_hero(
             PlayerID,
-            'npc_dota_hero_juggernaut',
+            'npc_dota_hero_earth_spirit',
             RandomInt(1, 2),
             DotaTeam.GOODGUYS,
             hero => {
                 hero.SetControllableByPlayer(PlayerID, false);
                 player.SetAssignedHeroEntity(hero);
+            }
+        );
+    }
+
+    test2(PlayerID: PlayerID) {
+        const player = PlayerResource.GetPlayer(PlayerID);
+        const hero = player?.GetAssignedHero();
+
+        CreateUnitByNameAsync(
+            'npc_test',
+            hero?.GetAbsOrigin() as Vector,
+            true,
+            undefined,
+            undefined,
+            DotaTeam.GOODGUYS,
+            hero => {
+                hero.SetControllableByPlayer(PlayerID, false);
             }
         );
     }

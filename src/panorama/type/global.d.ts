@@ -10,21 +10,6 @@ interface CScriptBindingPR_Game {
     GetConvarFloat: (name: string) => number;
 }
 
-interface SliderPanel extends Panel {
-    value: number;
-    min: number;
-    max: number;
-
-    default: number;
-    increment: number;
-    mousedown: boolean;
-
-    SetDirection(value: any): void; // ??
-    SetRequiresSelection(value: boolean): void;
-    SetShowDefaultValue(value: boolean): void;
-    SetValueNoEvents(value: number): void;
-}
-
 interface IntermediateData {
     [key: string]: any; // 根据需要定义更具体的类型
 }

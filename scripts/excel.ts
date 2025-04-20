@@ -37,7 +37,9 @@ interface BlockInfo {
     children: BlockInfo[];
 }
 
-
+interface IntermediateData {
+    [key: string]: any; // 根据需要定义更具体的类型
+}
 
 // === 核心解析器 ===
 class ExcelParser {
@@ -356,15 +358,32 @@ class FormatGenerator {
         return combined;
     }
 
-    private static deepFormatKV(value: any, depth: number): any {
+    private static deepFormatKV(
+        value: any,
+        depth: number,
+        is_AttachWearables?: boolean
+    ): any {
         if (value && typeof value === 'object') {
             const indent = '    '.repeat(depth);
             let cleanObj = Object.entries(value).reduce((acc, [k, v]) => {
-                acc += `${indent}"${k}" ${this.deepFormatKV(v, depth + 1)}\n`;
+                is_AttachWearables = is_AttachWearables || false;
+                if (!is_AttachWearables) {
+                    is_AttachWearables = k === 'AttachWearables';
+                }
+                acc += `${indent}"${k}" ${this.deepFormatKV(
+                    v,
+                    depth + 1,
+                    is_AttachWearables
+                )}\n`;
                 return acc;
             }, ` {\n`);
             cleanObj += `${'    '.repeat(depth - 1)}}`;
             return cleanObj;
+        }
+
+        if (is_AttachWearables) {
+            value = `{"ItemDef" "${value}"}`;
+            return value;
         }
 
         return `"${value}"`;

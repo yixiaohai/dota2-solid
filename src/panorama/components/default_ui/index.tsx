@@ -38,7 +38,6 @@ const camera_distance_default_get = () => {
 };
 
 const defaultSet = () => {
-    GameUI.SetCameraDistance(1200);
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_QUICK_STATS, false); // 击杀助攻数据
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR, false); // 顶部
     set(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBOARD, false); // 左侧默认计分板

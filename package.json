@@ -31,7 +31,7 @@
         "@types/glob": "^8.0.0",
         "@types/lodash": "^4.14.191",
         "@types/node": "^18.11.10",
-        "babel-plugin-jsx-panorama-expressions": "^0.1.7",
+        "babel-plugin-jsx-panorama-expressions": "^0.2.8",
         "babel-plugin-macros": "^3.1.0",
         "babel-preset-solid-panorama": "^0.1.5",
         "chokidar": "^3.5.3",
@@ -44,8 +44,8 @@
         "rollup": "^3.5.1",
         "sass": "^1.56.1",
         "solid-js": "^1.6.2",
-        "solid-panorama-all-in-jsx": "^0.2.5",
-        "solid-panorama-runtime": "^0.5.2",
+        "solid-panorama-all-in-jsx": "^0.4.3",
+        "solid-panorama-runtime": "^0.5.6",
         "steam-game-path": "^2.0.1",
         "ts-node": "^10.9.1",
         "typescript-styled-plugin": "^0.18.2",
@@ -54,6 +54,6 @@
     "devDependencies": {
         "@moddota/dota-lua-types": "*",
         "typescript": "^5.7.3",
-        "typescript-to-lua": "^1.23.0"
+        "typescript-to-lua": "^1.31.0"
     }
 }

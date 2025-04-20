@@ -379,12 +379,15 @@ const collapseItem_world: CollapseProps['items'] = [
                                 defaultValue: '1',
                                 shadeClose: true,
                                 slider: true,
+                                min: 0.01,
                                 max: 10,
+                                step: 0.01,
                                 onOk: (v: string) =>
                                     GameEvents.SendCustomGameEventToServer(
-                                        'c2s_console_command',
+                                        'c2s_convars_float',
                                         {
-                                            command: `host_timescale ${v}`
+                                            command: 'host_timescale',
+                                            value: parseFloat(v)
                                         }
                                     )
                             });
@@ -698,14 +701,19 @@ const MouseOutRune = (ButtonPanle: Panel) => {
 
 const HeroReplace = () => {
     console.warn('HeroReplace');
-
 };
 const HeroAddFriend = () => {
     GameEvents.SendCustomGameEventToServer('c2s_event', {
         event: 'test'
     });
 };
-const HeroAddEnemy = () => {};
+const HeroAddEnemy = () => {
+    console.warn(Game.GetConvarInt('custom_convar_test'));
+    console.warn(Game.GetConvarInt('custom_convar_test_help'));
+    GameEvents.SendCustomGameEventToServer('c2s_event', {
+        event: 'test2'
+    });
+};
 
 const [arrowParticle, setArrowParticle] = createSignal<ParticleID>(
     -1 as ParticleID
@@ -798,6 +806,7 @@ export const ToolCommon = () => {
                     activeKey="debug"
                 ></Collapse>
             </Panel>
+
         </Layer>
     );
 };

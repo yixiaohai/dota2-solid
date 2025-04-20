@@ -11,6 +11,7 @@ interface InputProps {
     text?: string | Accessor<string>;
     ontextentrychange?: Function;
     number?: boolean;
+    step?: number;
 }
 
 const inputStyle = css`
@@ -54,12 +55,12 @@ export const Input: Component<InputProps> = props => {
             if (eventType == 'wheeled') {
                 if (button == 1) {
                     textEntryRef.text = (
-                        parseInt(textEntryRef.text) + 1
+                        parseInt(textEntryRef.text) + (props.step || 1)
                     ).toString();
                 }
                 if (button == -1) {
                     textEntryRef.text = (
-                        parseInt(textEntryRef.text) - 1
+                        parseInt(textEntryRef.text) - (props.step || 1)
                     ).toString();
                 }
                 return;

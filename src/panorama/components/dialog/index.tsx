@@ -172,6 +172,7 @@ export interface DialogProps {
     slider?: boolean;
     min?: number;
     max?: number;
+    step?: number;
 }
 
 interface DialogActions {
@@ -290,11 +291,13 @@ class DialogManager implements DialogActions {
                 : (DialogManager.slider.value = props.min || 0);
             props.currentValue &&
                 (DialogManager.slider.value = Number(props.currentValue));
+
+            props.step && (DialogManager.slider.increment = props.step);
             DialogManager.slider.RemoveClass('minimized');
 
             DialogManager.slider.SetPanelEvent('onvaluechanged', () => {
                 DialogManager.input.text = DialogManager.slider.value
-                    .toFixed(0)
+                    .toFixed(2)
                     .toString();
             });
         }
@@ -317,21 +320,23 @@ class DialogManager implements DialogActions {
                     button: MouseButton | MouseScrollDirection,
                     pos: [number, number, number] | null
                 ) => {
+                    if (!DialogManager.input.BHasKeyFocus()) {
+                        removeListener?.();
+                        return;
+                    }
                     if (eventType == 'wheeled') {
                         if (button == 1) {
                             DialogManager.input.text = (
-                                parseInt(DialogManager.input.text) + 1
+                                parseFloat(DialogManager.input.text) +
+                                (props.step || 1)
                             ).toString();
                         }
                         if (button == -1) {
                             DialogManager.input.text = (
-                                parseInt(DialogManager.input.text) - 1
+                                parseFloat(DialogManager.input.text) -
+                                (props.step || 1)
                             ).toString();
                         }
-                        return;
-                    }
-                    if (eventType == 'pressed' && button == 0) {
-                        removeListener();
                         return;
                     }
                 };

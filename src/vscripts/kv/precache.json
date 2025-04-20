@@ -1,1 +1,6 @@
-{}
+{
+    "vmdl": [
+        "models/creeps/roshan/roshan.vmdl",
+        "models/heroes/shadow_fiend/shadow_fiend.vmdl"
+    ]
+}

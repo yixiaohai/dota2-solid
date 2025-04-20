@@ -11,9 +11,20 @@ export class Developer {
                 this.ConsoleCommand(data.command);
             }
         );
+
+        CustomGameEventManager.RegisterListener(
+            'c2s_convars_float',
+            (_, data) => {
+                this.ConvarsFloat(data.command, data.value);
+            }
+        );
     }
 
     ConsoleCommand(command: string) {
         SendToConsole(command);
+    }
+
+    ConvarsFloat(command: string, value: number) {
+        Convars.SetFloat(command, value);
     }
 }

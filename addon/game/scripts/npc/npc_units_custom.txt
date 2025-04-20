@@ -1,0 +1,50 @@
+"XLSXContent"
+{
+    "npc_roshan"  {
+        "_Loc" "roshan"
+        "BaseClass" "npc_dota_creature"
+        "Model" "models/creeps/roshan/roshan.vmdl"
+        "SoundSet" "Roshan"
+        "ArmorPhysical" "0"
+        "MagicalResistance" "0"
+        "AttackCapabilities" "DOTA_UNIT_CAP_MELEE_ATTACK"
+        "AttackDamageMin" "10"
+        "AttackDamageMax" "10"
+        "AttackAnimationPoint" "0.6"
+        "AttackRange" "150"
+        "BoundsHullName" "DOTA_HULL_SIZE_HERO"
+        "HealthBarOffset" "400"
+        "MovementCapabilities" "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed" "350"
+        "StatusHealth" "6000"
+        "Creature"  {
+            "AttachWearables"  {
+            }
+        }
+    }
+    "npc_test"  {
+        "_Loc" "test"
+        "BaseClass" "npc_dota_creature"
+        "Model" "models/heroes/shadow_fiend/shadow_fiend.vmdl"
+        "SoundSet" "Roshan"
+        "ArmorPhysical" "0"
+        "MagicalResistance" "0"
+        "AttackCapabilities" "DOTA_UNIT_CAP_MELEE_ATTACK"
+        "AttackDamageMin" "10"
+        "AttackDamageMax" "10"
+        "AttackAnimationPoint" "0.6"
+        "AttackRange" "150"
+        "BoundsHullName" "DOTA_HULL_SIZE_HERO"
+        "HealthBarOffset" "400"
+        "MovementCapabilities" "DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed" "350"
+        "StatusHealth" "6000"
+        "Creature"  {
+            "AttachWearables"  {
+                "Wearable1" {"ItemDef" "7188"}
+                "Wearable2" {"ItemDef" "7193"}
+                "Wearable3" {"ItemDef" "7279"}
+            }
+        }
+    }
+}

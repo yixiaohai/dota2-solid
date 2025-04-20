@@ -77,7 +77,7 @@ setBoolItems([
     { name: 'fog_enable', value: false }
 ]);
 
-setCommandItems(['cl_entitysummary']);
+setCommandItems(['cl_entitysummary', 'net_connections_stats']);
 
 setBoolItems(prevData =>
     prevData.map(l => {

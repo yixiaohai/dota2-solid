@@ -58,6 +58,7 @@ export const Layer: Component<LayerProps> = props => {
         <Panel
             class={LayerStyle}
             classList={{ minimized: !layer.isOpen(props.name, props.type) }}
+            hittest={false}
         >
             <Panel class={`${props.class ?? ''} content`} onactivate={() => {}}>
                 {resolved()}

@@ -25,6 +25,11 @@ interface CustomGameEventDeclarations {
         command: string;
     };
 
+    c2s_convars_float: {
+        command: string;
+        value: number;
+    };
+
     s2c_camera_distance: {
         distance: number;
     };

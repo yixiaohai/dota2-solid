@@ -144,17 +144,12 @@ export class SimpleEvent_PlayerID {
         const player = PlayerResource.GetPlayer(PlayerID);
         const hero = player?.GetAssignedHero();
 
-        CreateUnitByNameAsync(
-            'npc_test',
-            hero?.GetAbsOrigin() as Vector,
-            true,
-            undefined,
-            undefined,
-            DotaTeam.GOODGUYS,
-            hero => {
-                hero.SetControllableByPlayer(PlayerID, false);
-            }
-        );
+        console.warn('modifier_test')
+        hero?.AddNewModifier(hero, undefined, 'modifier_test', {});
+
+        timer.create(() => {
+            hero?.AddNewModifier(hero, undefined, 'modifier_test2', {});
+        },3);
     }
 }
 

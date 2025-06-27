@@ -1,15 +1,15 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { layer } from '../components/layer/manager';
-import { Layer } from '../components/layer';
-import { CButton } from '../components/button';
-import { Collapse, CollapseProps } from '../components/collapse';
-import { dialog } from '../components/dialog';
-import { console } from '../utils/console';
-import { timer } from '../utils/timer';
+import { layer } from '../../components/layer/manager';
+import { Layer } from '../../components/layer';
+import { CButton } from '../../components/button';
+import { Collapse, CollapseProps } from '../../components/collapse';
+import { dialog } from '../../components/dialog';
+import { console } from '../../utils/console';
+import { timer } from '../../utils/timer';
 import { create } from 'lodash';
 import { createSignal, onMount } from 'solid-js';
-import { cursor } from '../components/cursor';
-import { default_ui } from '../components/default_ui';
+import { cursor } from '../../components/cursor';
+import { default_ui } from '../../components/default_ui';
 
 const main = css`
     flow-children: down;

@@ -5,13 +5,13 @@ import xml from 'solid-panorama-all-in-jsx/xml.macro';
 import { render } from 'solid-panorama-runtime';
 import { Menu, MenuItem } from '../components/menu';
 import { layer } from '../components/layer/manager';
-import { ToolCommon } from '../view_debug/tool_common';
+import { ToolCommon } from './view_debug/tool_common';
 import { console } from '../utils/console';
-import { DefaultUI } from '../view_debug/default_ui';
-import { FastConsoleCommand } from '../view_debug/fast_console_command';
-import { CameraAdjust } from '../view_debug/camera_adjust';
+import { DefaultUI } from './view_debug/default_ui';
+import { FastConsoleCommand } from './view_debug/fast_console_command';
+import { CameraAdjust } from './view_debug/camera_adjust';
 import { CSlider } from '../components/slider';
-import { HeroPick } from '../view_debug/hero_pick';
+import { HeroPick } from './view_debug/hero_pick';
 
 css`
     .root {

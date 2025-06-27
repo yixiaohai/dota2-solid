@@ -1,12 +1,12 @@
 import css from 'solid-panorama-all-in-jsx/css.macro';
-import { layer } from '../components/layer/manager';
-import { Layer } from '../components/layer';
-import { CButton } from '../components/button';
-import { Collapse, CollapseProps } from '../components/collapse';
-import { dialog } from '../components/dialog';
-import { console } from '../utils/console';
-import { timer } from '../utils/timer';
-import { default_ui, DefaultUIState } from '../components/default_ui';
+import { layer } from '../../components/layer/manager';
+import { Layer } from '../../components/layer';
+import { CButton } from '../../components/button';
+import { Collapse, CollapseProps } from '../../components/collapse';
+import { dialog } from '../../components/dialog';
+import { console } from '../../utils/console';
+import { timer } from '../../utils/timer';
+import { default_ui, DefaultUIState } from '../../components/default_ui';
 import { createSignal, For } from 'solid-js';
 import { forEach, forIn } from 'lodash';
 

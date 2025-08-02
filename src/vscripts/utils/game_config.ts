@@ -10,7 +10,7 @@ export function GameConfig() {
     // 设置一天的时间
     GameRules.SetTimeOfDay(0.251)
     // 是否开启英雄重生
-    GameRules.SetHeroRespawnEnabled(false)
+    GameRules.SetHeroRespawnEnabled(true)
     // 是否允许选择相同英雄
     GameRules.SetSameHeroSelectionEnabled(true)
     // 设置选择英雄时间
@@ -89,7 +89,7 @@ export function GameConfig() {
     // 强制玩家选择英雄
     // game_mode.SetCustomGameForceHero('npc_dota_hero_wisp')
     // 设置固定的复活时间
-    // game_mode.SetFixedRespawnTime(5)
+    game_mode.SetFixedRespawnTime(5)
     // 是否禁用战争迷雾
     game_mode.SetFogOfWarDisabled(false)
     // 是否开启黑色迷雾，开启后地图一开始是全黑的，需要探索后才会显示

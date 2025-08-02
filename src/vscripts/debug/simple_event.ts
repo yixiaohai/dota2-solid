@@ -130,10 +130,11 @@ export class SimpleEvent_PlayerID {
 
         Hero.prototype.create_facet_hero(
             PlayerID,
-            'npc_dota_hero_earth_spirit',
+            'npc_dota_hero_chen',
             RandomInt(1, 2),
             DotaTeam.GOODGUYS,
             hero => {
+                hero.SetMoveCapability(UnitMoveCapability.NONE);
                 hero.SetControllableByPlayer(PlayerID, false);
                 player.SetAssignedHeroEntity(hero);
             }

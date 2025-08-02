@@ -5,6 +5,7 @@ import { timer } from '../utils/timer';
 @reloadable
 export class Developer {
     constructor() {
+        print('Developer');
         CustomGameEventManager.RegisterListener(
             'c2s_console_command',
             (_, data) => {
@@ -21,7 +22,7 @@ export class Developer {
     }
 
     ConsoleCommand(command: string) {
-        SendToConsole(command);
+        SendToServerConsole(command);
     }
 
     ConvarsFloat(command: string, value: number) {

@@ -1,4 +1,4 @@
-# j-panorama
+# dota2-solid
 
 此模版基于[solid-panorama](https://github.com/RobinCodeX/solid-panorama).
 
